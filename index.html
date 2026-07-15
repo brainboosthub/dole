@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="เว็บไซต์ร้านหนังสือสไตล์ภาพประกอบ พร้อมใช้งานบน GitHub Pages" />
+  <title>Book Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="announcement">
+    <div class="container announcement-inner">
+      <a class="brand brand-light" href="#home" aria-label="Book Store home">
+        <span class="brand-icon">B</span>
+        <span>book store</span>
+      </a>
+      <p>รับส่วนลดพิเศษสำหรับสมาชิกใหม่ พร้อมจัดส่งฟรีเมื่อครบตามเงื่อนไข</p>
+      <a class="tiny-btn" href="#featured">เลือกซื้อเลย</a>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="#home">
+        <span class="brand-icon">O</span>
+        <span>orange</span>
+      </a>
+      <button class="menu-toggle" aria-label="เปิดเมนู" aria-expanded="false">☰</button>
+      <nav class="main-nav" aria-label="เมนูหลัก">
+        <a href="#home">หน้าแรก</a>
+        <a href="#featured">หนังสือแนะนำ</a>
+        <a href="#categories">หมวดหมู่</a>
+        <a href="#contact">ติดต่อ</a>
+      </nav>
+      <a class="nav-button" href="#featured">ค้นหาหนังสือ</a>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="hero">
+      <div class="hero-overlay"></div>
+      <div class="container hero-content">
+        <div class="eyebrow">อ่าน • เรียนรู้ • สร้างแรงบันดาลใจ</div>
+        <h1>ดีไซน์พื้นที่แห่ง<br>การเรียนรู้ของคุณ</h1>
+        <p>ค้นพบหนังสือ ภาพประกอบ และเรื่องราวที่ช่วยเปิดมุมมองใหม่ในทุกวัน</p>
+        <div class="hero-actions">
+          <a class="primary-btn" href="#featured">ดูหนังสือแนะนำ</a>
+          <a class="text-link" href="#categories">ดูทุกหมวดหมู่ <span>→</span></a>
+        </div>
+      </div>
+      <div class="floating-dot dot-1"></div>
+      <div class="floating-dot dot-2"></div>
+      <div class="floating-dot dot-3"></div>
+    </section>
+
+    <section id="featured" class="featured-section">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <span class="section-kicker">เลือกสรรพิเศษ</span>
+            <h2>รายละเอียดที่ทำให้ทุกเล่มน่าอ่าน</h2>
+          </div>
+          <a class="view-all" href="#categories">ดูทั้งหมด →</a>
+        </div>
+
+        <div class="book-grid">
+          <article class="book-card">
+            <div class="book-image"><img src="assets/card1.png" alt="หนังสือภาพประกอบแนวแฟนตาซี"></div>
+            <div class="book-body">
+              <span class="badge">แนะนำ</span>
+              <h3>เรื่องเล่าจากห้องสมุดลับ</h3>
+              <p>การผจญภัยที่เต็มไปด้วยจินตนาการ ความกล้าหาญ และมิตรภาพ</p>
+              <div class="book-meta"><strong>฿329</strong><button aria-label="เพิ่มลงตะกร้า">+</button></div>
+            </div>
+          </article>
+
+          <article class="book-card">
+            <div class="book-image"><img src="assets/card2.png" alt="หนังสือการ์ตูนและงานออกแบบปก"></div>
+            <div class="book-body">
+              <span class="badge badge-dark">ขายดี</span>
+              <h3>ศิลปะการออกแบบปก</h3>
+              <p>รวมแนวคิดการจัดองค์ประกอบ สี และตัวอักษรสำหรับนักออกแบบ</p>
+              <div class="book-meta"><strong>฿425</strong><button aria-label="เพิ่มลงตะกร้า">+</button></div>
+            </div>
+          </article>
+
+          <article class="book-card">
+            <div class="book-image"><img src="assets/card3.png" alt="หนังสือภาพประกอบแนวเดินทาง"></div>
+            <div class="book-body">
+              <span class="badge">ใหม่</span>
+              <h3>เดินทางผ่านโลกสีสัน</h3>
+              <p>บันทึกการเดินทางที่ถ่ายทอดด้วยภาพประกอบอบอุ่นและสนุกสนาน</p>
+              <div class="book-meta"><strong>฿390</strong><button aria-label="เพิ่มลงตะกร้า">+</button></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="categories" class="category-section">
+      <div class="container">
+        <div class="section-heading light-heading">
+          <div><span class="section-kicker">เลือกอ่านตามใจ</span><h2>หมวดหมู่ยอดนิยม</h2></div>
+        </div>
+        <div class="category-grid">
+          <a href="#" class="category-card"><span>01</span><h3>วรรณกรรม</h3><p>นิยาย เรื่องสั้น และงานเขียนร่วมสมัย</p></a>
+          <a href="#" class="category-card"><span>02</span><h3>ศิลปะและดีไซน์</h3><p>แรงบันดาลใจสำหรับนักสร้างสรรค์</p></a>
+          <a href="#" class="category-card"><span>03</span><h3>เด็กและเยาวชน</h3><p>เรื่องราวสนุกที่เสริมจินตนาการ</p></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="contact" class="footer">
+    <div class="container footer-inner">
+      <div><a class="brand brand-light" href="#home"><span class="brand-icon">B</span><span>book store</span></a><p>พื้นที่เล็ก ๆ สำหรับคนรักหนังสือและงานออกแบบ</p></div>
+      <div><h4>ติดต่อเรา</h4><p>hello@bookstore.example</p><p>โทร. 02-000-0000</p></div>
+      <div><h4>ติดตามข่าวสาร</h4><form class="subscribe-form"><input type="email" placeholder="อีเมลของคุณ" required><button>สมัคร</button></form></div>
+    </div>
+    <div class="copyright">© 2026 Book Store. All rights reserved.</div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
