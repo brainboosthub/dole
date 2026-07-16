@@ -98,7 +98,9 @@ async function loadNewsSlider() {
     newsItems = Array.isArray(result.slides)
       ? result.slides.filter(Boolean)
       : [];
-
+const newsMode = String(result.mode || 'none')
+  .trim()
+  .toLowerCase();
     if (newsItems.length === 0) {
       slider.classList.add('is-empty');
       return;
@@ -151,11 +153,16 @@ async function loadNewsSlider() {
       loading.style.display = 'none';
     }
 
-    if (newsItems.length === 1) {
-      slider.classList.add('single-slide');
-    } else {
-      startNewsAutoSlide();
-    }
+if (newsMode !== 'block' || newsItems.length <= 1) {
+  // โหมดภาพนิ่ง หรือมีเพียงภาพเดียว
+  slider.classList.add('single-slide');
+  stopNewsAutoSlide();
+
+} else {
+  // โหมดสไลด์
+  slider.classList.remove('single-slide');
+  startNewsAutoSlide();
+}
 
   } catch (error) {
     console.error('โหลดภาพข่าวสารไม่สำเร็จ:', error);
