@@ -262,7 +262,7 @@ function startNewsAutoSlide() {
 
   newsAutoTimer = setInterval(function () {
     nextNewsSlide();
-  }, 5000);
+  }, 2500);
 }
 
 function stopNewsAutoSlide() {
