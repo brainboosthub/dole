@@ -1,6 +1,6 @@
 const toggle = document.querySelector('.menu-toggle');
 const nav = document.querySelector('.main-nav');
-
+let newsDisplayMode = 'none';
 toggle.addEventListener('click', () => {
   const isOpen = nav.classList.toggle('open');
   toggle.setAttribute('aria-expanded', String(isOpen));
@@ -68,7 +68,7 @@ const NEWS_API_URL =
 let newsCurrentIndex = 0;
 let newsAutoTimer = null;
 let newsItems = [];
-
+let newsDisplayMode = 'none';
 async function loadNewsSlider() {
   const slider = document.getElementById('newsSlider');
   const slidesContainer = document.getElementById('newsSlides');
@@ -209,9 +209,16 @@ function showNewsSlide(index) {
 }
 
 function nextNewsSlide() {
+  if (newsDisplayMode !== 'block') return;
+
   showNewsSlide(newsCurrentIndex + 1);
 }
 
+function previousNewsSlide() {
+  if (newsDisplayMode !== 'block') return;
+
+  showNewsSlide(newsCurrentIndex - 1);
+}
 function previousNewsSlide() {
   showNewsSlide(newsCurrentIndex - 1);
 }
@@ -232,9 +239,14 @@ function stopNewsAutoSlide() {
 }
 
 function restartNewsAutoSlide() {
-  if (newsItems.length > 1) {
+
+  if (
+    newsDisplayMode === 'block' &&
+    newsItems.length > 1
+  ) {
     startNewsAutoSlide();
   }
+
 }
 
 document.addEventListener('DOMContentLoaded', function () {
