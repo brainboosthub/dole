@@ -62,3 +62,197 @@ function setImageUrl(elementId, url) {
 }
 
 document.addEventListener('DOMContentLoaded', loadWebsiteImages);
+const NEWS_API_URL =
+  'https://script.google.com/macros/s/AKfycbyFu-j4vaLGLq4jFTXyZZp_IwEzHn3cXqCf2ShjF5oWFPZ72qioRubjCbyzuu-GotIqsQ/exec?mode=news';
+
+let newsCurrentIndex = 0;
+let newsAutoTimer = null;
+let newsItems = [];
+
+async function loadNewsSlider() {
+  const slider = document.getElementById('newsSlider');
+  const slidesContainer = document.getElementById('newsSlides');
+  const dotsContainer = document.getElementById('newsDots');
+  const loading = document.getElementById('newsLoading');
+
+  if (!slider || !slidesContainer || !dotsContainer) {
+    return;
+  }
+
+  try {
+    const response = await fetch(NEWS_API_URL, {
+      method: 'GET',
+      cache: 'no-store'
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error: ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    if (!result.success) {
+      throw new Error(result.message || 'โหลดข่าวสารไม่สำเร็จ');
+    }
+
+    newsItems = Array.isArray(result.slides)
+      ? result.slides.filter(Boolean)
+      : [];
+
+    if (newsItems.length === 0) {
+      slider.classList.add('is-empty');
+      return;
+    }
+
+    slidesContainer.innerHTML = '';
+    dotsContainer.innerHTML = '';
+
+    newsItems.forEach(function (url, index) {
+      const slide = document.createElement('div');
+      slide.className = 'news-slide';
+
+      if (index === 0) {
+        slide.classList.add('active');
+      }
+
+      const image = document.createElement('img');
+      image.src = url;
+      image.alt = `ข่าวสารลำดับที่ ${index + 1}`;
+      image.loading = index === 0 ? 'eager' : 'lazy';
+
+      image.onerror = function () {
+        slide.remove();
+      };
+
+      slide.appendChild(image);
+      slidesContainer.appendChild(slide);
+
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'news-dot';
+      dot.setAttribute(
+        'aria-label',
+        `แสดงข่าวลำดับที่ ${index + 1}`
+      );
+
+      if (index === 0) {
+        dot.classList.add('active');
+      }
+
+      dot.addEventListener('click', function () {
+        showNewsSlide(index);
+        restartNewsAutoSlide();
+      });
+
+      dotsContainer.appendChild(dot);
+    });
+
+    if (loading) {
+      loading.style.display = 'none';
+    }
+
+    if (newsItems.length === 1) {
+      slider.classList.add('single-slide');
+    } else {
+      startNewsAutoSlide();
+    }
+
+  } catch (error) {
+    console.error('โหลดภาพข่าวสารไม่สำเร็จ:', error);
+
+    if (loading) {
+      loading.textContent = 'ไม่สามารถโหลดข่าวสารได้';
+    }
+
+    setTimeout(function () {
+      slider.classList.add('is-empty');
+    }, 1500);
+  }
+}
+
+function showNewsSlide(index) {
+  const slides = document.querySelectorAll('.news-slide');
+  const dots = document.querySelectorAll('.news-dot');
+
+  if (!slides.length) return;
+
+  if (index < 0) {
+    index = slides.length - 1;
+  }
+
+  if (index >= slides.length) {
+    index = 0;
+  }
+
+  newsCurrentIndex = index;
+
+  slides.forEach(function (slide, slideIndex) {
+    slide.classList.toggle(
+      'active',
+      slideIndex === newsCurrentIndex
+    );
+  });
+
+  dots.forEach(function (dot, dotIndex) {
+    dot.classList.toggle(
+      'active',
+      dotIndex === newsCurrentIndex
+    );
+  });
+}
+
+function nextNewsSlide() {
+  showNewsSlide(newsCurrentIndex + 1);
+}
+
+function previousNewsSlide() {
+  showNewsSlide(newsCurrentIndex - 1);
+}
+
+function startNewsAutoSlide() {
+  stopNewsAutoSlide();
+
+  newsAutoTimer = setInterval(function () {
+    nextNewsSlide();
+  }, 5000);
+}
+
+function stopNewsAutoSlide() {
+  if (newsAutoTimer) {
+    clearInterval(newsAutoTimer);
+    newsAutoTimer = null;
+  }
+}
+
+function restartNewsAutoSlide() {
+  if (newsItems.length > 1) {
+    startNewsAutoSlide();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  const prevButton = document.getElementById('newsPrev');
+  const nextButton = document.getElementById('newsNext');
+  const slider = document.getElementById('newsSlider');
+
+  if (prevButton) {
+    prevButton.addEventListener('click', function () {
+      previousNewsSlide();
+      restartNewsAutoSlide();
+    });
+  }
+
+  if (nextButton) {
+    nextButton.addEventListener('click', function () {
+      nextNewsSlide();
+      restartNewsAutoSlide();
+    });
+  }
+
+  if (slider) {
+    slider.addEventListener('mouseenter', stopNewsAutoSlide);
+    slider.addEventListener('mouseleave', restartNewsAutoSlide);
+  }
+
+  loadNewsSlider();
+});
