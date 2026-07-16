@@ -1,6 +1,6 @@
 const toggle = document.querySelector('.menu-toggle');
 const nav = document.querySelector('.main-nav');
-let newsDisplayMode = 'none';
+
 toggle.addEventListener('click', () => {
   const isOpen = nav.classList.toggle('open');
   toggle.setAttribute('aria-expanded', String(isOpen));
@@ -19,36 +19,49 @@ document.querySelectorAll('.book-meta button').forEach(button => {
   button.addEventListener('click', () => {
     button.textContent = '✓';
     button.setAttribute('aria-label', 'เพิ่มลงตะกร้าแล้ว');
-    setTimeout(() => button.textContent = '+', 1400);
+
+    setTimeout(() => {
+      button.textContent = '+';
+    }, 1400);
   });
 });
+
+
+/* ======================================
+   รูปภาพเว็บไซต์
+====================================== */
+
 const IMAGE_API_URL =
   'https://script.google.com/macros/s/AKfycbyFu-j4vaLGLq4jFTXyZZp_IwEzHn3cXqCf2ShjF5oWFPZ72qioRubjCbyzuu-GotIqsQ/exec?mode=images';
 
 async function loadWebsiteImages() {
-
-  console.log("เริ่มโหลดรูป");
-
   try {
+    const response = await fetch(IMAGE_API_URL, {
+      method: 'GET',
+      cache: 'no-store'
+    });
 
-    const response = await fetch(IMAGE_API_URL);
-
-    console.log(response);
+    if (!response.ok) {
+      throw new Error(`HTTP error: ${response.status}`);
+    }
 
     const images = await response.json();
-
-    console.log(images);
 
     setImageUrl('card1Image', images.card1);
     setImageUrl('card2Image', images.card2);
     setImageUrl('card3Image', images.card3);
 
-  } catch(err){
+    if (images.hero) {
+      const hero = document.querySelector('.hero');
 
-    console.log(err);
+      if (hero) {
+        hero.style.backgroundImage = `url("${images.hero}")`;
+      }
+    }
 
+  } catch (error) {
+    console.error('โหลดรูปภาพเว็บไซต์ไม่สำเร็จ:', error);
   }
-
 }
 
 function setImageUrl(elementId, url) {
@@ -61,7 +74,11 @@ function setImageUrl(elementId, url) {
   }
 }
 
-document.addEventListener('DOMContentLoaded', loadWebsiteImages);
+
+/* ======================================
+   ข่าวสารแบบสไลด์
+====================================== */
+
 const NEWS_API_URL =
   'https://script.google.com/macros/s/AKfycbyFu-j4vaLGLq4jFTXyZZp_IwEzHn3cXqCf2ShjF5oWFPZ72qioRubjCbyzuu-GotIqsQ/exec?mode=news';
 
@@ -69,6 +86,7 @@ let newsCurrentIndex = 0;
 let newsAutoTimer = null;
 let newsItems = [];
 let newsDisplayMode = 'none';
+
 async function loadNewsSlider() {
   const slider = document.getElementById('newsSlider');
   const slidesContainer = document.getElementById('newsSlides');
@@ -98,16 +116,23 @@ async function loadNewsSlider() {
     newsItems = Array.isArray(result.slides)
       ? result.slides.filter(Boolean)
       : [];
-const newsMode = String(result.mode || 'none')
-  .trim()
-  .toLowerCase();
+
+    const newsMode = String(result.mode || 'none')
+      .trim()
+      .toLowerCase();
+
+    // สำคัญ ต้องกำหนดค่าให้ตัวแปรหลัก
+    newsDisplayMode = newsMode;
+
     if (newsItems.length === 0) {
       slider.classList.add('is-empty');
       return;
     }
 
+    slider.classList.remove('is-empty');
     slidesContainer.innerHTML = '';
     dotsContainer.innerHTML = '';
+    newsCurrentIndex = 0;
 
     newsItems.forEach(function (url, index) {
       const slide = document.createElement('div');
@@ -123,7 +148,7 @@ const newsMode = String(result.mode || 'none')
       image.loading = index === 0 ? 'eager' : 'lazy';
 
       image.onerror = function () {
-        slide.remove();
+        console.error('โหลดรูปข่าวไม่ได้:', url);
       };
 
       slide.appendChild(image);
@@ -142,6 +167,8 @@ const newsMode = String(result.mode || 'none')
       }
 
       dot.addEventListener('click', function () {
+        if (newsDisplayMode !== 'block') return;
+
         showNewsSlide(index);
         restartNewsAutoSlide();
       });
@@ -153,16 +180,19 @@ const newsMode = String(result.mode || 'none')
       loading.style.display = 'none';
     }
 
-if (newsMode !== 'block' || newsItems.length <= 1) {
-  // โหมดภาพนิ่ง หรือมีเพียงภาพเดียว
-  slider.classList.add('single-slide');
-  stopNewsAutoSlide();
+    if (
+      newsDisplayMode !== 'block' ||
+      newsItems.length <= 1
+    ) {
+      // J1 = none หรือมีเพียงภาพเดียว
+      slider.classList.add('single-slide');
+      stopNewsAutoSlide();
 
-} else {
-  // โหมดสไลด์
-  slider.classList.remove('single-slide');
-  startNewsAutoSlide();
-}
+    } else {
+      // J1 = block และมีมากกว่า 1 ภาพ
+      slider.classList.remove('single-slide');
+      startNewsAutoSlide();
+    }
 
   } catch (error) {
     console.error('โหลดภาพข่าวสารไม่สำเร็จ:', error);
@@ -219,12 +249,16 @@ function previousNewsSlide() {
 
   showNewsSlide(newsCurrentIndex - 1);
 }
-function previousNewsSlide() {
-  showNewsSlide(newsCurrentIndex - 1);
-}
 
 function startNewsAutoSlide() {
   stopNewsAutoSlide();
+
+  if (
+    newsDisplayMode !== 'block' ||
+    newsItems.length <= 1
+  ) {
+    return;
+  }
 
   newsAutoTimer = setInterval(function () {
     nextNewsSlide();
@@ -239,15 +273,18 @@ function stopNewsAutoSlide() {
 }
 
 function restartNewsAutoSlide() {
-
   if (
     newsDisplayMode === 'block' &&
     newsItems.length > 1
   ) {
     startNewsAutoSlide();
   }
-
 }
+
+
+/* ======================================
+   เริ่มระบบหลังหน้าเว็บโหลดเสร็จ
+====================================== */
 
 document.addEventListener('DOMContentLoaded', function () {
   const prevButton = document.getElementById('newsPrev');
@@ -273,5 +310,6 @@ document.addEventListener('DOMContentLoaded', function () {
     slider.addEventListener('mouseleave', restartNewsAutoSlide);
   }
 
+  loadWebsiteImages();
   loadNewsSlider();
 });
