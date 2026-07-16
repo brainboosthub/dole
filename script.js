@@ -26,36 +26,29 @@ const IMAGE_API_URL =
   'https://script.google.com/macros/s/AKfycbyFu-j4vaLGLq4jFTXyZZp_IwEzHn3cXqCf2ShjF5oWFPZ72qioRubjCbyzuu-GotIqsQ/exec?mode=images';
 
 async function loadWebsiteImages() {
-  try {
-    const response = await fetch(IMAGE_API_URL, {
-      method: 'GET',
-      cache: 'no-store'
-    });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error: ${response.status}`);
-    }
+  console.log("เริ่มโหลดรูป");
+
+  try {
+
+    const response = await fetch(IMAGE_API_URL);
+
+    console.log(response);
 
     const images = await response.json();
 
-    // ภาพพื้นหลัง Hero
-    if (images.hero) {
-      const hero = document.querySelector('.hero');
+    console.log(images);
 
-      if (hero) {
-        hero.style.backgroundImage =
-          `url("${images.hero}")`;
-      }
-    }
-
-    // ภาพการ์ด
     setImageUrl('card1Image', images.card1);
     setImageUrl('card2Image', images.card2);
     setImageUrl('card3Image', images.card3);
 
-  } catch (error) {
-    console.error('โหลด URL รูปภาพจาก Google Sheet ไม่สำเร็จ:', error);
+  } catch(err){
+
+    console.log(err);
+
   }
+
 }
 
 function setImageUrl(elementId, url) {
