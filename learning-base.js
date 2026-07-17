@@ -1,3 +1,5 @@
+console.log('learning-base.js โหลดสำเร็จ');
+
 const LEARNING_API_URL =
   'https://script.google.com/macros/s/ใส่_DEPLOYMENT_ID/exec';
 
