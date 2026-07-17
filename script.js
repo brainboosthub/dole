@@ -1,19 +1,26 @@
 const toggle = document.querySelector('.menu-toggle');
 const nav = document.querySelector('.main-nav');
 
-toggle.addEventListener('click', () => {
-  const isOpen = nav.classList.toggle('open');
-  toggle.setAttribute('aria-expanded', String(isOpen));
-  toggle.textContent = isOpen ? '✕' : '☰';
-});
+if (toggle && nav) {
+  toggle.addEventListener('click', () => {
+    const isOpen = nav.classList.toggle('open');
 
-document.querySelectorAll('.main-nav a').forEach(link => {
-  link.addEventListener('click', () => {
-    nav.classList.remove('open');
-    toggle.setAttribute('aria-expanded', 'false');
-    toggle.textContent = '☰';
+    toggle.setAttribute(
+      'aria-expanded',
+      String(isOpen)
+    );
+
+    toggle.textContent = isOpen ? '✕' : '☰';
   });
-});
+
+  document.querySelectorAll('.main-nav a').forEach(link => {
+    link.addEventListener('click', () => {
+      nav.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.textContent = '☰';
+    });
+  });
+}
 
 document.querySelectorAll('.book-meta button').forEach(button => {
   button.addEventListener('click', () => {
