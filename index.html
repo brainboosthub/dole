@@ -256,7 +256,6 @@
     <div class="copyright">© 2026 Book Store. All rights reserved.</div>
   </footer>
 
-  <script src="script.js"></script>
   <!-- Modal Login / ลงทะเบียน -->
 <div id="studentModal" class="learning-modal">
   <div class="learning-modal-box">
@@ -365,5 +364,33 @@
     </button>
   </div>
 </div>
+  <!-- Modal รายละเอียดกิจกรรม -->
+<div id="detailModal" class="learning-modal">
+  <div class="learning-modal-box learning-modal-large">
+
+    <button
+      class="learning-modal-close"
+      type="button"
+      onclick="closeLearningModal('detailModal')">
+      ×
+    </button>
+
+    <div id="detailContent"></div>
+
+    <button
+      id="detailAddCartBtn"
+      type="button">
+      ใส่ตะกร้า
+    </button>
+
+  </div>
+</div>
+
+<!-- JavaScript -->
+<script src="script.js"></script>
+<script src="learning-base.js"></script>
+
+</body>
+</html>
 </body>
 </html>
