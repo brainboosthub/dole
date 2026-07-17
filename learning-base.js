@@ -1,4 +1,4 @@
-console.log('learning-base.js โหลดสำเร็จ');
+console.log('learning-base.js loaded');
 
 const LEARNING_API_URL =
   'https://script.google.com/macros/s/AKfycbyFu-j4vaLGLq4jFTXyZZp_IwEzHn3cXqCf2ShjF5oWFPZ72qioRubjCbyzuu-GotIqsQ/exec';
@@ -635,4 +635,11 @@ document.addEventListener('DOMContentLoaded', async function () {
         'เกิดข้อผิดพลาดในการเริ่มระบบ: ' + error.message;
     }
   }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+  console.log('เริ่มโหลดระบบฐานการเรียนรู้');
+
+  updateLearningTop();
+  loadLearningActivities();
 });
