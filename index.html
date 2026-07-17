@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
   <div class="announcement">
@@ -22,22 +23,62 @@
     </div>
   </div>
 
-  <header class="site-header">
-    <div class="container nav-wrap">
-      <a class="brand" href="#home">
-        <span class="brand-icon">O</span>
-        <span>orange</span>
-      </a>
-      <button class="menu-toggle" aria-label="เปิดเมนู" aria-expanded="false">☰</button>
-      <nav class="main-nav" aria-label="เมนูหลัก">
-        <a href="#home">หน้าแรก</a>
-        <a href="#featured">หนังสือแนะนำ</a>
-        <a href="#categories">หมวดหมู่</a>
-        <a href="#contact">ติดต่อ</a>
-      </nav>
-      <a class="nav-button" href="#featured">ค้นหาหนังสือ</a>
+<header class="site-header">
+  <div class="container nav-wrap">
+
+    <a class="brand" href="#home">
+      <span class="brand-icon">O</span>
+      <span>orange</span>
+    </a>
+
+    <button class="menu-toggle"
+      aria-label="เปิดเมนู"
+      aria-expanded="false">
+      ☰
+    </button>
+
+    <nav class="main-nav" aria-label="เมนูหลัก">
+      <a href="#home">หน้าแรก</a>
+      <a href="#featured">หนังสือแนะนำ</a>
+      <a href="#learningBase">ฐานการเรียนรู้</a>
+      <a href="#categories">หมวดหมู่</a>
+      <a href="#contact">ติดต่อ</a>
+    </nav>
+
+    <div class="learning-top-actions">
+      <button
+        id="scoreBtn"
+        class="learning-nav-btn"
+        type="button"
+        onclick="openScoreModal()">
+        รวม 0 ชั่วโมง
+      </button>
+
+      <button
+        id="accountBtn"
+        class="learning-nav-btn"
+        type="button"
+        onclick="openStudentModal()">
+        Login
+      </button>
+
+      <button
+        class="learning-nav-btn"
+        type="button"
+        onclick="openCart()">
+        🛒 <span id="cartCount">0</span>
+      </button>
+
+      <button
+        class="learning-nav-btn learning-teacher-btn"
+        type="button"
+        onclick="openTeacherPage()">
+        ครูประจำฐาน
+      </button>
     </div>
-  </header>
+
+  </div>
+</header>
 
   <main>
     <section id="home" class="hero">
@@ -156,6 +197,39 @@
             </div>
           </article>
         </div>
+        <!-- ระบบฐานการเรียนรู้ -->
+<div id="learningBase" class="learning-base-box">
+
+  <div class="learning-heading">
+    <div>
+      <span class="section-kicker">ฐานการเรียนรู้</span>
+      <h2>รายการฐานกิจกรรม</h2>
+    </div>
+
+    <div class="learning-tools">
+      <select
+        id="baseFilter"
+        class="learning-select"
+        onchange="filterActivities()">
+        <option value="">ทุกฐานการเรียนรู้</option>
+      </select>
+
+      <button
+        class="learning-refresh-btn"
+        type="button"
+        onclick="loadLearningActivities()">
+        รีเฟรช
+      </button>
+    </div>
+  </div>
+
+  <div id="learningLoading" class="learning-message">
+    กำลังโหลดกิจกรรม...
+  </div>
+
+  <div id="activityGrid" class="learning-grid"></div>
+
+</div>
       </div>
     </section>
 
@@ -183,5 +257,113 @@
   </footer>
 
   <script src="script.js"></script>
+  <!-- Modal Login / ลงทะเบียน -->
+<div id="studentModal" class="learning-modal">
+  <div class="learning-modal-box">
+
+    <button
+      class="learning-modal-close"
+      type="button"
+      onclick="closeLearningModal('studentModal')">
+      ×
+    </button>
+
+    <h2>เข้าสู่ระบบ</h2>
+
+    <label for="loginPhone">เบอร์โทร</label>
+    <input
+      id="loginPhone"
+      class="learning-input"
+      maxlength="10"
+      inputmode="numeric"
+      placeholder="กรอกเบอร์โทร 10 หลัก">
+
+    <div class="learning-modal-actions">
+      <button type="button" onclick="studentLogin()">
+        Login
+      </button>
+
+      <button
+        type="button"
+        onclick="toggleStudentRegister()">
+        ลงทะเบียนผู้ใช้ใหม่
+      </button>
+    </div>
+
+    <div id="studentRegisterBox" class="learning-hidden">
+      <hr>
+
+      <h3>ลงทะเบียน</h3>
+
+      <input
+        id="stuFullname"
+        class="learning-input"
+        placeholder="ชื่อ-นามสกุล">
+
+      <input
+        id="stuPhone"
+        class="learning-input"
+        maxlength="10"
+        inputmode="numeric"
+        placeholder="เบอร์โทร">
+
+      <textarea
+        id="stuAddress"
+        class="learning-input"
+        placeholder="ที่อยู่"></textarea>
+
+      <button type="button" onclick="registerStudent()">
+        บันทึกลงทะเบียน
+      </button>
+    </div>
+
+    <button
+      id="studentLogoutBtn"
+      class="learning-logout-btn learning-hidden"
+      type="button"
+      onclick="studentLogout()">
+      ออกจากระบบ
+    </button>
+
+  </div>
+</div>
+
+<!-- Modal ตะกร้า -->
+<div id="cartModal" class="learning-modal">
+  <div class="learning-modal-box learning-modal-large">
+
+    <button
+      class="learning-modal-close"
+      type="button"
+      onclick="closeLearningModal('cartModal')">
+      ×
+    </button>
+
+    <h2>ตะกร้ากิจกรรม</h2>
+
+    <div id="cartList"></div>
+  </div>
+</div>
+
+<!-- Modal รายละเอียดกิจกรรม -->
+<div id="detailModal" class="learning-modal">
+  <div class="learning-modal-box learning-modal-large">
+
+    <button
+      class="learning-modal-close"
+      type="button"
+      onclick="closeLearningModal('detailModal')">
+      ×
+    </button>
+
+    <div id="detailContent"></div>
+
+    <button
+      id="detailAddCartBtn"
+      type="button">
+      ใส่ตะกร้า
+    </button>
+  </div>
+</div>
 </body>
 </html>
