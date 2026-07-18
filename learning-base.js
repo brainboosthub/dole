@@ -1,7 +1,5 @@
-console.log('learning-base.js loaded');
-
 const LEARNING_API_URL =
-  'https://script.google.com/macros/s/AKfycbyFu-j4vaLGLq4jFTXyZZp_IwEzHn3cXqCf2ShjF5oWFPZ72qioRubjCbyzuu-GotIqsQ/exec';
+  'https://script.google.com/macros/s/ใส่_DEPLOYMENT_ID/exec';
 
 let LEARNING_STUDENT = JSON.parse(
   localStorage.getItem('LEARN_STUDENT') || 'null'
@@ -41,10 +39,7 @@ async function loadLearningActivities() {
   const grid = document.getElementById('activityGrid');
   const loading = document.getElementById('learningLoading');
 
-  if (!grid) {
-    console.error('ไม่พบ #activityGrid');
-    return;
-  }
+  if (!grid) return;
 
   if (loading) {
     loading.style.display = 'block';
@@ -52,43 +47,29 @@ async function loadLearningActivities() {
   }
 
   try {
-    const result = await learningApi(
-      'learningActivities'
-    );
+    const result = await learningApi('learningActivities');
 
-    LEARNING_ACTIVITIES =
-      Array.isArray(result.activities)
-        ? result.activities
-        : [];
+    LEARNING_ACTIVITIES = Array.isArray(result.activities)
+      ? result.activities
+      : [];
 
-    renderLearningBaseFilter(
-      LEARNING_ACTIVITIES
-    );
-
-    renderLearningActivities(
-      LEARNING_ACTIVITIES
-    );
+    renderLearningBaseFilter(LEARNING_ACTIVITIES);
+    renderLearningActivities(LEARNING_ACTIVITIES);
 
     if (loading) {
       loading.style.display = 'none';
     }
 
   } catch (error) {
-    console.error(
-      'โหลดกิจกรรมไม่สำเร็จ:',
-      error
-    );
-
-    grid.innerHTML = '';
+    console.error(error);
 
     if (loading) {
-      loading.style.display = 'block';
       loading.textContent =
-        'โหลดกิจกรรมไม่สำเร็จ: ' +
-        error.message;
+        `โหลดกิจกรรมไม่สำเร็จ: ${error.message}`;
     }
   }
 }
+
 function renderLearningActivities(list) {
   const grid = document.getElementById('activityGrid');
 
@@ -143,14 +124,10 @@ function renderLearningActivities(list) {
             ${formatLearningThaiDate(activity.activityDate)}
           </div>
 
-<div class="learning-muted">
-  ครูฐาน:
-  ${escapeLearningHtml(
-    activity.teacherName ||
-    activity.teacherId ||
-    '-'
-  )}
-</div>
+          <div class="learning-muted">
+            ครูฐาน:
+            ${escapeLearningHtml(activity.teacherName || '-')}
+          </div>
 
           <p class="learning-muted">
             ${escapeLearningHtml(activity.detail || '')}
@@ -593,22 +570,7 @@ function escapeLearningAttr(value) {
   return escapeLearningHtml(value);
 }
 
-document.addEventListener('DOMContentLoaded', async function () {
-  console.log('เริ่มระบบฐานการเรียนรู้');
-
-  const loading = document.getElementById('learningLoading');
-
-  try {
-    updateLearningTop();
-    await loadLearningActivities();
-  } catch (error) {
-    console.error('เริ่มระบบฐานการเรียนรู้ไม่สำเร็จ:', error);
-
-    if (loading) {
-      loading.style.display = 'block';
-      loading.textContent =
-        'เกิดข้อผิดพลาดในการเริ่มระบบ: ' + error.message;
-    }
-  }
+document.addEventListener('DOMContentLoaded', function () {
+  updateLearningTop();
+  loadLearningActivities();
 });
-
