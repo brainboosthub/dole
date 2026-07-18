@@ -15,28 +15,57 @@ const API_URL =
     .replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
     .replaceAll('"','&quot;').replaceAll("'",'&#039;');
 
-  async function callApi(action, data = {}, method = 'POST') {
-    let response;
-    if (method === 'GET') {
-      const url = new URL(API_URL);
-      url.searchParams.set('mode', 'learning');
-      url.searchParams.set('action', action);
-      Object.entries(data).forEach(([key, value]) => url.searchParams.set(key, value ?? ''));
-      response = await fetch(url.toString(), { cache: 'no-store' });
-    } else {
-      response = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ mode: 'learning', action, data })
-      });
-    }
-    const text = await response.text();
-    let result;
-    try { result = JSON.parse(text); }
-    catch { throw new Error('API ส่งข้อมูลกลับมาไม่ใช่ JSON'); }
-    if (!response.ok || result?.success === false) throw new Error(result?.message || `HTTP ${response.status}`);
-    return Object.prototype.hasOwnProperty.call(result, 'data') ? result.data : result;
+async function callApi(action, data = {}, method = 'POST') {
+  let response;
+
+  if (method === 'GET') {
+    const url = new URL(API_URL);
+
+    url.searchParams.set('action', action);
+    url.searchParams.set('_t', Date.now());
+
+    Object.entries(data).forEach(([key, value]) => {
+      url.searchParams.set(key, value ?? '');
+    });
+
+    response = await fetch(url.toString(), {
+      cache: 'no-store'
+    });
+
+  } else {
+    response = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      },
+      body: JSON.stringify({
+        action: action,
+        data: data
+      })
+    });
   }
+
+  const text = await response.text();
+
+  let result;
+
+  try {
+    result = JSON.parse(text);
+  } catch (error) {
+    console.error('API RESPONSE:', text);
+    throw new Error('API ส่งข้อมูลกลับมาไม่ใช่ JSON');
+  }
+
+  if (!response.ok || result.success === false) {
+    throw new Error(
+      result.message || `HTTP ${response.status}`
+    );
+  }
+
+  return Object.prototype.hasOwnProperty.call(result, 'data')
+    ? result.data
+    : result;
+}
 
   function showPage(id, btn) {
     const root = $('learningBaseModule');
