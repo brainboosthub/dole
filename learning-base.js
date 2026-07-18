@@ -161,21 +161,119 @@
     } catch(err) { Swal.close(); Swal.fire('ผิดพลาด',err.message,'error'); }
   }
 
-  async function openCart() {
-    if (!requireStudent()) return;
-    $('cartModal').style.display='flex'; $('cartList').innerHTML='กำลังโหลด...';
-    try {
-      const list=await callApi('getMyCart',{studentId:student.studentId},'GET') || [];
-      if (!list.length) return $('cartList').innerHTML='<div class="learning-list-item">ยังไม่มีกิจกรรมในตะกร้า</div>';
-      const total=list.reduce((s,c)=>s+getActivityHours(c.activity),0);
-      $('cartList').innerHTML=`<div class="learning-list-item"><b>รวมทั้งหมด ${total} ชั่วโมง</b></div>`+
-      list.map(c=>`<div class="learning-list-item"><b>${escapeHtml(c.activity?.title||'-')}</b><br>
-      <span class="learning-muted">ชั่วโมง: ${getActivityHours(c.activity)} ชั่วโมง</span><br>
-      <span class="learning-muted">วันที่ ${formatThaiDate(c.activity?.activityDate)}</span>
-      <div class="learning-actions"><button class="btn-green" onclick="LearningBase.confirmJoin('${escapeHtml(c.activityId)}')">ยืนยันเข้าร่วม</button>
-      <button class="btn-red" onclick="LearningBase.cancelCartItem('${escapeHtml(c.cartId)}')">ลบ</button></div></div>`).join('');
-    } catch(err) { $('cartList').innerHTML=`<div class="learning-list-item">${escapeHtml(err.message)}</div>`; }
+async function openCart() {
+  if (!requireStudent()) return;
+
+  const cartModal = $('cartModal');
+  const cartList = $('cartList');
+
+  if (!cartModal || !cartList) return;
+
+  cartModal.style.display = 'flex';
+  cartList.innerHTML = 'กำลังโหลด...';
+
+  try {
+    const list = await callApi(
+      'getMyCart',
+      {
+        studentId: student.studentId
+      },
+      'GET'
+    ) || [];
+
+    if (!list.length) {
+      cartList.innerHTML = `
+        <div class="learning-list-item">
+          ยังไม่มีกิจกรรมในตะกร้า
+        </div>
+      `;
+      return;
+    }
+
+    const totalHours = list.reduce((sum, item) => {
+      return sum + getActivityHours(item.activity);
+    }, 0);
+
+    cartList.innerHTML = `
+      <div class="learning-cart-summary">
+        <b>รวมทั้งหมด ${totalHours} ชั่วโมง</b>
+      </div>
+    ` + list.map(item => {
+      const activity = item.activity || {};
+
+      const imageUrl =
+        String(activity.image1 || '').trim() ||
+        'https://placehold.co/300x200?text=Activity';
+
+      return `
+        <div class="learning-cart-item">
+
+          <div class="learning-cart-info">
+
+            <div class="learning-cart-title">
+              ${escapeHtml(activity.title || '-')}
+            </div>
+
+            <div class="learning-muted">
+              ฐาน: ${escapeHtml(activity.baseNo || '-')}
+            </div>
+
+            <div class="learning-muted">
+              ชั่วโมง:
+              ${getActivityHours(activity)} ชั่วโมง
+            </div>
+
+            <div class="learning-muted">
+              วันที่:
+              ${formatThaiDate(activity.activityDate)}
+            </div>
+
+            <div class="learning-cart-actions">
+
+              <button
+                type="button"
+                class="btn-green learning-confirm-btn"
+                onclick="LearningBase.confirmJoin(
+                  '${escapeHtml(item.activityId)}'
+                )">
+                ยืนยันเข้าร่วม
+              </button>
+
+              <button
+                type="button"
+                class="btn-red learning-delete-btn"
+                onclick="LearningBase.cancelCartItem(
+                  '${escapeHtml(item.cartId)}'
+                )">
+                ลบ
+              </button>
+
+            </div>
+          </div>
+
+          <img
+            class="learning-cart-image"
+            src="${escapeHtml(imageUrl)}"
+            alt="${escapeHtml(activity.title || 'รูปกิจกรรม')}"
+            loading="lazy"
+            onerror="
+              this.onerror=null;
+              this.src='https://placehold.co/300x200?text=Activity';
+            ">
+
+        </div>
+      `;
+    }).join('');
+
+  } catch (error) {
+    cartList.innerHTML = `
+      <div class="learning-list-item">
+        โหลดข้อมูลตะกร้าไม่สำเร็จ:
+        ${escapeHtml(error.message)}
+      </div>
+    `;
   }
+}
 
   async function loadCartCount() {
     if (!student) { $('cartCount').textContent='0'; return; }
