@@ -3,7 +3,7 @@ console.log(
 );
 
 const LEARNING_API_URL =
-  'https://script.google.com/macros/s/AKfycbyFu-j4vaLGLq4jFTXyZZp_IwEzHn3cXqCf2ShjF5oWFPZ72qioRubjCbyzuu-GotIqsQ/exec';
+  'https://script.google.com/macros/s/AKfycbzvVPllEQ0MSBDokzrav34yJ5IcTiqcVo2mALWNgwFBTlYdrWrr-S47UD4zz_k-b4yVBQ/exec';
 
 let LEARNING_STUDENT = JSON.parse(
   localStorage.getItem('LEARN_STUDENT') || 'null'
