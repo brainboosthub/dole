@@ -1,600 +1,1309 @@
-:root{--navy:#08263a;--navy2:#061c2c;--orange:#ff8467;--orange2:#ff6d4d;--yellow:#ffd36d;--cream:#fff6e7;--white:#fff;--text:#10212c;--muted:#64717a;--shadow:0 18px 45px rgba(7,31,48,.18)}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:"Kanit",sans-serif;color:var(--text);background:var(--cream)}a{text-decoration:none;color:inherit}img{max-width:100%;display:block}.container{width:min(1180px,calc(100% - 40px));margin:auto}
-.announcement{background:var(--navy2);color:#fff;min-height:86px;display:flex;align-items:center;background-image:radial-gradient(circle at 8% 30%,#ff744d 0 2px,transparent 3px),radial-gradient(circle at 28% 70%,#ffd36d 0 2px,transparent 3px),radial-gradient(circle at 72% 25%,#ff744d 0 2px,transparent 3px),radial-gradient(circle at 88% 70%,#fff 0 1px,transparent 2px);background-size:180px 90px}.announcement-inner{display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:center}.announcement p{margin:0;text-align:center;font-size:14px;opacity:.9}.brand{display:inline-flex;align-items:center;gap:9px;font-size:22px;font-weight:700}.brand-icon{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--orange2));color:#fff;display:grid;place-items:center;font-size:16px;box-shadow:inset 0 0 0 4px rgba(255,255,255,.22)}.brand-light{color:#fff}.tiny-btn,.primary-btn{background:var(--orange);color:#fff;border-radius:999px;padding:11px 22px;font-weight:600;transition:.25s}.tiny-btn:hover,.primary-btn:hover{transform:translateY(-2px);background:var(--orange2)}
-.site-header{background:#fff;position:sticky;top:0;z-index:20;box-shadow:0 5px 25px rgba(4,22,35,.09)}.nav-wrap{height:68px;display:flex;align-items:center;justify-content:space-between}.main-nav{display:flex;gap:34px;font-size:14px}.main-nav a{position:relative}.main-nav a:after{content:"";position:absolute;left:0;bottom:-8px;width:0;height:2px;background:var(--orange);transition:.25s}.main-nav a:hover:after{width:100%}.nav-button{background:var(--navy);color:#fff;border-radius:999px;padding:10px 20px;font-size:13px}.menu-toggle{display:none;border:0;background:none;font-size:26px}
-.hero {
-  position: relative;
-  min-height: 620px;
-  background-image: url("assets/hero.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+ChatGPT
+
+
+
+
+
+
+วันนี้ 0:48
+
+script js github เริ่มใหม่(1).txt
+เอกสาร
+
+index เgithub เริ่มใหม่(1).txt
+เอกสาร
+
+teacher ฐานการเรียนรู้(6).txt
+เอกสาร
+
+index ฐานการเรียนรู้(6).txt
+เอกสาร
+
+code ฐานการเรียนรู้(6).txt
+เอกสาร
+
+Appscript.txt
+เอกสาร
+ฉันมีโค้ดเว็บไซต์ ที่อยู่ใน GitHub ทำงานคู่กับ Appscript
+ฉันมีระบบฐานการเรียนรู้
+ฉันต้องการ
+- นำระบบฐานการเรียนรู้เพิ่มเข้า ในโค้ดที่มีอยู่(โปรเจ็คเดียวกัน) สามารถทำงานได้ใน GitHub 
+- รายการฐานกิจกรรม (<div class="container">) ของระบบฐานการเรียนรู้ นำมาแสดงในหน้าเว็บไซต์ เป็น Box ต่อจาก book-grid - นำ top-actions แสดงใน container nav-wrap ระบบนำนำทุกฟังก์ชันของระบบฐานการเรียนรู้  มาทำงานใน GitHub ยกเว้นระบบหลังบ้าน Teacher ที่ทำงานบน Appscript
+ไม่ทำระบบเดิมเพี้ยน
+
+ประมวลผล 2m 56s
+ฉันรวมระบบฐานการเรียนรู้เข้ากับเว็บไซต์ GitHub ให้แล้ว โดยคงโครงสร้างเว็บไซต์เดิมและแยก CSS/JavaScript ของระบบใหม่เพื่อลดปัญหาระบบเดิมเพี้ยน
+
+ดาวน์โหลดไฟล์ระบบที่รวมแล้ว
+
+ภายในประกอบด้วย:
+
+index.html — เพิ่มรายการกิจกรรมต่อจาก book-grid
+
+learning-base.css — CSS ระบบฐานการเรียนรู้ที่จำกัดผลกระทบไว้ในระบบนี้
+
+learning-base.js — เปลี่ยนจาก google.script.run เป็น fetch() สำหรับ GitHub
+
+script.js — ระบบรูปภาพเว็บไซต์เดิม
+
+Code.gs — รวม API รูปภาพและ API ฐานการเรียนรู้ โดยมี doGet และ doPost ชุดเดียว
+
+teacher.html — ระบบหลังบ้านครู ทำงานบน Apps Script ตามเดิม
+
+README-ติดตั้ง.txt — วิธีนำไฟล์ไปใช้งาน
+
+สิ่งที่ปรับสำคัญ:
+
+ปุ่มรวมชั่วโมง, Login, ตะกร้า และครูประจำฐาน อยู่ใน container nav-wrap ของเว็บไซต์เดิม ซึ่งเดิมมีเมนูหลักและปุ่มค้นหาหนังสืออยู่บริเวณนี้ 
+
+
+รายการกิจกรรมแสดงเป็น Box ต่อจากส่วน book-grid เดิม 
+
+
+ฟังก์ชันผู้ใช้ เช่น ลงทะเบียน, Login, ตะกร้า, ยืนยันกิจกรรม, ประวัติ และชั่วโมงสะสม ถูกนำมาทำงานบน GitHub
+
+หน้า ครูประจำฐาน ยังคงเปิดผ่าน Apps Script เพราะระบบเดิมใช้ google.script.run ติดต่อฟังก์ชันหลังบ้าน 
+
+
+ฐานข้อมูลยังใช้ชีต students, teachers, activities, carts, joins และ score ตามระบบเดิม 
+
+
+API รูปภาพ mode=images ยังทำงานเหมือนระบบเว็บไซต์เดิม 
+
+
+หลังนำ Code.gs ขึ้น Apps Script ต้อง Deploy เวอร์ชันใหม่ และตรวจว่า URL /exec ตรงกับ API_URL ใน learning-base.js และ IMAGE_API_URL ใน script.js ครับ 
+
+
+
+ข้อความที่วาง (1)(53).txt
+เอกสาร
+ฉันมี style.css 
+ต้องการให้ฐานการเรียนรู้ที่เพิ่มเข้ามา เป็นรูปแบบเดียวกันกับ Appscript ฐานการเรียนรู้ต้นแบบ
+
+ประมวลผล 1m 8s
+ปรับ CSS ระบบฐานการเรียนรู้ให้มีรูปแบบเดียวกับต้นแบบ Apps Script แล้ว ทั้งการ์ดกิจกรรม แท็บ ปุ่ม ตัวกรอง Modal ตะกร้า หน้ารายละเอียด และการแสดงผลบนมือถือ โดยจำกัด CSS ไว้เฉพาะระบบฐานการเรียนรู้ จึงไม่กระทบส่วนเว็บไซต์เดิม
+
+ดาวน์โหลดชุดไฟล์ที่ปรับแล้ว
+
+หรือดาวน์โหลดเฉพาะไฟล์ CSS:
+
+style.css
+
+learning-base.css
+
+วิธีใช้ที่แนะนำ
+นำ style.css ฉบับใหม่ไปแทนไฟล์เดิม จากนั้นลบบรรทัดนี้ออกจาก index.html
+
+<link rel="stylesheet" href="learning-base.css">
+เพราะ CSS ฐานการเรียนรู้ถูกรวมอยู่ใน style.css แล้ว
+
+รูปแบบเว็บไซต์เดิมใช้ตัวแปรสี เช่น --navy, --orange และ --cream อยู่แล้ว 
+
+ แต่ส่วนฐานการเรียนรู้ที่ปรับใหม่นี้จะคงหน้าตาตามต้นแบบ Apps Script ได้แก่พื้นหลังสีเทาอ่อน การ์ดสีขาว มุมโค้ง 22px ปุ่มสีน้ำเงิน แท็บสีเทา และ Modal สีขาว
+
+ฉันแก้ selector ที่ผิดในไฟล์เดิมแล้วด้วย เช่น:
+
+.card-#learningBaseModule
+.learning-.learning-header
+ซึ่งเป็น selector ที่ Browser ไม่สามารถนำไปใช้งานได้ถูกต้องครับ
+
+
+ดูรูปแบบ pop-up ตะกร้า (learning-modal-box) กิจกรรม ต้องมีรูปภาพแสดงด้วยเหมือน Appscript ต้นแบบ
+
+ประมวลผล 35s
+แก้ไข Popup ตะกร้ากิจกรรมแล้วครับ ตอนนี้แต่ละรายการจะแสดงเหมือน Apps Script ต้นแบบ ได้แก่
+
+รูปภาพจาก activity.image1
+
+ชื่อกิจกรรม
+
+จำนวนชั่วโมง
+
+วันที่จัดกิจกรรม
+
+ปุ่ม ยืนยันเข้าร่วม
+
+ปุ่ม ลบ
+
+บนมือถือรูปภาพจะย้ายขึ้นด้านบนและแสดงเต็มความกว้าง
+
+หากกิจกรรมไม่มีรูป หรือ URL รูปเปิดไม่ได้ ระบบจะแสดงภาพสำรองแทน
+
+ดาวน์โหลดชุดไฟล์ที่แก้ไขแล้ว
+
+ไฟล์ที่แก้ไขหลักคือ:
+
+learning-base.js
+
+ให้นำ learning-base.js ไปแทนไฟล์เดิมใน GitHub จากนั้นกด Commit changes และรีเฟรชหน้าเว็บไซต์ด้วย Ctrl + F5 ครับ
+
+
+{"success":false,"message":"Invalid mode","receivedMode":"learning"}
+
+
+ข้อความที่วาง (1)(54).txt
+เอกสาร
+ถูกมั้ย
+const toggle = document.querySelector('.menu-toggle');const nav = document.querySelector('.main-nav');
+
+toggle.addEventListener('click', () => {const isOpen = nav.classList.toggle('open');toggle.setAttribute('aria-expanded', String(isOpen));toggle.textContent = isOpen ? '✕' : '☰';});
+
+document.querySelectorAll('.main-nav a').forEach(link => {link.addEventListener('click', () => {nav.classList.remove('open');toggle.setAttribute('aria-expanded', 'false');toggle.textContent = '☰';});});
+
+document.querySelectorAll('.book-meta button').forEach(button => {button.addEventListener('click', () => {button.textContent = '✓';button.setAttribute('aria-label', 'เพิ่มลงตะกร้าแล้ว');setTimeout(() => button.textContent = '+', 1400);});});const IMAGE_API_URL ='https://script.google.com/macros/s/AKfycbyFu-j4vaLGLq4jFTXyZZp_IwEzHn3cXqCf2ShjF5oWFPZ72qioRubjCbyzuu-GotIqsQ/exec?mode=images';
+
+async function loadWebsiteImages() {try {const response = await fetch(IMAGE_API_URL, {method: 'GET',cache: 'no-store'});
+
+if (!response.ok) {
+  throw new Error(HTTP error: ${response.status});
 }
-.hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,28,44,.96) 0%,rgba(5,28,44,.79) 40%,rgba(5,28,44,.1) 78%)}
-.hero-content{position:relative;z-index:2;color:#fff;padding-top:90px}.eyebrow,.section-kicker{text-transform:uppercase;letter-spacing:2px;font-size:12px;font-weight:600}.hero h1{font-size:clamp(42px,6vw,70px);line-height:.98;max-width:650px;margin:18px 0}.hero p{max-width:520px;line-height:1.8;opacity:.88}.hero-actions{display:flex;align-items:center;gap:26px;margin-top:30px}.text-link{font-weight:500}.floating-dot{position:absolute;border-radius:50%;background:var(--orange);box-shadow:0 0 0 7px rgba(255,132,103,.16)}.dot-1{width:12px;height:12px;left:9%;top:25%}.dot-2{width:8px;height:8px;left:39%;top:16%;background:var(--yellow)}.dot-3{width:10px;height:10px;right:8%;top:24%}
-.featured-section{background:linear-gradient(180deg,var(--orange) 0%,#ff8e71 54%,var(--yellow) 54%,#ffdc86 100%);padding:70px 0 95px;position:relative}.featured-section:before,.featured-section:after{content:"";position:absolute;bottom:0;width:190px;height:190px;background:#ffd36d;border-radius:50%}.featured-section:before{left:-90px}.featured-section:after{right:-90px}.section-heading{display:flex;justify-content:space-between;align-items:end;margin-bottom:28px}.section-heading h2{font-size:clamp(28px,4vw,44px);margin:6px 0 0}.view-all{font-weight:600}
-.book-grid{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:28px;
-  max-width:1060px;
-  margin:0 auto;
-  position:relative;
-  z-index:2;
+
+const images = await response.json();
+
+// ภาพพื้นหลัง Hero
+if (images.hero) {
+  const hero = document.querySelector('.hero');
+
+  if (hero) {
+    hero.style.backgroundImage =
+      url("${images.hero}");
+  }
 }
-.book-card{
-  width:100%;
-  max-width:335px;
-  margin:0 auto;
-  background:#ff9a80;
-  border-radius:8px;
-  overflow:hidden;
-  box-shadow:var(--shadow);
-  transition:.25s;
-}
-.book-card:hover{transform:translateY(-8px)}.book-image{aspect-ratio:1.25/1;overflow:hidden;background:var(--navy)}.book-image img{width:100%;height:100%;object-fit:cover}.book-body{padding:20px}.badge{display:inline-block;background:var(--yellow);border-radius:999px;padding:5px 11px;font-size:11px;font-weight:700}.badge-dark{background:var(--navy);color:#fff}.book-body h3{font-size:23px;margin:13px 0 8px;color:#fff}.book-body p{font-size:14px;line-height:1.65;margin:0;color:rgba(16,33,44,.78)}.book-meta{display:flex;justify-content:space-between;align-items:center;margin-top:18px}.book-meta strong{font-size:20px}.book-meta button{width:38px;height:38px;border:0;border-radius:50%;background:var(--navy);color:#fff;font-size:23px;cursor:pointer}
-.category-section{background:var(--navy);padding:80px 0;color:#fff}.light-heading h2{color:#fff}.category-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}.category-card{border:1px solid rgba(255,255,255,.14);padding:28px;border-radius:14px;background:rgba(255,255,255,.04);transition:.25s}.category-card:hover{background:var(--orange);transform:translateY(-5px)}.category-card span{color:var(--yellow);font-weight:700}.category-card h3{font-size:25px;margin:20px 0 8px}.category-card p{opacity:.78;line-height:1.6}
-.footer{background:#041622;color:#fff;padding-top:55px}.footer-inner{display:grid;grid-template-columns:1.2fr .7fr 1fr;gap:60px;padding-bottom:45px}.footer p{color:rgba(255,255,255,.66);margin:8px 0}.footer h4{margin-top:0}
-.subscribe-form{display:flex}.subscribe-form input{flex:1;min-width:0;padding:12px 14px;border:0;border-radius:8px 0 0 8px}.subscribe-form button{border:0;background:var(--orange);color:#fff;padding:0 18px;border-radius:0 8px 8px 0}.copyright{text-align:center;border-top:1px solid rgba(255,255,255,.1);padding:18px;color:rgba(255,255,255,.5);font-size:13px}
-@media(max-width:860px){.announcement p{display:none}.announcement-inner{grid-template-columns:1fr auto}.main-nav,.nav-button{display:none}.menu-toggle{display:block}.main-nav.open{display:flex;position:absolute;top:68px;left:0;right:0;background:#fff;flex-direction:column;padding:22px 30px;box-shadow:0 15px 25px rgba(0,0,0,.1)}
-.book-grid,.category-grid{grid-template-columns:1fr 1fr}
-.book-grid{
-  max-width:720px;
-}
-.footer-inner{grid-template-columns:1fr 1fr}.hero{height:580px}.hero-overlay{background:linear-gradient(90deg,rgba(5,28,44,.95),rgba(5,28,44,.55))}}
-@media(max-width:590px){
-  .container{
-    width:min(100% - 26px,1180px);
+
+// ภาพการ์ด
+setImageUrl('card1Image', images.card1);
+setImageUrl('card2Image', images.card2);
+setImageUrl('card3Image', images.card3);
+
+} catch (error) {console.error('โหลด URL รูปภาพจาก Google Sheet ไม่สำเร็จ:', error);}}
+
+function setImageUrl(elementId, url) {if (!url) return;
+
+const image = document.getElementById(elementId);
+
+if (image) {image.src = url;}}
+
+document.addEventListener('DOMContentLoaded', loadWebsiteImages);
+
+จากไฟล์ learning-base.js ล่าสุด ฟังก์ชันโหลดกิจกรรม ไม่ได้ส่ง mode=learning แล้ว แต่ส่งเพียง action=getActivities 
+
+
+ดังนั้นที่ยังขึ้น
+
+โหลดกิจกรรมไม่สำเร็จ: Invalid mode
+หมายความว่าเว็บไซต์ GitHub ยังโหลดไฟล์ JavaScript ตัวเก่า หรือมี learning-base.js มากกว่า 1 ไฟล์ถูกเรียกใช้งาน
+
+1. แก้ใน index.html
+ค้นหาบรรทัด:
+
+<script src="learning-base.js"></script>
+เปลี่ยนเป็น:
+
+<script src="learning-base.js?v=20260719-2"></script>
+ต้องมีบรรทัดเรียก learning-base.js เพียงครั้งเดียวเท่านั้น
+
+ค้นหาทั้งไฟล์ index.html ด้วยคำว่า:
+
+learning-base.js
+ถ้าพบมากกว่า 1 บรรทัด ให้เหลือเพียงบรรทัดเดียว
+
+2. ตรวจ learning-base.js
+ส่วน callApi() ต้องเป็นแบบนี้ โดยไม่มี mode=learning:
+
+async function callApi(action, data = {}, method = 'POST') {
+  let response;
+
+  if (method === 'GET') {
+    const url = new URL(API_URL);
+
+    url.searchParams.set('action', action);
+    url.searchParams.set('_t', Date.now());
+
+    Object.entries(data).forEach(([key, value]) => {
+      url.searchParams.set(key, value ?? '');
+    });
+
+    console.log('LEARNING API GET:', url.toString());
+
+    response = await fetch(url.toString(), {
+      method: 'GET',
+      cache: 'no-store'
+    });
+
+  } else {
+    response = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      },
+      body: JSON.stringify({
+        action: action,
+        data: data
+      })
+    });
   }
 
-  .announcement{
-    min-height:66px;
+  const text = await response.text();
+
+  console.log('LEARNING API RESPONSE:', text);
+
+  let result;
+
+  try {
+    result = JSON.parse(text);
+  } catch (error) {
+    throw new Error('API ส่งข้อมูลกลับมาไม่ใช่ JSON');
   }
 
-  .hero{
-    height:600px;
-  }
-
-  .hero-content{
-    padding-top:75px;
-  }
-
-  .hero h1{
-    font-size:44px;
-  }
-
-  .hero-actions{
-    align-items:flex-start;
-    flex-direction:column;
-    gap:17px;
-  }
-
-  .section-heading{
-    align-items:flex-start;
-    flex-direction:column;
-    gap:12px;
-  }
-
-  .book-grid,
-  .category-grid,
-  .footer-inner{
-    grid-template-columns:1fr;
-  }
-
-  .featured-section{
-    background:linear-gradient(
-      180deg,
-      var(--orange),
-      #ff9d82 72%,
-      var(--yellow)
+  if (!response.ok || result.success === false) {
+    throw new Error(
+      result.message || `HTTP ${response.status}`
     );
   }
 
-  .book-card{
-    width:100%;
-    max-width:335px;
-    margin:0 auto;
+  return Object.prototype.hasOwnProperty.call(result, 'data')
+    ? result.data
+    : result;
+}
+ไฟล์ล่าสุดของคุณเรียกกิจกรรมด้วย getActivities แบบ GET ถูกต้องแล้ว 
+
+
+3. แก้ Code.gs ให้รองรับทั้งแบบใหม่และแบบเก่า
+ใช้ doGet() นี้แทนตัวเดิมทั้งหมด:
+
+function doGet(e) {
+  e = e || {};
+  const p = e.parameter || {};
+
+  const mode = String(p.mode || '').trim().toLowerCase();
+  const action = String(p.action || '').trim();
+  const page = String(p.page || '').trim();
+
+  // หลังบ้านครู
+  if (page === 'teacher') {
+    setupLearningBaseSheets_();
+
+    return HtmlService.createTemplateFromFile('teacher')
+      .evaluate()
+      .setTitle('Dashboard ครูประจำฐาน')
+      .addMetaTag(
+        'viewport',
+        'width=device-width, initial-scale=1'
+      )
+      .setXFrameOptionsMode(
+        HtmlService.XFrameOptionsMode.ALLOWALL
+      );
   }
 
-  .footer-inner{
-    gap:30px;
+  // ฐานการเรียนรู้
+  // รองรับทั้ง URL ใหม่ที่มี action อย่างเดียว
+  // และ URL เก่าที่มี mode=learning
+  if (action || mode === 'learning') {
+    try {
+      if (!action) {
+        throw new Error('ไม่พบคำสั่ง action');
+      }
+
+      const result = runLearningAction_(action, p);
+
+      return jsonOutput_({
+        success: true,
+        data: result
+      });
+
+    } catch (error) {
+      return jsonOutput_({
+        success: false,
+        message: error.message,
+        receivedMode: mode,
+        receivedAction: action
+      });
+    }
   }
 
-  .subscribe-form{
-    max-width:420px;
+  // รูปภาพเว็บไซต์
+  if (mode === 'images') {
+    try {
+      return jsonOutput_(getWebsiteImages());
+    } catch (error) {
+      return jsonOutput_({
+        success: false,
+        message: error.message
+      });
+    }
   }
+
+  return jsonOutput_({
+    success: false,
+    message: 'Invalid mode',
+    receivedMode: mode,
+    receivedAction: action
+  });
+}
+และต้องมี:
+
+function jsonOutput_(data) {
+  return ContentService
+    .createTextOutput(JSON.stringify(data))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+4. ตรวจว่า doGet() ไม่มีซ้ำ
+ใน Apps Script กด Ctrl + F แล้วค้นหา:
+
+function doGet
+ทั้งโปรเจกต์ต้องมีเพียงหนึ่งฟังก์ชัน:
+
+function doGet(e)
+ถ้ามีอยู่ในไฟล์อื่น เช่น api.gs, Code.gs หรือ image.gs ให้รวมทั้งหมดไว้ใน doGet() เดียว เพราะ Apps Script ไม่ควรมี doGet() หลายตัว
+
+5. ทดสอบ URL โดยตรง
+เปิด URL นี้:
+
+https://script.google.com/macros/s/AKfycbyFu-j4vaLGLq4jFTXyZZp_IwEzHn3cXqCf2ShjF5oWFPZ72qioRubjCbyzuu-GotIqsQ/exec?action=getActivities
+ต้องได้:
+
+{
+  "success": true,
+  "data": []
+}
+หรือมีรายการกิจกรรม
+
+หาก URL นี้ยังตอบ Invalid mode แปลว่า Deployment ยังไม่ได้ใช้ doGet() ตัวใหม่ ต้องแก้ Deployment เดิมโดยเลือก เวอร์ชันใหม่ แล้วกด ทำให้ใช้งานได้
+
+6. ตรวจจากหน้า GitHub
+กด F12 → แท็บ Console แล้วรีเฟรชหน้า
+
+ต้องเห็น URL ลักษณะนี้:
+
+LEARNING API GET:
+https://script.google.com/.../exec?action=getActivities&_t=...
+ถ้าเห็น:
+
+exec?mode=learning&action=getActivities
+แปลว่าหน้าเว็บยังโหลด JavaScript ตัวเก่า ให้ตรวจชื่อไฟล์ ตำแหน่งไฟล์ และเพิ่ม ?v=20260719-2 ตามขั้นตอนแรกครับ
+
+
+image(677).png
+
+ประมวลผล 13s
+จากภาพนี้เจอสาเหตุสำคัญแล้วครับ
+
+ใน Console มีข้อความว่า
+
+LEARNING API RESPONSE:
+{"success":false,"message":"Invalid mode","receivedMode":""}
+สังเกต receivedMode เป็นค่าว่าง ("") ไม่ใช่ learning
+
+และ URL ที่เรียกคือ
+
+.../exec?action=getActivities
+ซึ่งแปลว่า ฝั่ง GitHub ใช้ JavaScript เวอร์ชันใหม่แล้ว แต่ Apps Script ที่ URL นี้ยังเป็นโค้ดเวอร์ชันเก่า ซึ่งยังบังคับว่าต้องมี mode=images จึงตอบ Invalid mode
+
+ดังนั้นปัญหา ไม่ได้อยู่ที่ learning-base.js แล้ว แต่อยู่ที่ Code.gs ที่ Deploy อยู่
+
+ขอให้ตรวจ 2 อย่างนี้
+1. ส่ง doGet() ปัจจุบันทั้งหมด
+ขอเฉพาะฟังก์ชัน
+
+function doGet(e) {
+   ...
+}
+ทั้งหมดตั้งแต่ { ถึง }
+
+2. ส่ง runLearningAction_()
+ขอทั้งฟังก์ชัน
+
+function runLearningAction_(...) {
+   ...
+}
+3. ตรวจว่ามี doGet() กี่ตัว
+ใน Apps Script กด
+
+Ctrl + Shift + F
+ค้นหา
+
+function doGet
+แล้วบอกผมว่าเจอกี่ไฟล์ เช่น
+
+Code.gs
+image.gs
+api.gs
+หรือส่งภาพผลการค้นหามาก็ได้
+
+จากภาพของคุณ ผมมั่นใจแล้วว่า
+✅ GitHub โหลด learning-base.js ตัวใหม่แล้ว
+
+✅ JavaScript เรียก action=getActivities ถูกต้อง
+
+❌ Apps Script ที่ URL /exec ยังเป็น doGet() ตัวเก่าหรือ Deploy ผิดเวอร์ชัน
+
+ถ้าคุณส่ง doGet() ทั้งหมด มา ผมจะบอกได้ทันทีว่าต้องแก้ตรงไหน โดยไม่ต้องเดาครับ
+
+
+function doGet(e) {
+  e = e || {};
+  const p = e.parameter || {};
+
+  const mode = String(p.mode || '').trim().toLowerCase();
+  const action = String(p.action || '').trim();
+  const page = String(p.page || '').trim();
+
+  // หลังบ้านครู
+  if (page === 'teacher') {
+    setupLearningBaseSheets_();
+
+    return HtmlService.createTemplateFromFile('teacher')
+      .evaluate()
+      .setTitle('Dashboard ครูประจำฐาน')
+      .addMetaTag(
+        'viewport',
+        'width=device-width, initial-scale=1'
+      )
+      .setXFrameOptionsMode(
+        HtmlService.XFrameOptionsMode.ALLOWALL
+      );
+  }
+
+  // ฐานการเรียนรู้
+  // รองรับทั้ง URL ใหม่ที่มี action อย่างเดียว
+  // และ URL เก่าที่มี mode=learning
+  if (action || mode === 'learning') {
+    try {
+      if (!action) {
+        throw new Error('ไม่พบคำสั่ง action');
+      }
+
+      const result = runLearningAction_(action, p);
+
+      return jsonOutput_({
+        success: true,
+        data: result
+      });
+
+    } catch (error) {
+      return jsonOutput_({
+        success: false,
+        message: error.message,
+        receivedMode: mode,
+        receivedAction: action
+      });
+    }
+  }
+
+  // รูปภาพเว็บไซต์
+  if (mode === 'images') {
+    try {
+      return jsonOutput_(getWebsiteImages());
+    } catch (error) {
+      return jsonOutput_({
+        success: false,
+        message: error.message
+      });
+    }
+  }
+
+  return jsonOutput_({
+    success: false,
+    message: 'Invalid mode',
+    receivedMode: mode,
+    receivedAction: action
+  });
+}
+
+doGet() ที่ส่งมานี้ ถูกต้องแล้ว และ URL แบบนี้ควรเข้าบล็อกฐานการเรียนรู้ทันที:
+
+/exec?action=getActivities
+แต่คำตอบที่หน้าเว็บได้รับคือ:
+
+{"success":false,"message":"Invalid mode","receivedMode":""}
+คำตอบนี้ ไม่ได้มาจาก doGet() ที่คุณส่งมา เพราะโค้ดปัจจุบันของคุณจะต้องส่ง receivedAction กลับมาด้วย เช่น:
+
+{
+  "success": false,
+  "message": "...",
+  "receivedMode": "",
+  "receivedAction": "getActivities"
+}
+ดังนั้นสาเหตุคือ URL /exec ที่เว็บไซต์เรียก ยังชี้ไปยัง Deployment เก่า หรือคนละโปรเจกต์ Apps Script
+
+ทดสอบให้ชัดเจน
+เพิ่มข้อความตรวจสอบไว้บนสุดของ doGet() ชั่วคราว:
+
+function doGet(e) {
+  e = e || {};
+  const p = e.parameter || {};
+
+  const mode = String(p.mode || '').trim().toLowerCase();
+  const action = String(p.action || '').trim();
+  const page = String(p.page || '').trim();
+
+  // ทดสอบว่า Deployment ใช้โค้ดนี้จริงหรือไม่
+  if (p.test === 'version') {
+    return jsonOutput_({
+      success: true,
+      version: 'LEARNING-20260719-V3',
+      mode: mode,
+      action: action
+    });
+  }
+
+  // หลังบ้านครู
+  if (page === 'teacher') {
+    setupLearningBaseSheets_();
+
+    return HtmlService.createTemplateFromFile('teacher')
+      .evaluate()
+      .setTitle('Dashboard ครูประจำฐาน')
+      .addMetaTag(
+        'viewport',
+        'width=device-width, initial-scale=1'
+      )
+      .setXFrameOptionsMode(
+        HtmlService.XFrameOptionsMode.ALLOWALL
+      );
+  }
+
+  if (action || mode === 'learning') {
+    try {
+      if (!action) {
+        throw new Error('ไม่พบคำสั่ง action');
+      }
+
+      const result = runLearningAction_(action, p);
+
+      return jsonOutput_({
+        success: true,
+        data: result
+      });
+
+    } catch (error) {
+      return jsonOutput_({
+        success: false,
+        message: error.message,
+        receivedMode: mode,
+        receivedAction: action
+      });
+    }
+  }
+
+  if (mode === 'images') {
+    try {
+      return jsonOutput_(getWebsiteImages());
+    } catch (error) {
+      return jsonOutput_({
+        success: false,
+        message: error.message
+      });
+    }
+  }
+
+  return jsonOutput_({
+    success: false,
+    message: 'Invalid mode',
+    receivedMode: mode,
+    receivedAction: action
+  });
+}
+จากนั้นบันทึกและ Deploy ใหม่ แล้วเปิด:
+
+https://script.google.com/macros/s/AKfycbyFu-j4vaLGLq4jFTXyZZp_IwEzHn3cXqCf2ShjF5oWFPZ72qioRubjCbyzuu-GotIqsQ/exec?test=version
+ผลที่ถูกต้องต้องเป็น:
+
+{
+  "success": true,
+  "version": "LEARNING-20260719-V3",
+  "mode": "",
+  "action": ""
+}
+ถ้ายังขึ้น Invalid mode แสดงว่า URL นี้ไม่ใช่ Deployment ของโปรเจกต์ที่กำลังแก้แน่นอน
+
+วิธี Deploy ที่ถูกต้อง
+ไปที่ Apps Script:
+
+การทำให้ใช้งานได้
+
+จัดการการทำให้ใช้งานได้
+
+ดู URL ของ Deployment แต่ละรายการ
+
+หา Deployment ที่มี ID นี้:
+
+AKfycbyFu-j4vaLGLq4jFTXyZZp_IwEzHn3cXqCf2ShjF5oWFPZ72qioRubjCbyzuu-GotIqsQ
+กดรูปดินสอ
+
+ตรงเวอร์ชันเลือก เวอร์ชันใหม่
+
+กด ทำให้ใช้งานได้
+
+อย่ากดแค่บันทึกโค้ด เพราะ /exec จะยังใช้เวอร์ชันเก่า
+
+หากสร้าง Deployment ใหม่
+ถ้า Apps Script ให้ URL ใหม่ ต้องนำ URL ใหม่นั้นไปแก้ทั้งสองไฟล์
+
+ใน learning-base.js:
+
+const API_URL =
+  'URL_EXEC_ใหม่';
+ใน script.js:
+
+const IMAGE_API_URL =
+  'URL_EXEC_ใหม่?mode=images';
+หลังแก้ GitHub ให้เปลี่ยนเวอร์ชันไฟล์ใน index.html:
+
+<script src="learning-base.js?v=20260719-4"></script>
+<script src="script.js?v=20260719-4"></script>
+แล้วกด Ctrl + F5
+
+จุดชี้ขาดคือ URL ?test=version ถ้าไม่แสดง LEARNING-20260719-V3 แสดงว่ากำลัง Deploy หรือแก้คนละโปรเจกต์ครับ
+
+
+{--navy:#08263a;--navy2:#061c2c;--orange:#ff8467;--orange2:#ff6d4d;--yellow:#ffd36d;--cream:#fff6e7;--white:#fff;--text:#10212c;--muted:#64717a;--shadow:0 18px 45px rgba(7,31,48,.18)}
+*{box-sizing}html{scroll-behavior}body{margin:0;font-family:"Kanit",sans-serif;color(--text);background(--cream)}a{text-decoration;color}img{max-width:100%;display}.container{width(1180px,calc(100% - 40px));margin}
+.announcement{background(--navy2);color:#fff;min-height:86px;display;align-items;background-image(circle at 8% 30%,#ff744d 0 2px,transparent 3px),radial-gradient(circle at 28% 70%,#ffd36d 0 2px,transparent 3px),radial-gradient(circle at 72% 25%,#ff744d 0 2px,transparent 3px),radial-gradient(circle at 88% 70%,#fff 0 1px,transparent 2px);background-size:180px 90px}.announcement-inner{display;grid-template-columns 1fr auto;gap:28px;align-items}.announcement p{margin:0;text-align;font-size:14px;opacity:.9}.brand{display;align-items;gap:9px;font-size:22px;font-weight:700}.brand-icon{width:30px;height:30px;border-radius:50%;background(135deg,var(--orange),var(--orange2));color:#fff;display;place-items;font-size:16px;box-shadow 0 0 0 4px rgba(255,255,255,.22)}.brand-light{color:#fff}.tiny-btn,.primary-btn{background(--orange);color:#fff;border-radius:999px;padding:11px 22px;font-weight:600;transition:.25s}.tiny-btn,.primary-btn{transform(-2px);background(--orange2)}
+.site-header{background:#fff;position;top:0;z-index:20;box-shadow:0 5px 25px rgba(4,22,35,.09)}.nav-wrap{height:68px;display;align-items;justify-content}.main-nav{display;gap:34px;font-size:14px}.main-nav a{position}.main-nav a{content:"";position;left:0;bottom:-8px;width:0;height:2px;background(--orange);transition:.25s}.main-nav a:hover{width:100%}.nav-button{background(--navy);color:#fff;border-radius:999px;padding:10px 20px;font-size:13px}.menu-toggle{display;border:0;background;font-size:26px}
+.hero {
+position: relative;
+min-height: 620px;
+background-image: url("assets/hero.png");
+background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+}
+.hero-overlay{position;inset:0;background(90deg,rgba(5,28,44,.96) 0%,rgba(5,28,44,.79) 40%,rgba(5,28,44,.1) 78%)}
+.hero-content{position;z-index:2;color:#fff;padding-top:90px}.eyebrow,.section-kicker{text-transform;letter-spacing:2px;font-size:12px;font-weight:600}.hero h1{font-size(42px,6vw,70px);line-height:.98;max-width:650px;margin:18px 0}.hero p{max-width:520px;line-height:1.8;opacity:.88}.hero-actions{display;align-items;gap:26px;margin-top:30px}.text-link{font-weight:500}.floating-dot{position;border-radius:50%;background(--orange);box-shadow:0 0 0 7px rgba(255,132,103,.16)}.dot-1{width:12px;height:12px;left:9%;top:25%}.dot-2{width:8px;height:8px;left:39%;top:16%;background(--yellow)}.dot-3{width:10px;height:10px;right:8%;top:24%}
+.featured-section{background(180deg,var(--orange) 0%,#ff8e71 54%,var(--yellow) 54%,#ffdc86 100%);padding:70px 0 95px;position}.featured-section,.featured-section{content:"";position;bottom:0;width:190px;height:190px;background:#ffd36d;border-radius:50%}.featured-section.featured-section.section-heading{display;justify-content;align-items;margin-bottom:28px}.section-heading h2{font-size(28px,4vw,44px);margin:6px 0 0}.view-all{font-weight:600}
+.book-grid{
+display;
+grid-template-columns(3,minmax(0,1fr));
+gap:28px;
+max-width:1060px;
+margin:0 auto;
+position;
+z-index:2;
+}
+.book-card{
+width:100%;
+max-width:335px;
+margin:0 auto;
+background:#ff9a80;
+border-radius:8px;
+overflow;
+box-shadow(--shadow);
+transition:.25s;
+}
+.book-card{transform(-8px)}.book-image{aspect-ratio:1.25/1;overflow;background(--navy)}.book-image img{width:100%;height:100%;object-fit}.book-body{padding:20px}.badge{display;background(--yellow);border-radius:999px;padding:5px 11px;font-size:11px;font-weight:700}.badge-dark{background(--navy);color:#fff}.book-body h3{font-size:23px;margin:13px 0 8px;color:#fff}.book-body p{font-size:14px;line-height:1.65;margin:0;color(16,33,44,.78)}.book-meta{display;justify-content;align-items;margin-top:18px}.book-meta strong{font-size:20px}.book-meta button{width:38px;height:38px;border:0;border-radius:50%;background(--navy);color:#fff;font-size:23px;cursor}
+.category-section{background(--navy);padding:80px 0;color:#fff}.light-heading h2{color:#fff}.category-grid{display;grid-template-columns(3,1fr);gap:22px}.category-card{border:1px solid rgba(255,255,255,.14);padding:28px;border-radius:14px;background(255,255,255,.04);transition:.25s}.category-card{background(--orange);transform(-5px)}.category-card span{color(--yellow);font-weight:700}.category-card h3{font-size:25px;margin:20px 0 8px}.category-card p{opacity:.78;line-height:1.6}
+.footer{background:#041622;color:#fff;padding-top:55px}.footer-inner{display;grid-template-columns:1.2fr .7fr 1fr;gap:60px;padding-bottom:45px}.footer p{color(255,255,255,.66);margin:8px 0}.footer h4{margin-top:0}
+.subscribe-form{display}.subscribe-form input{flex:1;min-width:0;padding:12px 14px;border:0;border-radius:8px 0 0 8px}.subscribe-form button{border:0;background(--orange);color:#fff;padding:0 18px;border-radius:0 8px 8px 0}.copyright{text-align;border-top:1px solid rgba(255,255,255,.1);padding:18px;color(255,255,255,.5);font-size:13px}
+@media(max-width:860px){.announcement p{display}.announcement-inner{grid-template-columns:1fr auto}.main-nav,.nav-button{display}.menu-toggle{display}.main-nav.open{display;position;top:68px;left:0;right:0;background:#fff;flex-direction;padding:22px 30px;box-shadow:0 15px 25px rgba(0,0,0,.1)}
+.book-grid,.category-grid{grid-template-columns:1fr 1fr}
+.book-grid{
+max-width:720px;
+}
+.footer-inner{grid-template-columns:1fr 1fr}.hero{height:580px}.hero-overlay{background(90deg,rgba(5,28,44,.95),rgba(5,28,44,.55))}}
+@media(max-width:590px){
+.container{
+width(100% - 26px,1180px);
+}
+
+.announcement{
+min-height:66px;
+}
+
+.hero{
+height:600px;
+}
+
+.hero-content{
+padding-top:75px;
+}
+
+.hero h1{
+font-size:44px;
+}
+
+.hero-actions{
+align-items;
+flex-direction;
+gap:17px;
+}
+
+.section-heading{
+align-items;
+flex-direction;
+gap:12px;
+}
+
+.book-grid,
+.category-grid,
+.footer-inner{
+grid-template-columns:1fr;
+}
+
+.featured-section{
+background(
+180deg,
+var(--orange),
+#ff9d82 72%,
+var(--yellow)
+);
+}
+
+.book-card{
+width:100%;
+max-width:335px;
+margin:0 auto;
+}
+
+.footer-inner{
+gap:30px;
+}
+
+.subscribe-form{
+max-width:420px;
+}
 }
 /* ================================
-   News slider
+News slider
 ================================ */
 
 .news-slider {
-  position: relative;
-  width: 100%;
-  margin: 0 0 42px;
-  border-radius: 24px;
-  overflow: hidden;
-  background: #ececec;
-  box-shadow: 0 14px 35px rgba(4, 35, 52, 0.16);
+position: relative;
+width: 100%;
+margin: 0 0 42px;
+border-radius: 24px;
+overflow: hidden;
+background: #ececec;
+box-shadow: 0 14px 35px rgba(4, 35, 52, 0.16);
 }
 
 .news-slides {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 6;
-  min-height: 280px;
+position: relative;
+width: 100%;
+aspect-ratio: 16 / 6;
+min-height: 280px;
 }
 
 .news-slide {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  visibility: hidden;
-  transition:
-    opacity 0.55s ease,
-    visibility 0.55s ease;
+position: absolute;
+inset: 0;
+width: 100%;
+height: 100%;
+opacity: 0;
+visibility: hidden;
+transition:
+opacity 0.55s ease,
+visibility 0.55s ease;
 }
 
 .news-slide.active {
-  opacity: 1;
-  visibility: visible;
+opacity: 1;
+visibility: visible;
 }
 
 .news-slide img {
-  display: block;
-  width: 100%;
-  height: 100%;
- object-fit: contain;
+display: block;
+width: 100%;
+height: 100%;
+object-fit: contain;
 background: #ffffff;
-  object-position: center;
+object-position: center;
 }
 
 .news-arrow{
-  position:absolute;
-  top:50%;
-  z-index:10;
+position;
+top:50%;
+z-index:10;
 
-  width:46px;
-  height:46px;
-  padding:0;
+width:46px;
+height:46px;
+padding:0;
 
-  display:flex;
-  align-items:center;
-  justify-content:center;
+display;
+align-items;
+justify-content;
 
-  border:0;
-  border-radius:50%;
-  background:rgba(5,35,53,.82);
-  color:#fff;
+border:0;
+border-radius:50%;
+background(5,35,53,.82);
+color:#fff;
 
-  font-family:Arial,sans-serif;
-  font-size:34px;
-  line-height:1;
+font-family,sans-serif;
+font-size:34px;
+line-height:1;
 
-  cursor:pointer;
-  transform:translateY(-50%);
-  transition:background .2s ease,transform .2s ease;
+cursor;
+transform(-50%);
+transition .2s ease,transform .2s ease;
 }
 
 .news-prev{
-  left:18px;
+left:18px;
 }
 
 .news-next{
-  right:18px;
+right:18px;
 }
 
-.news-arrow:hover{
-  background:#ff7d61;
-  transform:translateY(-50%) scale(1.06);
+.news-arrow{
+background:#ff7d61;
+transform(-50%) scale(1.06);
 }
 .news-dots {
-  position: absolute;
-  left: 50%;
-  bottom: 16px;
-  z-index: 5;
-  display: flex;
-  gap: 8px;
-  transform: translateX(-50%);
+position: absolute;
+left: 50%;
+bottom: 16px;
+z-index: 5;
+display: flex;
+gap: 8px;
+transform: translateX(-50%);
 }
 
 .news-dot {
-  width: 10px;
-  height: 10px;
-  padding: 0;
-  border: 2px solid #fff;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.45);
-  cursor: pointer;
+width: 10px;
+height: 10px;
+padding: 0;
+border: 2px solid #fff;
+border-radius: 50%;
+background: rgba(255, 255, 255, 0.45);
+cursor: pointer;
 }
 
 .news-dot.active {
-  width: 26px;
-  border-radius: 10px;
-  background: #ff7d61;
+width: 26px;
+border-radius: 10px;
+background: #ff7d61;
 }
 
 .news-loading {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #edf0f1;
-  color: #173447;
-  font-size: 16px;
-  font-weight: 500;
+position: absolute;
+inset: 0;
+z-index: 3;
+display: flex;
+align-items: center;
+justify-content: center;
+background: #edf0f1;
+color: #173447;
+font-size: 16px;
+font-weight: 500;
 }
 
 .news-slider.is-empty {
-  display: none;
+display: none;
 }
 
 .news-slider.single-slide .news-arrow,
 .news-slider.single-slide .news-dots {
-  display: none;
+display: none;
 }
 
 @media (max-width: 768px) {
-  .news-slider {
-    margin-bottom: 30px;
-    border-radius: 16px;
-  }
+.news-slider {
+margin-bottom: 30px;
+border-radius: 16px;
+}
 
-  .news-slides {
-    aspect-ratio: 16 / 9;
-    min-height: 190px;
-  }
+.news-slides {
+aspect-ratio: 16 / 9;
+min-height: 190px;
+}
 
-  .news-arrow {
-    width: 38px;
-    height: 38px;
-    font-size: 28px;
-  }
+.news-arrow {
+width: 38px;
+height: 38px;
+font-size: 28px;
+}
 
-  .news-prev {
-    left: 10px;
-  }
+.news-prev {
+left: 10px;
+}
 
-  .news-next {
-    right: 10px;
-  }
+.news-next {
+right: 10px;
+}
 
-  .news-dots {
-    bottom: 10px;
-  }
+.news-dots {
+bottom: 10px;
+}
 }
 .news-slider{
-  position:relative;
-  isolation:isolate;
+position;
+isolation;
 }
 @media(max-width:768px){
-  .news-arrow{
-    width:38px;
-    height:38px;
-    font-size:28px;
-  }
-
-  .news-prev{
-    left:10px;
-  }
-
-  .news-next{
-    right:10px;
-  }
+.news-arrow{
+width:38px;
+height:38px;
+font-size:28px;
 }
 
-/* =====================================================
-   Learning Base — Apps Script original style
-   Scoped to avoid changing the existing GitHub website
-===================================================== */
-
-#learningBaseModule,
-#learningBaseModule *{box-sizing:border-box}
-
-#learningBaseModule{
-  width:100%;
-  margin:0;
-  padding:24px 0 60px;
-  font-family:'Prompt','Kanit',Arial,sans-serif;
-  background:#f5f7fb;
-  color:#111827;
+.news-prev{
+left:10px;
 }
 
-#learningBaseModule .learning-container{
-  width:100%;
-  max-width:1900px;
-  margin:auto;
-  padding:0 24px;
+.news-next{
+right:10px;
+}
+}
+/* =====================================
+Learning Base
+===================================== */
+
+.learning-top-actions{
+display;
+align-items;
+justify-content;
+gap:7px;
+flex-wrap;
 }
 
-/* Top navigation buttons moved into the website nav-wrap */
-.learning-nav-actions{
-  display:flex;
-  gap:10px;
-  align-items:center;
-  flex-wrap:wrap;
-  margin-left:auto;
+.learning-nav-btn{
+min-height:38px;
+padding:8px 13px;
+border:0;
+border-radius:999px;
+background(--navy);
+color:#fff;
+font-family;
+font-size:12px;
+font-weight:600;
+cursor;
+white-space;
 }
 
-.learning-nav-actions button,
-.learning-nav-actions a{
-  border:0;
-  border-radius:14px;
-  padding:10px 16px;
-  font-family:'Prompt','Kanit',Arial,sans-serif;
-  font-size:13px;
-  font-weight:700;
-  line-height:1.2;
-  cursor:pointer;
-  text-decoration:none;
-  white-space:nowrap;
-  background:#2563eb;
-  color:#fff;
+.learning-teacher-btn{
+background(--orange);
 }
 
-.learning-nav-actions .learning-light{background:#fff;color:#2563eb;border:1px solid #dbeafe}
-.learning-nav-actions .learning-teacher{background:#111827;color:#fff}
-.learning-nav-actions button:hover,
-.learning-nav-actions a:hover{opacity:.9}
-
-/* Buttons */
-#learningBaseModule button,
-.learning-modal button{
-  border:0;
-  border-radius:14px;
-  padding:10px 16px;
-  font-family:'Prompt','Kanit',Arial,sans-serif;
-  font-weight:700;
-  cursor:pointer;
-  background:#2563eb;
-  color:#fff;
+.learning-base-box{
+position;
+z-index:2;
+width:100%;
+margin-top:55px;
+padding:32px;
+border-radius:22px;
+background(255,255,255,.18);
+box-shadow:0 15px 35px rgba(7,31,48,.13);
 }
 
-#learningBaseModule .btn-light,.learning-modal .btn-light{background:#fff;color:#2563eb}
-#learningBaseModule .btn-green,.learning-modal .btn-green{background:#16a34a}
-#learningBaseModule .btn-orange,.learning-modal .btn-orange{background:#f97316}
-#learningBaseModule .btn-red,.learning-modal .btn-red{background:#dc2626}
-#learningBaseModule .btn-dark,.learning-modal .btn-dark{background:#111827}
-
-/* Tabs */
-#learningBaseModule .learning-tabs{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-bottom:18px;
+.learning-heading{
+display;
+align-items;
+justify-content;
+gap:20px;
+margin-bottom:24px;
 }
 
-#learningBaseModule .learning-tabs > div{
-  flex-wrap:wrap;
+.learning-heading h2{
+margin:6px 0 0;
+font-size(28px,4vw,42px);
 }
 
-#learningBaseModule .learning-tabs button{
-  background:#e5e7eb;
-  color:#111827;
+.learning-tools{
+display;
+align-items;
+gap:9px;
 }
 
-#learningBaseModule .learning-tabs button.active{
-  background:#2563eb;
-  color:#fff;
+.learning-select{
+width:250px;
+min-height:42px;
+padding:8px 13px;
+border:1px solid rgba(8,38,58,.16);
+border-radius:12px;
+background:#fff;
+color(--text);
+font-family;
 }
 
-#learningBaseModule #baseFilter{
-  width:260px;
-  padding:12px 14px;
-  border:1px solid #d1d5db;
-  border-radius:14px;
-  margin:0;
-  font-family:inherit;
-  font-size:15px;
-  background:#fff;
-  color:#111827;
+.learning-refresh-btn{
+min-height:42px;
+padding:8px 18px;
+border:0;
+border-radius:12px;
+background(--navy);
+color:#fff;
+font-family;
+font-weight:600;
+cursor;
 }
 
-/* Section heading */
-#learningBaseModule .learning-section-title{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:16px;
-  gap:10px;
-  flex-wrap:wrap;
+.learning-grid{
+display;
+grid-template-columns(3,minmax(0,1fr));
+gap:24px;
 }
 
-#learningBaseModule .learning-section-title h2{
-  margin:0;
-  font-size:clamp(24px,3vw,30px);
-  color:#111827;
+.learning-card{
+overflow;
+border-radius:16px;
+background:#fff;
+box-shadow:0 12px 30px rgba(7,31,48,.14);
 }
 
-/* Activity cards — same dimensions and visual style as Apps Script */
-#learningBaseModule .learning-grid,
-#learningBaseModule #activityGrid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
-  gap:22px;
-  width:100%;
+.learning-card-image{
+width:100%;
+aspect-ratio:16 / 10;
+object-fit;
+background:#e5e7eb;
 }
 
-#learningBaseModule .learning-card{
-  background:#fff;
-  border-radius:22px;
-  overflow:hidden;
-  box-shadow:0 10px 25px rgba(15,23,42,.08);
-  border:1px solid #e5e7eb;
+.learning-card-body{
+padding:18px;
 }
 
-#learningBaseModule .learning-card img{
-  display:block;
-  width:100%;
-  height:170px;
-  object-fit:cover;
-  background:#e5e7eb;
+.learning-tag{
+display;
+padding:5px 11px;
+border-radius:999px;
+background:#e0f2fe;
+color:#0369a1;
+font-size:12px;
+font-weight:700;
 }
 
-#learningBaseModule .learning-card-body{padding:16px}
-
-#learningBaseModule .learning-tag{
-  display:inline-block;
-  padding:5px 10px;
-  margin-bottom:8px;
-  background:#e0f2fe;
-  color:#0369a1;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:700;
+.learning-title{
+margin:11px 0 7px;
+font-size:20px;
+font-weight:700;
+line-height:1.35;
 }
 
-#learningBaseModule .learning-title{
-  margin:4px 0;
-  font-size:18px;
-  font-weight:800;
-  line-height:1.4;
-  color:#111827;
+.learning-muted{
+color:#64748b;
+font-size:13px;
+line-height:1.65;
 }
 
-#learningBaseModule .learning-muted{
-  color:#64748b;
-  font-size:14px;
-  line-height:1.6;
+.learning-card-actions{
+display;
+gap:8px;
+flex-wrap;
+margin-top:15px;
 }
 
-#learningBaseModule .learning-detail{
-  white-space:pre-line;
-  display:-webkit-box;
-  -webkit-box-orient:vertical;
-  -webkit-line-clamp:3;
-  overflow:hidden;
+.learning-card-actions button{
+padding:9px 14px;
+border:0;
+border-radius:10px;
+background(--navy);
+color:#fff;
+font-family;
+font-weight:600;
+cursor;
 }
 
-#learningBaseModule .learning-actions{
-  display:flex;
-  gap:8px;
-  margin-top:14px;
-  flex-wrap:wrap;
+.learning-card-actions button{
+background(--orange);
 }
 
-/* History */
-#learningBaseModule .learning-list-item{
-  background:#fff;
-  border:1px solid #e5e7eb;
-  border-radius:18px;
-  padding:14px;
-  margin-bottom:10px;
-  box-shadow:0 6px 18px rgba(15,23,42,.05);
+.learning-message{
+padding:22px;
+border-radius:14px;
+background(255,255,255,.7);
+text-align;
 }
 
-#learningBaseModule table{
-  width:100%;
-  border-collapse:collapse;
-  background:#fff;
-  border-radius:18px;
-  overflow:hidden;
-}
-
-#learningBaseModule th,
-#learningBaseModule td{
-  padding:12px;
-  border-bottom:1px solid #e5e7eb;
-  text-align:left;
-  vertical-align:top;
-}
-
-#learningBaseModule th{background:#e0f2fe;color:#075985}
-#learningBaseModule .teacher-img{width:42px!important;height:42px!important;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:6px}
-#learningBaseModule .learning-hidden{display:none!important}
-
-/* Modals */
 .learning-modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:1000;
-  align-items:center;
-  justify-content:center;
-  padding:16px;
-  background:rgba(15,23,42,.55);
-  font-family:'Prompt','Kanit',Arial,sans-serif;
-  color:#111827;
+display;
+position;
+inset:0;
+z-index:1000;
+align-items;
+justify-content;
+padding:18px;
+background(4,22,34,.68);
 }
 
 .learning-modal-box{
-  width:100%;
-  max-width:620px;
-  max-height:90vh;
-  overflow:auto;
-  background:#fff;
-  border-radius:24px;
-  padding:22px;
-  box-shadow:0 20px 50px rgba(0,0,0,.25);
+position;
+width:100%;
+max-width:620px;
+max-height:90vh;
+overflow;
+padding:26px;
+border-radius:22px;
+background:#fff;
+box-shadow:0 25px 60px rgba(0,0,0,.28);
 }
 
-.learning-modal-box h2,
-.learning-modal-box h3{color:#111827}
-
-.learning-modal input,
-.learning-modal textarea,
-.learning-modal select{
-  width:100%;
-  padding:12px 14px;
-  border:1px solid #d1d5db;
-  border-radius:14px;
-  margin:6px 0 12px;
-  font-family:inherit;
-  font-size:15px;
-  background:#fff;
-  color:#111827;
+.learning-modal-large{
+max-width:900px;
 }
 
-.learning-modal textarea{min-height:100px}
-.learning-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.learning-modal-close{
+position;
+top:14px;
+right:14px;
+width:38px;
+height:38px;
+padding:0;
+border:0;
+border-radius:50%;
+background:#dc2626;
+color:#fff;
+font-size:22px;
+cursor;
+}
 
-/* Detail slider */
-.detail-slider{width:100%;height:360px;border-radius:22px;overflow:hidden;background:#e5e7eb;margin-bottom:18px;position:relative}
-.detail-slide{display:none;width:100%;height:100%}
-.detail-slide.active{display:block}
-.detail-slide img{width:100%;height:100%;object-fit:cover}
-.detail-dots{display:flex;justify-content:center;gap:8px;margin-top:-34px;margin-bottom:22px;position:relative;z-index:5}
-.detail-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.65)}
-.detail-dot.active{background:#fff}
-.detail-info h2{margin:0 0 10px;font-size:28px}
-.detail-info .line{padding:10px 0;border-bottom:1px solid #e5e7eb;font-size:17px;line-height:1.7}
+.learning-input{
+width:100%;
+margin:7px 0 12px;
+padding:12px 14px;
+border:1px solid #d1d5db;
+border-radius:12px;
+font-family;
+font-size:15px;
+}
 
-/* Cart */
-.learning-cart-summary{padding:14px 16px;margin-bottom:12px;background:#fff;border:1px solid #e5e7eb;border-radius:18px;font-weight:800;box-shadow:0 5px 16px rgba(15,23,42,.05)}
-.learning-cart-item{display:grid;grid-template-columns:minmax(0,1fr) 180px;gap:16px;align-items:center;padding:14px;margin-bottom:12px;background:#fff;border:1px solid #e5e7eb;border-radius:18px;box-shadow:0 5px 16px rgba(15,23,42,.05)}
-.learning-cart-info{min-width:0}
-.learning-cart-title{margin-bottom:4px;font-size:17px;font-weight:800;color:#111827}
-.learning-cart-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.learning-confirm-btn{background:#16a34a!important}
-.learning-delete-btn{background:#dc2626!important}
-.learning-cart-image{width:180px;height:120px;object-fit:cover;border-radius:16px;background:#e5e7eb}
+.learning-modal-actions{
+display;
+gap:9px;
+flex-wrap;
+}
 
-@media(min-width:1600px){
-  #learningBaseModule .learning-container{max-width:1800px}
-  #learningBaseModule .learning-grid,
-  #learningBaseModule #activityGrid{grid-template-columns:repeat(auto-fill,minmax(340px,1fr))}
+.learning-hidden{
+display !important;
+}
+
+.learning-logout-btn{
+margin-top:16px;
+background:#dc2626;
+}
+
+@media(max-width:1000px){
+.learning-grid{
+grid-template-columns(2,minmax(0,1fr));
+}
+
+.main-nav{
+gap:18px;
+}
 }
 
 @media(max-width:860px){
-  .learning-nav-actions{order:4;width:100%;justify-content:center;padding:8px 0 4px}
-  .learning-nav-actions button,.learning-nav-actions a{font-size:12px;padding:8px 11px}
+.learning-top-actions{
+display;
+width:100%;
+padding-top:12px;
 }
 
-@media(max-width:650px){
-  #learningBaseModule{padding-top:18px}
-  #learningBaseModule .learning-container{padding:0 14px}
-  #learningBaseModule .learning-tabs > div{align-items:stretch!important}
-  #learningBaseModule .learning-tabs > div > div:first-child{width:100%;display:grid!important;grid-template-columns:1fr 1fr}
-  #learningBaseModule .learning-tabs > div > div:last-child{width:100%;margin-left:0!important}
-  #learningBaseModule #baseFilter{width:100%!important;margin-top:10px}
-  #learningBaseModule .learning-grid,
-  #learningBaseModule #activityGrid{grid-template-columns:1fr}
-  .learning-row{grid-template-columns:1fr}
-  .detail-slider{height:230px}
-  .learning-cart-item{grid-template-columns:1fr}
-  .learning-cart-image{width:100%;height:190px;order:-1}
+.main-nav.open + .learning-top-actions{
+display;
 }
+}
+
+@media(max-width:590px){
+.learning-base-box{
+padding:20px 14px;
+}
+
+.learning-heading{
+align-items;
+flex-direction;
+}
+
+.learning-tools{
+width:100%;
+}
+
+.learning-select{
+flex:1;
+min-width:0;
+width;
+}
+
+.learning-grid{
+grid-template-columns:1fr;
+}
+}
+.learning-detail {
+white-space: pre-line;
+display: -webkit-box;
+-webkit-box-orient: vertical;
+-webkit-line-clamp: 3;
+overflow: hidden;
+}
+.learning-cart-summary {
+padding: 14px 16px;
+margin-bottom: 12px;
+background: #fff;
+border: 1px solid #e5e7eb;
+border-radius: 18px;
+font-weight: 800;
+box-shadow: 0 5px 16px rgba(15, 23, 42, 0.05);
+}
+
+.learning-cart-item {
+display: grid;
+grid-template-columns: minmax(0, 1fr) 180px;
+gap: 16px;
+align-items: center;
+padding: 14px;
+margin-bottom: 12px;
+background: #fff;
+border: 1px solid #e5e7eb;
+border-radius: 18px;
+box-shadow: 0 5px 16px rgba(15, 23, 42, 0.05);
+}
+
+.learning-cart-info {
+min-width: 0;
+}
+
+.learning-cart-title {
+margin-bottom: 4px;
+font-size: 17px;
+font-weight: 800;
+color: #111827;
+}
+
+.learning-cart-actions {
+display: flex;
+flex-wrap: wrap;
+gap: 8px;
+margin-top: 14px;
+}
+
+.learning-confirm-btn {
+border: 0;
+border-radius: 14px;
+padding: 10px 16px;
+background: #16a34a;
+color: #fff;
+font-weight: 700;
+cursor: pointer;
+}
+
+.learning-delete-btn {
+border: 0;
+border-radius: 14px;
+padding: 10px 16px;
+background: #dc2626;
+color: #fff;
+font-weight: 700;
+cursor: pointer;
+}
+
+.learning-cart-image {
+width: 180px;
+height: 120px;
+object-fit: cover;
+border-radius: 16px;
+background: #e5e7eb;
+}
+
+@media (max-width: 600px) {
+.learning-cart-item {
+grid-template-columns: 1fr;
+}
+
+.learning-cart-image {
+width: 100%;
+height: 190px;
+order: -1;
+}
+}
+
+
+ปิด
