@@ -517,8 +517,11 @@ async function openCart() {
   const modal = document.getElementById('cartModal');
   const listBox = document.getElementById('cartList');
 
+  if (!modal || !listBox) return;
+
   modal.style.display = 'flex';
-  listBox.innerHTML = 'กำลังโหลด...';
+  listBox.innerHTML =
+    '<div class="learning-message">กำลังโหลด...</div>';
 
   try {
     const result = await learningApi('getMyCart', {
@@ -531,25 +534,154 @@ async function openCart() {
 
     if (!list.length) {
       listBox.innerHTML =
-        '<div class="learning-message">ยังไม่มีกิจกรรมในตะกร้า</div>';
+        '<div class="learning-message">' +
+        'ยังไม่มีกิจกรรมในตะกร้า' +
+        '</div>';
       return;
     }
 
-    listBox.innerHTML = list.map(item => `
-      <div class="learning-card-body">
-        <strong>
-          ${escapeLearningHtml(item.activity?.title || '-')}
-        </strong>
+    const totalHours = list.reduce(function (sum, item) {
+      return sum + getLearningHours(item.activity || {});
+    }, 0);
 
-        <div class="learning-muted">
-          ${getLearningHours(item.activity || {})} ชั่วโมง
-        </div>
+    const fallbackImage =
+      'https://placehold.co/300x200?text=Activity';
+
+    listBox.innerHTML = `
+      <div class="learning-cart-summary">
+        รวมทั้งหมด ${totalHours} ชั่วโมง
       </div>
-    `).join('');
+
+      ${list.map(function (item) {
+        const activity = item.activity || {};
+
+        const image = String(
+          activity.image1 || fallbackImage
+        ).trim();
+
+        return `
+          <div class="learning-cart-item">
+
+            <div class="learning-cart-info">
+              <div class="learning-cart-title">
+                ${escapeLearningHtml(
+                  activity.title || '-'
+                )}
+              </div>
+
+              <div class="learning-muted">
+                ชั่วโมง:
+                ${getLearningHours(activity)}
+                ชั่วโมง
+              </div>
+
+              <div class="learning-muted">
+                วันที่:
+                ${formatLearningThaiDate(
+                  activity.activityDate
+                )}
+              </div>
+
+              <div class="learning-cart-actions">
+
+                <button
+                  type="button"
+                  class="learning-confirm-btn"
+                  onclick="confirmLearningJoin(
+                    '${escapeLearningAttr(
+                      item.activityId
+                    )}'
+                  )">
+                  ยืนยันเข้าร่วม
+                </button>
+
+                <button
+                  type="button"
+                  class="learning-delete-btn"
+                  onclick="cancelLearningCartItem(
+                    '${escapeLearningAttr(
+                      item.cartId
+                    )}'
+                  )">
+                  ลบ
+                </button>
+
+              </div>
+            </div>
+
+            <img
+              class="learning-cart-image"
+              src="${escapeLearningAttr(image)}"
+              alt="${escapeLearningAttr(
+                activity.title || 'กิจกรรม'
+              )}"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              onerror="
+                this.onerror=null;
+                this.src='${fallbackImage}';
+              "
+            >
+
+          </div>
+        `;
+      }).join('')}
+    `;
 
   } catch (error) {
-    listBox.innerHTML =
-      `<div class="learning-message">${escapeLearningHtml(error.message)}</div>`;
+    console.error('โหลดตะกร้าไม่สำเร็จ:', error);
+
+    listBox.innerHTML = `
+      <div class="learning-message">
+        ${escapeLearningHtml(error.message)}
+      </div>
+    `;
+  }
+}
+async function confirmLearningJoin(activityId) {
+  if (!requireLearningStudent()) return;
+
+  const confirmResult = await Swal.fire({
+    title: 'ยืนยันเข้าร่วมกิจกรรม?',
+    text: 'ต้องการยืนยันเข้าร่วมกิจกรรมนี้หรือไม่',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'ยืนยันเข้าร่วม',
+    cancelButtonText: 'ยกเลิก',
+    confirmButtonColor: '#16a34a'
+  });
+
+  if (!confirmResult.isConfirmed) return;
+
+  try {
+    Swal.fire({
+      title: 'กำลังบันทึก...',
+      allowOutsideClick: false,
+      didOpen: function () {
+        Swal.showLoading();
+      }
+    });
+
+    const result = await learningApi('confirmJoin', {
+      studentId: LEARNING_STUDENT.studentId,
+      activityId: activityId
+    });
+
+    await Swal.fire(
+      result.message || 'ยืนยันเข้าร่วมเรียบร้อย',
+      '',
+      'success'
+    );
+
+    loadLearningCartCount();
+    openCart();
+
+  } catch (error) {
+    Swal.fire(
+      'ผิดพลาด',
+      error.message,
+      'error'
+    );
   }
 }
 
@@ -600,7 +732,50 @@ function openTeacherPage() {
     'noopener'
   );
 }
+async function cancelLearningCartItem(cartId) {
+  const confirmResult = await Swal.fire({
+    title: 'ยืนยันการลบ?',
+    text: 'ต้องการลบกิจกรรมนี้ออกจากตะกร้าหรือไม่',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'ลบ',
+    cancelButtonText: 'ไม่',
+    confirmButtonColor: '#dc2626'
+  });
 
+  if (!confirmResult.isConfirmed) return;
+
+  try {
+    Swal.fire({
+      title: 'กำลังลบ...',
+      allowOutsideClick: false,
+      didOpen: function () {
+        Swal.showLoading();
+      }
+    });
+
+    const result = await learningApi('cancelCart', {
+      cartId: cartId,
+      studentId: LEARNING_STUDENT.studentId
+    });
+
+    await Swal.fire(
+      result.message || 'ลบออกจากตะกร้าแล้ว',
+      '',
+      'success'
+    );
+
+    loadLearningCartCount();
+    openCart();
+
+  } catch (error) {
+    Swal.fire(
+      'ผิดพลาด',
+      error.message,
+      'error'
+    );
+  }
+}
 function updateLearningTop() {
   const account = document.getElementById('accountBtn');
 
