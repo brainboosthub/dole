@@ -978,7 +978,7 @@ async function loadLearningCartCount() {
   }
 }
 
-function openScoreModal() {
+async function openScoreModal() {
   if (!LEARNING_STUDENT) {
     return Swal.fire(
       'แจ้งเตือน',
@@ -987,12 +987,170 @@ function openScoreModal() {
     );
   }
 
-  Swal.fire(
-    'ชั่วโมงสะสม',
-    'ส่วน API ชั่วโมงสะสมจะเชื่อมต่อในขั้นถัดไป',
-    'info'
-  );
-}
+  Swal.fire({
+    title: 'กำลังโหลดชั่วโมงสะสม...',
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+
+    didOpen: function () {
+      Swal.showLoading();
+    }
+  });
+
+  try {
+    const result = await learningApi(
+      'getStudentScores',
+      {
+        studentId:
+          LEARNING_STUDENT.studentId
+      }
+    );
+
+    const list = Array.isArray(result.list)
+      ? result.list
+      : [];
+
+    const total = Number(
+      result.total || 0
+    );
+
+    updateLearningScoreButton(total);
+
+    if (!list.length) {
+      return Swal.fire({
+        title: 'ชั่วโมงสะสม',
+
+        html: `
+          <div style="
+            padding:20px 10px;
+            text-align:center;
+          ">
+            <div style="
+              font-size:34px;
+              font-weight:700;
+              color:#16a34a;
+              margin-bottom:8px;
+            ">
+              ${total} ชั่วโมง
+            </div>
+
+            <div style="color:#64748b;">
+              ยังไม่มีรายการบันทึกชั่วโมง
+            </div>
+          </div>
+        `,
+
+        icon: 'info',
+        confirmButtonText: 'ปิด'
+      });
+    }
+
+    const rows = list.map(function (item) {
+      const hours = Number(
+        item.actualHours || 0
+      );
+
+      return `
+        <div style="
+          padding:14px 0;
+          border-bottom:1px solid #e5e7eb;
+          text-align:left;
+        ">
+          <div style="
+            font-weight:600;
+            color:#0f172a;
+            margin-bottom:5px;
+          ">
+            ${escapeLearningHtml(
+              item.title || '-'
+            )}
+          </div>
+
+          ${
+            item.baseNo
+              ? `
+                <div style="
+                  font-size:13px;
+                  color:#64748b;
+                  margin-bottom:3px;
+                ">
+                  ฐานที่:
+                  ${escapeLearningHtml(
+                    item.baseNo
+                  )}
+                </div>
+              `
+              : ''
+          }
+
+          ${
+            item.activityDate
+              ? `
+                <div style="
+                  font-size:13px;
+                  color:#64748b;
+                  margin-bottom:3px;
+                ">
+                  วันที่:
+                  ${escapeLearningHtml(
+                    item.activityDate
+                  )}
+                </div>
+              `
+              : ''
+          }
+
+          <div style="
+            margin-top:7px;
+            font-size:16px;
+            font-weight:700;
+            color:#16a34a;
+          ">
+            ${hours} ชั่วโมง
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    Swal.fire({
+      title: 'ชั่วโมงสะสม',
+
+      html: `
+        <div style="
+          max-height:480px;
+          overflow-y:auto;
+          padding-right:6px;
+        ">
+          <div style="
+            background:#f0fdf4;
+            border:1px solid #bbf7d0;
+            border-radius:14px;
+            padding:16px;
+            margin-bottom:8px;
+            text-align:center;
+          ">
+            <div style="
+              color:#64748b;
+              font-size:14px;
+            ">
+              ชั่วโมงสะสมทั้งหมด
+            </div>
+
+            <div style="
+              color:#16a34a;
+              font-size:32px;
+              font-weight:700;
+            ">
+              ${total} ชั่วโมง
+            </div>
+          </div>
+
+          ${rows}
+        </div>
+      `,
+
+      width: 600,
+      confirm
 
 function openTeacherPage() {
   window.open(
