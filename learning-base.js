@@ -2,7 +2,7 @@
 (() => {
   'use strict';
 
-  const API_URL = 'https://script.google.com/macros/s/AKfycbzq9SWm2mEBe_gsusJKNEj7hlORO29BejRrOI7CoapwBj145UCyUBccmzdv4pzLAHlW/exec';
+  const API_URL = 'https://script.google.com/macros/s/AKfycbyFu-j4vaLGLq4jFTXyZZp_IwEzHn3cXqCf2ShjF5oWFPZ72qioRubjCbyzuu-GotIqsQ/exec';
   const TEACHER_URL = API_URL + '?page=teacher';
   let student = JSON.parse(localStorage.getItem('LEARN_STUDENT') || 'null');
   let activities = [];
@@ -168,12 +168,23 @@
       const list=await callApi('getMyCart',{studentId:student.studentId},'GET') || [];
       if (!list.length) return $('cartList').innerHTML='<div class="learning-list-item">ยังไม่มีกิจกรรมในตะกร้า</div>';
       const total=list.reduce((s,c)=>s+getActivityHours(c.activity),0);
-      $('cartList').innerHTML=`<div class="learning-list-item"><b>รวมทั้งหมด ${total} ชั่วโมง</b></div>`+
-      list.map(c=>`<div class="learning-list-item"><b>${escapeHtml(c.activity?.title||'-')}</b><br>
-      <span class="learning-muted">ชั่วโมง: ${getActivityHours(c.activity)} ชั่วโมง</span><br>
-      <span class="learning-muted">วันที่ ${formatThaiDate(c.activity?.activityDate)}</span>
-      <div class="learning-actions"><button class="btn-green" onclick="LearningBase.confirmJoin('${escapeHtml(c.activityId)}')">ยืนยันเข้าร่วม</button>
-      <button class="btn-red" onclick="LearningBase.cancelCartItem('${escapeHtml(c.cartId)}')">ลบ</button></div></div>`).join('');
+      $('cartList').innerHTML=`<div class="learning-cart-summary"><b>รวมทั้งหมด ${total} ชั่วโมง</b></div>`+
+      list.map(c=>`<div class="learning-cart-item">
+        <div class="learning-cart-info">
+          <div class="learning-cart-title">${escapeHtml(c.activity?.title||'-')}</div>
+          <span class="learning-muted">ชั่วโมง: ${getActivityHours(c.activity)} ชั่วโมง</span><br>
+          <span class="learning-muted">วันที่ ${formatThaiDate(c.activity?.activityDate)}</span>
+          <div class="learning-cart-actions">
+            <button class="btn-green learning-confirm-btn" onclick="LearningBase.confirmJoin('${escapeHtml(c.activityId)}')">ยืนยันเข้าร่วม</button>
+            <button class="btn-red learning-delete-btn" onclick="LearningBase.cancelCartItem('${escapeHtml(c.cartId)}')">ลบ</button>
+          </div>
+        </div>
+        <img class="learning-cart-image"
+          src="${escapeHtml(c.activity?.image1 || 'https://placehold.co/300x200?text=Activity')}"
+          alt="${escapeHtml(c.activity?.title || 'กิจกรรม')}"
+          loading="lazy"
+          onerror="this.onerror=null;this.src='https://placehold.co/300x200?text=Activity';">
+      </div>`).join('');
     } catch(err) { $('cartList').innerHTML=`<div class="learning-list-item">${escapeHtml(err.message)}</div>`; }
   }
 
