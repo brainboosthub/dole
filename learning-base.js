@@ -1,4 +1,6 @@
-console.log('learning-base.js loaded');
+console.log(
+  'learning-base.js VERSION 2026-07-18-03'
+);
 
 const LEARNING_API_URL =
   'https://script.google.com/macros/s/AKfycbyFu-j4vaLGLq4jFTXyZZp_IwEzHn3cXqCf2ShjF5oWFPZ72qioRubjCbyzuu-GotIqsQ/exec';
@@ -94,33 +96,54 @@ function renderLearningActivities(list) {
 
   if (!grid) return;
 
-  if (!Array.isArray(list) || !list.length) {
+  if (!Array.isArray(list) || list.length === 0) {
     grid.innerHTML =
       '<div class="learning-message">ยังไม่มีกิจกรรม</div>';
     return;
   }
 
+  const fallbackImage =
+    'https://placehold.co/600x400?text=Learning+Base';
+
   grid.innerHTML = list.map(function (activity) {
-    const image =
-      activity.image1 ||
-      'https://placehold.co/600x400?text=Learning+Base';
+    const image = String(
+      activity.image1 || fallbackImage
+    ).trim();
+
+    const teacher =
+      activity.teacherName ||
+      activity.teacherId ||
+      '-';
 
     return `
       <article class="learning-card">
+
         <img
           class="learning-card-image"
           src="${escapeLearningAttr(image)}"
-          alt="${escapeLearningAttr(activity.title || 'กิจกรรม')}"
+          alt="${escapeLearningAttr(
+            activity.title || 'กิจกรรม'
+          )}"
           loading="lazy"
+          referrerpolicy="no-referrer"
+          onerror="
+            this.onerror=null;
+            this.src='${fallbackImage}';
+          "
         >
 
         <div class="learning-card-body">
+
           <span class="learning-tag">
-            ${escapeLearningHtml(activity.baseNo || '-')}
+            ${escapeLearningHtml(
+              activity.baseNo || '-'
+            )}
           </span>
 
           <div class="learning-title">
-            ${escapeLearningHtml(activity.title || '-')}
+            ${escapeLearningHtml(
+              activity.title || '-'
+            )}
           </div>
 
           <div class="learning-muted">
@@ -132,7 +155,9 @@ function renderLearningActivities(list) {
               ? `
                 <div class="learning-muted">
                   รูปแบบ:
-                  ${escapeLearningHtml(activity.learningType)}
+                  ${escapeLearningHtml(
+                    activity.learningType
+                  )}
                 </div>
               `
               : ''
@@ -140,27 +165,29 @@ function renderLearningActivities(list) {
 
           <div class="learning-muted">
             วันที่:
-            ${formatLearningThaiDate(activity.activityDate)}
+            ${formatLearningThaiDate(
+              activity.activityDate
+            )}
           </div>
 
-<div class="learning-muted">
-  ครูฐาน:
-  ${escapeLearningHtml(
-    activity.teacherName ||
-    activity.teacherId ||
-    '-'
-  )}
-</div>
+          <div class="learning-muted">
+            ครูฐาน:
+            ${escapeLearningHtml(teacher)}
+          </div>
 
-          <p class="learning-muted">
-            ${escapeLearningHtml(activity.detail || '')}
+          <p class="learning-muted learning-detail">
+            ${escapeLearningHtml(
+              activity.detail || ''
+            )}
           </p>
 
           <div class="learning-card-actions">
             <button
               type="button"
               onclick="addLearningToCart(
-                '${escapeLearningAttr(activity.activityId)}'
+                '${escapeLearningAttr(
+                  activity.activityId
+                )}'
               )">
               ใส่ตะกร้า
             </button>
@@ -168,11 +195,14 @@ function renderLearningActivities(list) {
             <button
               type="button"
               onclick="openLearningActivityDetail(
-                '${escapeLearningAttr(activity.activityId)}'
+                '${escapeLearningAttr(
+                  activity.activityId
+                )}'
               )">
               ดูรายละเอียด
             </button>
           </div>
+
         </div>
       </article>
     `;
