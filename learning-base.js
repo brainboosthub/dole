@@ -28,7 +28,10 @@ async function callApi(action, data = {}, method = 'POST') {
       url.searchParams.set(key, value ?? '');
     });
 
+    console.log('LEARNING API GET:', url.toString());
+
     response = await fetch(url.toString(), {
+      method: 'GET',
       cache: 'no-store'
     });
 
@@ -47,12 +50,13 @@ async function callApi(action, data = {}, method = 'POST') {
 
   const text = await response.text();
 
+  console.log('LEARNING API RESPONSE:', text);
+
   let result;
 
   try {
     result = JSON.parse(text);
   } catch (error) {
-    console.error('API RESPONSE:', text);
     throw new Error('API ส่งข้อมูลกลับมาไม่ใช่ JSON');
   }
 
