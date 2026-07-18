@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
@@ -9,7 +10,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
   <div class="announcement">
@@ -23,62 +23,22 @@
     </div>
   </div>
 
-<header class="site-header">
-  <div class="container nav-wrap">
-
-    <a class="brand" href="#home">
-      <span class="brand-icon">O</span>
-      <span>orange</span>
-    </a>
-
-    <button class="menu-toggle"
-      aria-label="เปิดเมนู"
-      aria-expanded="false">
-      ☰
-    </button>
-
-    <nav class="main-nav" aria-label="เมนูหลัก">
-      <a href="#home">หน้าแรก</a>
-      <a href="#featured">หนังสือแนะนำ</a>
-      <a href="#learningBase">ฐานการเรียนรู้</a>
-      <a href="#categories">หมวดหมู่</a>
-      <a href="#contact">ติดต่อ</a>
-    </nav>
-
-    <div class="learning-top-actions">
-      <button
-        id="scoreBtn"
-        class="learning-nav-btn"
-        type="button"
-        onclick="openScoreModal()">
-        รวม 0 ชั่วโมง
-      </button>
-
-      <button
-        id="accountBtn"
-        class="learning-nav-btn"
-        type="button"
-        onclick="openStudentModal()">
-        Login
-      </button>
-
-      <button
-        class="learning-nav-btn"
-        type="button"
-        onclick="openCart()">
-        🛒 <span id="cartCount">0</span>
-      </button>
-
-      <button
-        class="learning-nav-btn learning-teacher-btn"
-        type="button"
-        onclick="openTeacherPage()">
-        ครูประจำฐาน
-      </button>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="#home">
+        <span class="brand-icon">O</span>
+        <span>orange</span>
+      </a>
+      <button class="menu-toggle" aria-label="เปิดเมนู" aria-expanded="false">☰</button>
+      <nav class="main-nav" aria-label="เมนูหลัก">
+        <a href="#home">หน้าแรก</a>
+        <a href="#featured">หนังสือแนะนำ</a>
+        <a href="#categories">หมวดหมู่</a>
+        <a href="#contact">ติดต่อ</a>
+      </nav>
+      <a class="nav-button" href="#featured">ค้นหาหนังสือ</a>
     </div>
-
-  </div>
-</header>
+  </header>
 
   <main>
     <section id="home" class="hero">
@@ -99,51 +59,17 @@
 
 <section id="featured" class="featured-section">
   <div class="container">
-
-    <!-- สไลด์ข่าวสาร -->
-    <div id="newsSlider" class="news-slider" aria-label="ข่าวสาร">
-      <div id="newsSlides" class="news-slides"></div>
-
-      <button
-        id="newsPrev"
-        class="news-arrow news-prev"
-        type="button"
-        aria-label="ข่าวก่อนหน้า">
-        ‹
-      </button>
-
-      <button
-        id="newsNext"
-        class="news-arrow news-next"
-        type="button"
-        aria-label="ข่าวถัดไป">
-        ›
-      </button>
-
-      <div id="newsDots" class="news-dots"></div>
-
-      <div id="newsLoading" class="news-loading">
-        กำลังโหลดข่าวสาร...
-      </div>
-    </div>
-
     <div class="section-heading">
       <div>
         <span class="section-kicker">เลือกสรรพิเศษ</span>
         <h2>รายละเอียดที่ทำให้ทุกเล่มน่าอ่าน</h2>
       </div>
-
       <a class="view-all" href="#categories">ดูทั้งหมด →</a>
     </div>
-          <div>
-            <span class="section-kicker">เลือกสรรพิเศษ</span>
-            <h2>รายละเอียดที่ทำให้ทุกเล่มน่าอ่าน</h2>
-          </div>
-          <a class="view-all" href="#categories">ดูทั้งหมด →</a>
-        </div>
 
-        <div class="book-grid">
-          <article class="book-card">
+    <div class="book-grid">
+      <article class="book-card">
+
 <div class="book-image">
   <img
     id="card1Image"
@@ -161,7 +87,8 @@
             </div>
           </article>
 
-          <article class="book-card">
+      <article class="book-card">
+
 <div class="book-image">
   <img
     id="card2Image"
@@ -179,7 +106,8 @@
             </div>
           </article>
 
-          <article class="book-card">
+      <article class="book-card">
+
 <div class="book-image">
   <img
     id="card3Image"
@@ -197,54 +125,22 @@
             </div>
           </article>
         </div>
-        <!-- ระบบฐานการเรียนรู้ -->
-<div id="learningBase" class="learning-base-box">
-
-  <div class="learning-heading">
-    <div>
-      <span class="section-kicker">ฐานการเรียนรู้</span>
-      <h2>รายการฐานกิจกรรม</h2>
-    </div>
-
-    <div class="learning-tools">
-      <select
-        id="baseFilter"
-        class="learning-select"
-        onchange="filterActivities()">
-        <option value="">ทุกฐานการเรียนรู้</option>
-      </select>
-
-      <button
-        class="learning-refresh-btn"
-        type="button"
-        onclick="loadLearningActivities()">
-        รีเฟรช
-      </button>
-    </div>
-  </div>
-
-  <div id="learningLoading" class="learning-message">
-    กำลังโหลดกิจกรรม...
-  </div>
-
-  <div id="activityGrid" class="learning-grid"></div>
-
-</div>
       </div>
     </section>
 
-    <section id="categories" class="category-section">
-      <div class="container">
-        <div class="section-heading light-heading">
-          <div><span class="section-kicker">เลือกอ่านตามใจ</span><h2>หมวดหมู่ยอดนิยม</h2></div>
-        </div>
-        <div class="category-grid">
-          <a href="#" class="category-card"><span>01</span><h3>วรรณกรรม</h3><p>นิยาย เรื่องสั้น และงานเขียนร่วมสมัย</p></a>
-          <a href="#" class="category-card"><span>02</span><h3>ศิลปะและดีไซน์</h3><p>แรงบันดาลใจสำหรับนักสร้างสรรค์</p></a>
-          <a href="#" class="category-card"><span>03</span><h3>เด็กและเยาวชน</h3><p>เรื่องราวสนุกที่เสริมจินตนาการ</p></a>
-        </div>
-      </div>
-    </section>
+<section id="categories" class="category-section">
+  <div class="container">
+    <div class="section-heading light-heading">
+      <div><span class="section-kicker">เลือกอ่านตามใจ</span><h2>หมวดหมู่ยอดนิยม</h2></div>
+    </div>
+    <div class="category-grid">
+      <a href="#" class="category-card"><span>01</span><h3>วรรณกรรม</h3><p>นิยาย เรื่องสั้น และงานเขียนร่วมสมัย</p></a>
+      <a href="#" class="category-card"><span>02</span><h3>ศิลปะและดีไซน์</h3><p>แรงบันดาลใจสำหรับนักสร้างสรรค์</p></a>
+      <a href="#" class="category-card"><span>03</span><h3>เด็กและเยาวชน</h3><p>เรื่องราวสนุกที่เสริมจินตนาการ</p></a>
+    </div>
+  </div>
+</section>
+
   </main>
 
   <footer id="contact" class="footer">
@@ -256,118 +152,7 @@
     <div class="copyright">© 2026 Book Store. All rights reserved.</div>
   </footer>
 
-  <!-- Modal Login / ลงทะเบียน -->
-<div id="studentModal" class="learning-modal">
-  <div class="learning-modal-box">
+  <script src="script.js"></script>
 
-    <button
-      class="learning-modal-close"
-      type="button"
-      onclick="closeLearningModal('studentModal')">
-      ×
-    </button>
-
-    <h2>เข้าสู่ระบบ</h2>
-
-    <label for="loginPhone">เบอร์โทร</label>
-    <input
-      id="loginPhone"
-      class="learning-input"
-      maxlength="10"
-      inputmode="numeric"
-      placeholder="กรอกเบอร์โทร 10 หลัก">
-
-    <div class="learning-modal-actions">
-      <button type="button" onclick="studentLogin()">
-        Login
-      </button>
-
-      <button
-        type="button"
-        onclick="toggleStudentRegister()">
-        ลงทะเบียนผู้ใช้ใหม่
-      </button>
-    </div>
-
-    <div id="studentRegisterBox" class="learning-hidden">
-      <hr>
-
-      <h3>ลงทะเบียน</h3>
-
-      <input
-        id="stuFullname"
-        class="learning-input"
-        placeholder="ชื่อ-นามสกุล">
-
-      <input
-        id="stuPhone"
-        class="learning-input"
-        maxlength="10"
-        inputmode="numeric"
-        placeholder="เบอร์โทร">
-
-      <textarea
-        id="stuAddress"
-        class="learning-input"
-        placeholder="ที่อยู่"></textarea>
-
-      <button type="button" onclick="registerStudent()">
-        บันทึกลงทะเบียน
-      </button>
-    </div>
-
-    <button
-      id="studentLogoutBtn"
-      class="learning-logout-btn learning-hidden"
-      type="button"
-      onclick="studentLogout()">
-      ออกจากระบบ
-    </button>
-
-  </div>
-</div>
-
-<!-- Modal ตะกร้า -->
-<div id="cartModal" class="learning-modal">
-  <div class="learning-modal-box learning-modal-large">
-
-    <button
-      class="learning-modal-close"
-      type="button"
-      onclick="closeLearningModal('cartModal')">
-      ×
-    </button>
-
-    <h2>ตะกร้ากิจกรรม</h2>
-
-    <div id="cartList"></div>
-  </div>
-</div>
-
-<!-- Modal รายละเอียดกิจกรรม -->
-<!-- Modal รายละเอียดกิจกรรม -->
-<div id="detailModal" class="learning-modal">
-  <div class="learning-modal-box learning-modal-large">
-
-    <button
-      class="learning-modal-close"
-      type="button"
-      onclick="closeLearningModal('detailModal')">
-      ×
-    </button>
-
-    <div id="detailContent"></div>
-
-    <button
-      id="detailAddCartBtn"
-      type="button">
-      ใส่ตะกร้า
-    </button>
-
-  </div>
-</div>
-
-<script src="script.js?v=20260718-06"></script>
-<script src="learning-base.js?v=20260718-10"></script>
 </body>
 </html>
