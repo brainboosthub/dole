@@ -1,5 +1,5 @@
 console.log(
-  'learning-base.js VERSION 2026-07-18-03'
+  'learning-base.js VERSION 2026-07-18-05'
 );
 
 const LEARNING_API_URL =
@@ -57,7 +57,12 @@ async function loadLearningActivities() {
     const result = await learningApi(
       'learningActivities'
     );
-
+console.log('API URL ที่เรียก:', LEARNING_API_URL);
+console.log('ผล API ล่าสุด:', result);
+console.log(
+  'กิจกรรมรายการแรก:',
+  result.activities?.[0]
+);
     LEARNING_ACTIVITIES =
       Array.isArray(result.activities)
         ? result.activities
