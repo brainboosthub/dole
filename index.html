@@ -10,6 +10,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="learning-base.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
   <div class="announcement">
@@ -36,6 +38,14 @@
         <a href="#categories">หมวดหมู่</a>
         <a href="#contact">ติดต่อ</a>
       </nav>
+
+<div class="learning-nav-actions" aria-label="ระบบฐานการเรียนรู้">
+  <button id="scoreBtn" class="learning-light" type="button" onclick="LearningBase.openScoreModal()">รวม 0 ชั่วโมง</button>
+  <button id="accountBtn" class="learning-light" type="button" onclick="LearningBase.openStudentModal()">Login</button>
+  <button class="learning-light" type="button" onclick="LearningBase.openCart()">🛒 ตะกร้า <span id="cartCount">0</span></button>
+  <a class="learning-teacher" id="teacherPageLink" href="#" target="_blank" rel="noopener">ครูประจำฐาน</a>
+</div>
+
       <a class="nav-button" href="#featured">ค้นหาหนังสือ</a>
     </div>
   </header>
@@ -128,6 +138,55 @@
       </div>
     </section>
 
+<section id="learningBaseModule"><div class="learning-container">
+
+  <div class="learning-tabs">
+<div style="display:flex;align-items:center;width:100%;gap:10px">
+
+  <div style="display:flex;gap:10px">
+    <button class="active"
+      onclick="LearningBase.showPage('activitiesPage',this)">
+      กิจกรรมทั้งหมด
+    </button>
+
+    <button
+      onclick="LearningBase.showPage('historyPage',this)">
+      กิจกรรมที่ยืนยันแล้ว
+    </button>
+  </div>
+
+  <div style="margin-left:auto">
+    <select
+      id="baseFilter"
+      onchange="LearningBase.filterActivities()"
+      style="width:260px"
+    >
+      <option value="">ทุกฐานการเรียนรู้</option>
+    </select>
+  </div>
+
+</div>
+    
+  </div>
+
+  <section id="activitiesPage">
+    <div class="learning-section-title">
+      <h2>รายการกิจกรรมฐานการเรียนรู้</h2>
+      <button onclick="LearningBase.loadActivities()">รีเฟรช</button>
+    </div>
+    <div id="activityGrid" class="learning-grid"></div>
+  </section>
+
+  <section id="historyPage" class="learning-hidden">
+    <div class="learning-section-title">
+      <h2>กิจกรรมที่ยืนยันแล้ว</h2>
+      <button onclick="LearningBase.loadHistory()">รีเฟรช</button>
+    </div>
+    <div id="historyList"></div>
+  </section>
+</div>
+</section>
+
 <section id="categories" class="category-section">
   <div class="container">
     <div class="section-heading light-heading">
@@ -154,5 +213,111 @@
 
   <script src="script.js"></script>
 
+<!-- Student Modal -->
+<div id="studentModal" class="learning-modal">
+  <div class="learning-modal-box">
+    <div style="
+  display:flex;
+  justify-content:flex-end;
+">
+
+  <button
+    class="btn-red"
+    onclick="LearningBase.closeModal('studentModal')"
+    style="
+      width:42px;
+      height:42px;
+      border-radius:999px;
+      padding:0;
+      font-size:20px;
+      line-height:1;
+    ">
+    ×
+  </button>
+
+</div>
+    <h2>👤 Login</h2>
+
+    <label>เบอร์โทร</label>
+    <input id="loginPhone" maxlength="10" inputmode="numeric">
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+      <button onclick="LearningBase.studentLogin()">Login</button>
+      <button
+  id="newRegisterBtn"
+  class="btn-green"
+  onclick="LearningBase.showRegisterBox()"
+  style="margin-left:auto">
+  ลงทะเบียนผู้ใช้ใหม่
+</button>
+    </div>
+
+    <div id="registerBox" style="display:none;margin-top:18px">
+      <hr>
+      <h3>ยังไม่มีบัญชี ลงทะเบียน</h3>
+
+      <label>ชื่อ-นามสกุล</label>
+      <input id="stuFullname">
+
+      <label>เบอร์โทร</label>
+      <input id="stuPhone" maxlength="10" inputmode="numeric">
+
+      <label>ที่อยู่</label>
+      <textarea id="stuAddress"></textarea>
+      <div style="
+  display:flex;
+  justify-content:flex-end;
+  margin-top:14px;
+">
+
+  <button
+    class="btn-green"
+    onclick="LearningBase.registerStudent()">
+    ลงทะเบียน
+  </button>
+
+</div>
+    </div>
+
+<div id="logoutBox" style="margin-top:15px;display:none">
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+
+    <button
+      class="btn-green"
+      onclick="LearningBase.showRegisterBox()">
+      ลงทะเบียน
+    </button>
+
+    <button
+      class="btn-orange"
+      onclick="LearningBase.closeStudentModal()">
+      ออกจากระบบ
+    </button>
+
+  </div>
+</div>
+  </div>
+</div>
+
+<!-- Cart Modal -->
+<div id="cartModal" class="learning-modal">
+  <div class="learning-modal-box">
+    <h2>🛒 ตะกร้ากิจกรรม</h2>
+    <div id="cartList"></div>
+    <button class="btn-red" onclick="LearningBase.closeModal('cartModal')">ปิด</button>
+  </div>
+</div>
+
+<div id="detailModal" class="learning-modal">
+  <div class="learning-modal-box" style="max-width:900px">
+    <div id="detailContent"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:15px">
+      <button id="detailAddCartBtn">ใส่ตะกร้า</button>
+      <button class="btn-red" onclick="LearningBase.closeModal('detailModal')">ปิด</button>
+    </div>
+  </div>
+</div>
+
+  <script src="learning-base.js"></script>
 </body>
 </html>
