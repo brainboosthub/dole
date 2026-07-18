@@ -138,8 +138,6 @@ learning-base.js
 ให้นำ learning-base.js ไปแทนไฟล์เดิมใน GitHub จากนั้นกด Commit changes และรีเฟรชหน้าเว็บไซต์ด้วย Ctrl + F5 ครับ
 
 
-{"success":false,"message":"Invalid mode","receivedMode":"learning"}
-
 
 ข้อความที่วาง (1)(54).txt
 เอกสาร
@@ -184,204 +182,6 @@ const image = document.getElementById(elementId);
 if (image) {image.src = url;}}
 
 document.addEventListener('DOMContentLoaded', loadWebsiteImages);
-
-จากไฟล์ learning-base.js ล่าสุด ฟังก์ชันโหลดกิจกรรม ไม่ได้ส่ง mode=learning แล้ว แต่ส่งเพียง action=getActivities 
-
-
-ดังนั้นที่ยังขึ้น
-
-โหลดกิจกรรมไม่สำเร็จ: Invalid mode
-หมายความว่าเว็บไซต์ GitHub ยังโหลดไฟล์ JavaScript ตัวเก่า หรือมี learning-base.js มากกว่า 1 ไฟล์ถูกเรียกใช้งาน
-
-1. แก้ใน index.html
-ค้นหาบรรทัด:
-
-<script src="learning-base.js"></script>
-เปลี่ยนเป็น:
-
-<script src="learning-base.js?v=20260719-2"></script>
-ต้องมีบรรทัดเรียก learning-base.js เพียงครั้งเดียวเท่านั้น
-
-ค้นหาทั้งไฟล์ index.html ด้วยคำว่า:
-
-learning-base.js
-ถ้าพบมากกว่า 1 บรรทัด ให้เหลือเพียงบรรทัดเดียว
-
-2. ตรวจ learning-base.js
-ส่วน callApi() ต้องเป็นแบบนี้ โดยไม่มี mode=learning:
-
-async function callApi(action, data = {}, method = 'POST') {
-  let response;
-
-  if (method === 'GET') {
-    const url = new URL(API_URL);
-
-    url.searchParams.set('action', action);
-    url.searchParams.set('_t', Date.now());
-
-    Object.entries(data).forEach(([key, value]) => {
-      url.searchParams.set(key, value ?? '');
-    });
-
-    console.log('LEARNING API GET:', url.toString());
-
-    response = await fetch(url.toString(), {
-      method: 'GET',
-      cache: 'no-store'
-    });
-
-  } else {
-    response = await fetch(API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'text/plain;charset=utf-8'
-      },
-      body: JSON.stringify({
-        action: action,
-        data: data
-      })
-    });
-  }
-
-  const text = await response.text();
-
-  console.log('LEARNING API RESPONSE:', text);
-
-  let result;
-
-  try {
-    result = JSON.parse(text);
-  } catch (error) {
-    throw new Error('API ส่งข้อมูลกลับมาไม่ใช่ JSON');
-  }
-
-  if (!response.ok || result.success === false) {
-    throw new Error(
-      result.message || `HTTP ${response.status}`
-    );
-  }
-
-  return Object.prototype.hasOwnProperty.call(result, 'data')
-    ? result.data
-    : result;
-}
-ไฟล์ล่าสุดของคุณเรียกกิจกรรมด้วย getActivities แบบ GET ถูกต้องแล้ว 
-
-
-3. แก้ Code.gs ให้รองรับทั้งแบบใหม่และแบบเก่า
-ใช้ doGet() นี้แทนตัวเดิมทั้งหมด:
-
-function doGet(e) {
-  e = e || {};
-  const p = e.parameter || {};
-
-  const mode = String(p.mode || '').trim().toLowerCase();
-  const action = String(p.action || '').trim();
-  const page = String(p.page || '').trim();
-
-  // หลังบ้านครู
-  if (page === 'teacher') {
-    setupLearningBaseSheets_();
-
-    return HtmlService.createTemplateFromFile('teacher')
-      .evaluate()
-      .setTitle('Dashboard ครูประจำฐาน')
-      .addMetaTag(
-        'viewport',
-        'width=device-width, initial-scale=1'
-      )
-      .setXFrameOptionsMode(
-        HtmlService.XFrameOptionsMode.ALLOWALL
-      );
-  }
-
-  // ฐานการเรียนรู้
-  // รองรับทั้ง URL ใหม่ที่มี action อย่างเดียว
-  // และ URL เก่าที่มี mode=learning
-  if (action || mode === 'learning') {
-    try {
-      if (!action) {
-        throw new Error('ไม่พบคำสั่ง action');
-      }
-
-      const result = runLearningAction_(action, p);
-
-      return jsonOutput_({
-        success: true,
-        data: result
-      });
-
-    } catch (error) {
-      return jsonOutput_({
-        success: false,
-        message: error.message,
-        receivedMode: mode,
-        receivedAction: action
-      });
-    }
-  }
-
-  // รูปภาพเว็บไซต์
-  if (mode === 'images') {
-    try {
-      return jsonOutput_(getWebsiteImages());
-    } catch (error) {
-      return jsonOutput_({
-        success: false,
-        message: error.message
-      });
-    }
-  }
-
-  return jsonOutput_({
-    success: false,
-    message: 'Invalid mode',
-    receivedMode: mode,
-    receivedAction: action
-  });
-}
-และต้องมี:
-
-function jsonOutput_(data) {
-  return ContentService
-    .createTextOutput(JSON.stringify(data))
-    .setMimeType(ContentService.MimeType.JSON);
-}
-4. ตรวจว่า doGet() ไม่มีซ้ำ
-ใน Apps Script กด Ctrl + F แล้วค้นหา:
-
-function doGet
-ทั้งโปรเจกต์ต้องมีเพียงหนึ่งฟังก์ชัน:
-
-function doGet(e)
-ถ้ามีอยู่ในไฟล์อื่น เช่น api.gs, Code.gs หรือ image.gs ให้รวมทั้งหมดไว้ใน doGet() เดียว เพราะ Apps Script ไม่ควรมี doGet() หลายตัว
-
-5. ทดสอบ URL โดยตรง
-เปิด URL นี้:
-
-https://script.google.com/macros/s/AKfycbyFu-j4vaLGLq4jFTXyZZp_IwEzHn3cXqCf2ShjF5oWFPZ72qioRubjCbyzuu-GotIqsQ/exec?action=getActivities
-ต้องได้:
-
-{
-  "success": true,
-  "data": []
-}
-หรือมีรายการกิจกรรม
-
-หาก URL นี้ยังตอบ Invalid mode แปลว่า Deployment ยังไม่ได้ใช้ doGet() ตัวใหม่ ต้องแก้ Deployment เดิมโดยเลือก เวอร์ชันใหม่ แล้วกด ทำให้ใช้งานได้
-
-6. ตรวจจากหน้า GitHub
-กด F12 → แท็บ Console แล้วรีเฟรชหน้า
-
-ต้องเห็น URL ลักษณะนี้:
-
-LEARNING API GET:
-https://script.google.com/.../exec?action=getActivities&_t=...
-ถ้าเห็น:
-
-exec?mode=learning&action=getActivities
-แปลว่าหน้าเว็บยังโหลด JavaScript ตัวเก่า ให้ตรวจชื่อไฟล์ ตำแหน่งไฟล์ และเพิ่ม ?v=20260719-2 ตามขั้นตอนแรกครับ
-
 
 image(677).png
 
@@ -655,6 +455,237 @@ const IMAGE_API_URL =
 แล้วกด Ctrl + F5
 
 จุดชี้ขาดคือ URL ?test=version ถ้าไม่แสดง LEARNING-20260719-V3 แสดงว่ากำลัง Deploy หรือแก้คนละโปรเจกต์ครับ
+
+
+
+teacher ฐานการเรียนรู้(7).txt
+เอกสาร
+
+index ฐานการเรียนรู้(7).txt
+เอกสาร
+
+code ฐานการเรียนรู้(7).txt
+เอกสาร
+ตะกร้ากิจกรรม (learning-modal-box) จะมีรูปภาพฐานที่เลือกไว้
+ให้เพิ่มรูปภาพ พิจารณาจากโคัด modal-box ระบบฐานการเรียนรู้ต้นแบบ
+
+ถูกต้องครับ จากระบบต้นแบบ modal-box ของตะกร้าจะแสดงข้อมูลกิจกรรมด้านซ้าย และรูป image1 ของกิจกรรมด้านขวา ขนาดประมาณ 180 × 120px 
+
+
+ในระบบ GitHub ให้แก้เฉพาะ openCart() ในไฟล์ learning-base.js เป็นโค้ดนี้:
+
+async function openCart() {
+  if (!requireStudent()) return;
+
+  const cartModal = $('cartModal');
+  const cartList = $('cartList');
+
+  if (!cartModal || !cartList) return;
+
+  cartModal.style.display = 'flex';
+  cartList.innerHTML = 'กำลังโหลด...';
+
+  try {
+    const list = await callApi(
+      'getMyCart',
+      {
+        studentId: student.studentId
+      },
+      'GET'
+    ) || [];
+
+    if (!list.length) {
+      cartList.innerHTML = `
+        <div class="learning-list-item">
+          ยังไม่มีกิจกรรมในตะกร้า
+        </div>
+      `;
+      return;
+    }
+
+    const totalHours = list.reduce((sum, cart) => {
+      return sum + getActivityHours(cart.activity);
+    }, 0);
+
+    cartList.innerHTML = `
+      <div class="learning-cart-summary">
+        <b>รวมทั้งหมด ${totalHours} ชั่วโมง</b>
+      </div>
+    ` + list.map(cart => {
+      const activity = cart.activity || {};
+
+      const imageUrl =
+        String(activity.image1 || '').trim() ||
+        'https://placehold.co/300x200?text=Activity';
+
+      return `
+        <div class="learning-cart-item">
+
+          <div class="learning-cart-info">
+
+            <div class="learning-cart-title">
+              ${escapeHtml(activity.title || '-')}
+            </div>
+
+            <div class="learning-muted">
+              ฐาน: ${escapeHtml(activity.baseNo || '-')}
+            </div>
+
+            <div class="learning-muted">
+              ชั่วโมง: ${getActivityHours(activity)} ชั่วโมง
+            </div>
+
+            <div class="learning-muted">
+              วันที่ ${formatThaiDate(activity.activityDate)}
+            </div>
+
+            <div class="learning-cart-actions">
+
+              <button
+                type="button"
+                class="btn-green learning-confirm-btn"
+                onclick="LearningBase.confirmJoin(
+                  '${escapeHtml(cart.activityId)}'
+                )">
+                ยืนยันเข้าร่วม
+              </button>
+
+              <button
+                type="button"
+                class="btn-red learning-delete-btn"
+                onclick="LearningBase.cancelCartItem(
+                  '${escapeHtml(cart.cartId)}'
+                )">
+                ลบ
+              </button>
+
+            </div>
+          </div>
+
+          <img
+            class="learning-cart-image"
+            src="${escapeHtml(imageUrl)}"
+            alt="${escapeHtml(activity.title || 'รูปกิจกรรม')}"
+            loading="lazy"
+            onerror="
+              this.onerror=null;
+              this.src='https://placehold.co/300x200?text=Activity';
+            ">
+
+        </div>
+      `;
+    }).join('');
+
+  } catch (error) {
+    cartList.innerHTML = `
+      <div class="learning-list-item">
+        โหลดข้อมูลตะกร้าไม่สำเร็จ:
+        ${escapeHtml(error.message)}
+      </div>
+    `;
+  }
+}
+จากนั้นเพิ่ม CSS นี้ไว้ท้าย learning-base.css:
+
+/* สรุปจำนวนชั่วโมงในตะกร้า */
+#learningBaseModule .learning-cart-summary {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  padding: 14px;
+  margin-bottom: 10px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+}
+
+/* รายการกิจกรรมในตะกร้า */
+#learningBaseModule .learning-cart-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 180px;
+  gap: 15px;
+  align-items: center;
+
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  padding: 14px;
+  margin-bottom: 10px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+}
+
+#learningBaseModule .learning-cart-info {
+  min-width: 0;
+}
+
+#learningBaseModule .learning-cart-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 8px;
+  overflow-wrap: anywhere;
+}
+
+#learningBaseModule .learning-cart-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+/* รูปภาพฐานที่เลือก */
+#learningBaseModule .learning-cart-image {
+  display: block;
+  width: 180px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 16px;
+  background: #e5e7eb;
+  border: 1px solid #e5e7eb;
+}
+
+/* โทรศัพท์มือถือ */
+@media (max-width: 650px) {
+  #learningBaseModule .learning-cart-item {
+    grid-template-columns: 1fr;
+  }
+
+  #learningBaseModule .learning-cart-image {
+    width: 100%;
+    height: 190px;
+    grid-row: 1;
+  }
+
+  #learningBaseModule .learning-cart-info {
+    grid-row: 2;
+  }
+}
+ไม่ต้องแก้ HTML ของ Modal เพราะต้นแบบใช้เพียง:
+
+<div id="cartModal" class="learning-modal">
+  <div class="learning-modal-box">
+    <h2>🛒 ตะกร้ากิจกรรม</h2>
+
+    <div id="cartList"></div>
+
+    <button
+      class="btn-red"
+      onclick="LearningBase.closeModal('cartModal')">
+      ปิด
+    </button>
+  </div>
+</div>
+ด้าน Apps Script ไม่ต้องแก้เพิ่มเติม เพราะ getMyCart() นำข้อมูลกิจกรรมทั้งหมด—including image1—มารวมไว้ใน activity อยู่แล้ว 
+
+
+หลังอัปโหลดไฟล์ใหม่ขึ้น GitHub ให้แก้เวอร์ชันใน index.html เพื่อป้องกัน Cache:
+
+<link
+  rel="stylesheet"
+  href="learning-base.css?v=20260719-5">
+
+<script
+  src="learning-base.js?v=20260719-5">
+</script>
+แล้วกด Ctrl + F5 รูปภาพที่แสดงจะเป็น image1 ของฐานกิจกรรมที่ผู้ใช้เลือกใส่ตะกร้าครับ
 
 
 {--navy:#08263a;--navy2:#061c2c;--orange:#ff8467;--orange2:#ff6d4d;--yellow:#ffd36d;--cream:#fff6e7;--white:#fff;--text:#10212c;--muted:#64717a;--shadow:0 18px 45px rgba(7,31,48,.18)}
