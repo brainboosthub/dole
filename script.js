@@ -4,7 +4,7 @@ toggle.addEventListener('click', () => {const isOpen = nav.classList.toggle('ope
 
 document.querySelectorAll('.main-nav a').forEach(link => {link.addEventListener('click', () => {nav.classList.remove('open');toggle.setAttribute('aria-expanded', 'false');toggle.textContent = '☰';});});
 
-document.querySelectorAll('.book-meta button').forEach(button => {button.addEventListener('click', () => {button.textContent = '✓';button.setAttribute('aria-label', 'เพิ่มลงตะกร้าแล้ว');setTimeout(() => button.textContent = '+', 1400);});});const IMAGE_API_URL ='https://script.google.com/macros/s/AKfycbzq9SWm2mEBe_gsusJKNEj7hlORO29BejRrOI7CoapwBj145UCyUBccmzdv4pzLAHlW/exec?mode=images';
+document.querySelectorAll('.book-meta button').forEach(button => {button.addEventListener('click', () => {button.textContent = '✓';button.setAttribute('aria-label', 'เพิ่มลงตะกร้าแล้ว');setTimeout(() => button.textContent = '+', 1400);});});const IMAGE_API_URL ='https://script.google.com/macros/s/AKfycbyFu-j4vaLGLq4jFTXyZZp_IwEzHn3cXqCf2ShjF5oWFPZ72qioRubjCbyzuu-GotIqsQ/exec?mode=images';
 
 async function loadWebsiteImages() {try {const response = await fetch(IMAGE_API_URL, {method: 'GET',cache: 'no-store'});
 
