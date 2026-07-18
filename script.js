@@ -1,5 +1,5 @@
 console.log(
-  'learning-base.js VERSION 2026-07-18-02'
+  'script.js VERSION 2026-07-18-02'
 );
 const toggle = document.querySelector('.menu-toggle');
 const nav = document.querySelector('.main-nav');
