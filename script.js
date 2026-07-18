@@ -1,26 +1,22 @@
+console.log(
+  'learning-base.js VERSION 2026-07-18-02'
+);
 const toggle = document.querySelector('.menu-toggle');
 const nav = document.querySelector('.main-nav');
 
-if (toggle && nav) {
-  toggle.addEventListener('click', () => {
-    const isOpen = nav.classList.toggle('open');
+toggle.addEventListener('click', () => {
+  const isOpen = nav.classList.toggle('open');
+  toggle.setAttribute('aria-expanded', String(isOpen));
+  toggle.textContent = isOpen ? '✕' : '☰';
+});
 
-    toggle.setAttribute(
-      'aria-expanded',
-      String(isOpen)
-    );
-
-    toggle.textContent = isOpen ? '✕' : '☰';
+document.querySelectorAll('.main-nav a').forEach(link => {
+  link.addEventListener('click', () => {
+    nav.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.textContent = '☰';
   });
-
-  document.querySelectorAll('.main-nav a').forEach(link => {
-    link.addEventListener('click', () => {
-      nav.classList.remove('open');
-      toggle.setAttribute('aria-expanded', 'false');
-      toggle.textContent = '☰';
-    });
-  });
-}
+});
 
 document.querySelectorAll('.book-meta button').forEach(button => {
   button.addEventListener('click', () => {
