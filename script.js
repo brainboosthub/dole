@@ -32,7 +32,7 @@ if (toggle && nav) {
 ====================================== */
 
 const IMAGE_API_URL =
-  'https://script.google.com/macros/s/AKfycbyFu-j4vaLGLq4jFTXyZZp_IwEzHn3cXqCf2ShjF5oWFPZ72qioRubjCbyzuu-GotIqsQ/exec?mode=images';
+  'https://script.google.com/macros/s/AKfycbzvVPllEQ0MSBDokzrav34yJ5IcTiqcVo2mALWNgwFBTlYdrWrr-S47UD4zz_k-b4yVBQ/exec?mode=images';
 
 async function loadWebsiteImages() {
   try {
