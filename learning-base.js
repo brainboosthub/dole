@@ -41,8 +41,6 @@ async function loadLearningActivities() {
   const grid = document.getElementById('activityGrid');
   const loading = document.getElementById('learningLoading');
 
-  console.log('เรียก loadLearningActivities()');
-
   if (!grid) {
     console.error('ไม่พบ #activityGrid');
     return;
@@ -54,70 +52,43 @@ async function loadLearningActivities() {
   }
 
   try {
-    const requestUrl =
-      LEARNING_API_URL +
-      '?mode=learningActivities&_=' +
-      Date.now();
+    const result = await learningApi(
+      'learningActivities'
+    );
 
-    console.log('Learning API:', requestUrl);
+    LEARNING_ACTIVITIES =
+      Array.isArray(result.activities)
+        ? result.activities
+        : [];
 
-    const response = await fetch(requestUrl, {
-      method: 'GET',
-      cache: 'no-store',
-      redirect: 'follow'
-    });
+    renderLearningBaseFilter(
+      LEARNING_ACTIVITIES
+    );
 
-    console.log('HTTP status:', response.status);
-
-    if (!response.ok) {
-      throw new Error('HTTP ' + response.status);
-    }
-
-    const responseText = await response.text();
-
-    console.log('API response:', responseText);
-
-    let result;
-
-    try {
-      result = JSON.parse(responseText);
-    } catch (error) {
-      throw new Error(
-        'API ไม่ได้ส่ง JSON กลับมา: ' +
-        responseText.substring(0, 150)
-      );
-    }
-
-    if (result.success === false) {
-      throw new Error(
-        result.message || 'โหลดรายการกิจกรรมไม่สำเร็จ'
-      );
-    }
-
-    LEARNING_ACTIVITIES = Array.isArray(result.activities)
-      ? result.activities
-      : [];
-
-    renderLearningBaseFilter(LEARNING_ACTIVITIES);
-    renderLearningActivities(LEARNING_ACTIVITIES);
+    renderLearningActivities(
+      LEARNING_ACTIVITIES
+    );
 
     if (loading) {
       loading.style.display = 'none';
     }
 
   } catch (error) {
-    console.error('โหลดกิจกรรมไม่สำเร็จ:', error);
+    console.error(
+      'โหลดกิจกรรมไม่สำเร็จ:',
+      error
+    );
+
+    grid.innerHTML = '';
 
     if (loading) {
       loading.style.display = 'block';
       loading.textContent =
-        'โหลดกิจกรรมไม่สำเร็จ: ' + error.message;
+        'โหลดกิจกรรมไม่สำเร็จ: ' +
+        error.message;
     }
-
-    grid.innerHTML = '';
   }
 }
-
 function renderLearningActivities(list) {
   const grid = document.getElementById('activityGrid');
 
@@ -172,10 +143,14 @@ function renderLearningActivities(list) {
             ${formatLearningThaiDate(activity.activityDate)}
           </div>
 
-          <div class="learning-muted">
-            ครูฐาน:
-            ${escapeLearningHtml(activity.teacherName || '-')}
-          </div>
+<div class="learning-muted">
+  ครูฐาน:
+  ${escapeLearningHtml(
+    activity.teacherName ||
+    activity.teacherId ||
+    '-'
+  )}
+</div>
 
           <p class="learning-muted">
             ${escapeLearningHtml(activity.detail || '')}
@@ -637,9 +612,3 @@ document.addEventListener('DOMContentLoaded', async function () {
   }
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-  console.log('เริ่มโหลดระบบฐานการเรียนรู้');
-
-  updateLearningTop();
-  loadLearningActivities();
-});
