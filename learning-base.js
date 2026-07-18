@@ -187,15 +187,13 @@ function renderLearningActivities(list) {
           </p>
 
           <div class="learning-card-actions">
-            <button
-              type="button"
-              onclick="addLearningToCart(
-                '${escapeLearningAttr(
-                  activity.activityId
-                )}'
-              )">
-              ใส่ตะกร้า
-            </button>
+<button
+  type="button"
+  onclick="addLearningToCart(
+    '${escapeLearningAttr(activity.activityId)}'
+  )">
+  ใส่ตะกร้า
+</button>
 
             <button
               type="button"
@@ -646,4 +644,3 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
   }
 });
-
