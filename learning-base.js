@@ -2,8 +2,7 @@
 (() => {
   'use strict';
 
-const API_URL =
-  'https://script.google.com/macros/s/AKfycbyFu-j4vaLGLq4jFTXyZZp_IwEzHn3cXqCf2ShjF5oWFPZ72qioRubjCbyzuu-GotIqsQ/exec';
+  const API_URL = 'https://script.google.com/macros/s/AKfycbyFu-j4vaLGLq4jFTXyZZp_IwEzHn3cXqCf2ShjF5oWFPZ72qioRubjCbyzuu-GotIqsQ/exec';
   const TEACHER_URL = API_URL + '?page=teacher';
   let student = JSON.parse(localStorage.getItem('LEARN_STUDENT') || 'null');
   let activities = [];
@@ -15,61 +14,28 @@ const API_URL =
     .replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
     .replaceAll('"','&quot;').replaceAll("'",'&#039;');
 
-async function callApi(action, data = {}, method = 'POST') {
-  let response;
-
-  if (method === 'GET') {
-    const url = new URL(API_URL);
-
-    url.searchParams.set('action', action);
-    url.searchParams.set('_t', Date.now());
-
-    Object.entries(data).forEach(([key, value]) => {
-      url.searchParams.set(key, value ?? '');
-    });
-
-    console.log('LEARNING API GET:', url.toString());
-
-    response = await fetch(url.toString(), {
-      method: 'GET',
-      cache: 'no-store'
-    });
-
-  } else {
-    response = await fetch(API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'text/plain;charset=utf-8'
-      },
-      body: JSON.stringify({
-        action: action,
-        data: data
-      })
-    });
+  async function callApi(action, data = {}, method = 'POST') {
+    let response;
+    if (method === 'GET') {
+      const url = new URL(API_URL);
+      url.searchParams.set('mode', 'learning');
+      url.searchParams.set('action', action);
+      Object.entries(data).forEach(([key, value]) => url.searchParams.set(key, value ?? ''));
+      response = await fetch(url.toString(), { cache: 'no-store' });
+    } else {
+      response = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ mode: 'learning', action, data })
+      });
+    }
+    const text = await response.text();
+    let result;
+    try { result = JSON.parse(text); }
+    catch { throw new Error('API ส่งข้อมูลกลับมาไม่ใช่ JSON'); }
+    if (!response.ok || result?.success === false) throw new Error(result?.message || `HTTP ${response.status}`);
+    return Object.prototype.hasOwnProperty.call(result, 'data') ? result.data : result;
   }
-
-  const text = await response.text();
-
-  console.log('LEARNING API RESPONSE:', text);
-
-  let result;
-
-  try {
-    result = JSON.parse(text);
-  } catch (error) {
-    throw new Error('API ส่งข้อมูลกลับมาไม่ใช่ JSON');
-  }
-
-  if (!response.ok || result.success === false) {
-    throw new Error(
-      result.message || `HTTP ${response.status}`
-    );
-  }
-
-  return Object.prototype.hasOwnProperty.call(result, 'data')
-    ? result.data
-    : result;
-}
 
   function showPage(id, btn) {
     const root = $('learningBaseModule');
@@ -202,23 +168,12 @@ async function callApi(action, data = {}, method = 'POST') {
       const list=await callApi('getMyCart',{studentId:student.studentId},'GET') || [];
       if (!list.length) return $('cartList').innerHTML='<div class="learning-list-item">ยังไม่มีกิจกรรมในตะกร้า</div>';
       const total=list.reduce((s,c)=>s+getActivityHours(c.activity),0);
-      $('cartList').innerHTML=`<div class="learning-cart-summary"><b>รวมทั้งหมด ${total} ชั่วโมง</b></div>`+
-      list.map(c=>`<div class="learning-cart-item">
-        <div class="learning-cart-info">
-          <div class="learning-cart-title">${escapeHtml(c.activity?.title||'-')}</div>
-          <span class="learning-muted">ชั่วโมง: ${getActivityHours(c.activity)} ชั่วโมง</span><br>
-          <span class="learning-muted">วันที่ ${formatThaiDate(c.activity?.activityDate)}</span>
-          <div class="learning-cart-actions">
-            <button class="btn-green learning-confirm-btn" onclick="LearningBase.confirmJoin('${escapeHtml(c.activityId)}')">ยืนยันเข้าร่วม</button>
-            <button class="btn-red learning-delete-btn" onclick="LearningBase.cancelCartItem('${escapeHtml(c.cartId)}')">ลบ</button>
-          </div>
-        </div>
-        <img class="learning-cart-image"
-          src="${escapeHtml(c.activity?.image1 || 'https://placehold.co/300x200?text=Activity')}"
-          alt="${escapeHtml(c.activity?.title || 'กิจกรรม')}"
-          loading="lazy"
-          onerror="this.onerror=null;this.src='https://placehold.co/300x200?text=Activity';">
-      </div>`).join('');
+      $('cartList').innerHTML=`<div class="learning-list-item"><b>รวมทั้งหมด ${total} ชั่วโมง</b></div>`+
+      list.map(c=>`<div class="learning-list-item"><b>${escapeHtml(c.activity?.title||'-')}</b><br>
+      <span class="learning-muted">ชั่วโมง: ${getActivityHours(c.activity)} ชั่วโมง</span><br>
+      <span class="learning-muted">วันที่ ${formatThaiDate(c.activity?.activityDate)}</span>
+      <div class="learning-actions"><button class="btn-green" onclick="LearningBase.confirmJoin('${escapeHtml(c.activityId)}')">ยืนยันเข้าร่วม</button>
+      <button class="btn-red" onclick="LearningBase.cancelCartItem('${escapeHtml(c.cartId)}')">ลบ</button></div></div>`).join('');
     } catch(err) { $('cartList').innerHTML=`<div class="learning-list-item">${escapeHtml(err.message)}</div>`; }
   }
 
