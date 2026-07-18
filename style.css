@@ -565,3 +565,83 @@ background: #ffffff;
   -webkit-line-clamp: 3;
   overflow: hidden;
 }
+.learning-cart-summary {
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  font-weight: 800;
+  box-shadow: 0 5px 16px rgba(15, 23, 42, 0.05);
+}
+
+.learning-cart-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 180px;
+  gap: 16px;
+  align-items: center;
+  padding: 14px;
+  margin-bottom: 12px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  box-shadow: 0 5px 16px rgba(15, 23, 42, 0.05);
+}
+
+.learning-cart-info {
+  min-width: 0;
+}
+
+.learning-cart-title {
+  margin-bottom: 4px;
+  font-size: 17px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.learning-cart-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.learning-confirm-btn {
+  border: 0;
+  border-radius: 14px;
+  padding: 10px 16px;
+  background: #16a34a;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.learning-delete-btn {
+  border: 0;
+  border-radius: 14px;
+  padding: 10px 16px;
+  background: #dc2626;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.learning-cart-image {
+  width: 180px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 16px;
+  background: #e5e7eb;
+}
+
+@media (max-width: 600px) {
+  .learning-cart-item {
+    grid-template-columns: 1fr;
+  }
+
+  .learning-cart-image {
+    width: 100%;
+    height: 190px;
+    order: -1;
+  }
+}
