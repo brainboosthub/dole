@@ -15,27 +15,70 @@ async function learningApi(mode, data = {}) {
   const url = new URL(LEARNING_API_URL);
 
   url.searchParams.set('mode', mode);
-  url.searchParams.set('data', JSON.stringify(data));
-  url.searchParams.set('_', Date.now().toString());
+  url.searchParams.set(
+    'data',
+    JSON.stringify(data || {})
+  );
 
-  const response = await fetch(url.toString(), {
-    method: 'GET',
-    cache: 'no-store'
-  });
+  url.searchParams.set(
+    '_',
+    Date.now().toString()
+  );
+
+  const response = await fetch(
+    url.toString(),
+    {
+      method: 'GET',
+      cache: 'no-store',
+      redirect: 'follow'
+    }
+  );
 
   if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
+    throw new Error(
+      `เชื่อมต่อระบบไม่สำเร็จ HTTP ${response.status}`
+    );
   }
 
-  const result = await response.json();
+  const responseText = await response.text();
 
-  if (
-    result &&
-    result.success === false
-  ) {
-    throw new Error(result.message || 'เกิดข้อผิดพลาด');
+  let result;
+
+  try {
+    result = JSON.parse(responseText);
+
+  } catch (error) {
+    console.error(
+      'ข้อมูลที่ได้รับไม่ใช่ JSON:',
+      responseText
+    );
+
+    throw new Error(
+      'Apps Script ส่งข้อมูลกลับมาไม่ถูกต้อง'
+    );
   }
 
+  if (!result || typeof result !== 'object') {
+    throw new Error(
+      'ไม่ได้รับข้อมูลจาก Apps Script'
+    );
+  }
+
+  /*
+   * success:false หมายถึง doGet หรือระบบหลังบ้าน
+   * เกิดข้อผิดพลาดจริง
+   */
+  if (result.success === false) {
+    throw new Error(
+      result.message ||
+      'ระบบหลังบ้านเกิดข้อผิดพลาด'
+    );
+  }
+
+  /*
+   * ไม่โยน Error เมื่อ ok:false
+   * ให้แต่ละฟังก์ชันนำไปแสดงเป็นข้อความแจ้งเตือน
+   */
   return result;
 }
 
@@ -321,32 +364,55 @@ function requireLearningStudent() {
 }
 
 async function studentLogin() {
-  const phone = document
-    .getElementById('loginPhone')
-    .value.trim();
+  const input =
+    document.getElementById('loginPhone');
+
+  const phone = String(
+    input ? input.value : ''
+  )
+    .replace(/\D/g, '')
+    .trim();
 
   if (!/^0\d{9}$/.test(phone)) {
     return Swal.fire(
       'แจ้งเตือน',
-      'กรุณากรอกเบอร์โทร 10 หลัก',
+      'กรุณากรอกเบอร์โทร 10 หลัก โดยขึ้นต้นด้วย 0',
       'warning'
     );
   }
 
   try {
-    Swal.showLoading();
-
-    const result = await learningApi('studentLogin', {
-      phone
+    Swal.fire({
+      title: 'กำลังเข้าสู่ระบบ...',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      didOpen: function () {
+        Swal.showLoading();
+      }
     });
 
-    Swal.close();
+    const result = await learningApi(
+      'studentLogin',
+      { phone: phone }
+    );
 
     if (!result.ok) {
       return Swal.fire(
         'แจ้งเตือน',
-        result.message,
+        result.message ||
+        'เข้าสู่ระบบไม่สำเร็จ',
         'warning'
+      );
+    }
+
+    if (
+      !result.student ||
+      !result.student.studentId
+    ) {
+      return Swal.fire(
+        'ผิดพลาด',
+        'ข้อมูลผู้เรียนที่ได้รับไม่ครบ',
+        'error'
       );
     }
 
@@ -360,55 +426,129 @@ async function studentLogin() {
     updateLearningTop();
     closeLearningModal('studentModal');
 
-    Swal.fire('สำเร็จ', result.message, 'success');
+    Swal.fire(
+      'สำเร็จ',
+      result.message ||
+      'เข้าสู่ระบบสำเร็จ',
+      'success'
+    );
 
   } catch (error) {
-    Swal.close();
-    Swal.fire('ผิดพลาด', error.message, 'error');
+    console.error(
+      'เข้าสู่ระบบนักศึกษาไม่สำเร็จ:',
+      error
+    );
+
+    Swal.fire(
+      'ผิดพลาด',
+      error.message,
+      'error'
+    );
   }
 }
 
 async function registerStudent() {
-  const fullname = document
-    .getElementById('stuFullname')
-    .value.trim();
+  const fullname = String(
+    document
+      .getElementById('stuFullname')
+      ?.value || ''
+  ).trim();
 
-  const phone = document
-    .getElementById('stuPhone')
-    .value.trim();
+  const phone = String(
+    document
+      .getElementById('stuPhone')
+      ?.value || ''
+  )
+    .replace(/\D/g, '')
+    .trim();
 
-  const address = document
-    .getElementById('stuAddress')
-    .value.trim();
+  const address = String(
+    document
+      .getElementById('stuAddress')
+      ?.value || ''
+  ).trim();
 
   if (!fullname || !phone || !address) {
     return Swal.fire(
       'แจ้งเตือน',
-      'กรุณากรอกข้อมูลให้ครบ',
+      'กรุณากรอกชื่อ เบอร์โทร และที่อยู่ให้ครบ',
+      'warning'
+    );
+  }
+
+  if (!/^0\d{9}$/.test(phone)) {
+    return Swal.fire(
+      'แจ้งเตือน',
+      'เบอร์โทรต้องขึ้นต้นด้วย 0 และมี 10 หลัก',
       'warning'
     );
   }
 
   try {
-    Swal.showLoading();
-
-    const result = await learningApi('registerStudent', {
-      fullname,
-      phone,
-      address
+    Swal.fire({
+      title: 'กำลังลงทะเบียน...',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      didOpen: function () {
+        Swal.showLoading();
+      }
     });
 
-    Swal.close();
+    const result = await learningApi(
+      'registerStudent',
+      {
+        fullname: fullname,
+        phone: phone,
+        address: address
+      }
+    );
+
+    if (!result.ok) {
+      return Swal.fire(
+        'แจ้งเตือน',
+        result.message ||
+        'ลงทะเบียนไม่สำเร็จ',
+        'warning'
+      );
+    }
+
+    /*
+     * ถ้า Backend ส่งข้อมูล student กลับมา
+     * ให้ Login อัตโนมัติเหมือนระบบเดิม
+     */
+    if (
+      result.student &&
+      result.student.studentId
+    ) {
+      LEARNING_STUDENT = result.student;
+
+      localStorage.setItem(
+        'LEARN_STUDENT',
+        JSON.stringify(LEARNING_STUDENT)
+      );
+
+      updateLearningTop();
+      closeLearningModal('studentModal');
+    }
 
     Swal.fire(
-      result.ok ? 'สำเร็จ' : 'แจ้งเตือน',
-      result.message,
-      result.ok ? 'success' : 'warning'
+      'สำเร็จ',
+      result.message ||
+      'ลงทะเบียนสำเร็จ',
+      'success'
     );
 
   } catch (error) {
-    Swal.close();
-    Swal.fire('ผิดพลาด', error.message, 'error');
+    console.error(
+      'ลงทะเบียนไม่สำเร็จ:',
+      error
+    );
+
+    Swal.fire(
+      'ผิดพลาด',
+      error.message,
+      'error'
+    );
   }
 }
 
@@ -425,29 +565,77 @@ function studentLogout() {
 async function addLearningToCart(activityId) {
   if (!requireLearningStudent()) return;
 
-  try {
-    Swal.showLoading();
+  const studentId = String(
+    LEARNING_STUDENT?.studentId || ''
+  ).trim();
 
-    const result = await learningApi('addToCart', {
-      studentId: LEARNING_STUDENT.studentId,
-      activityId
+  activityId = String(
+    activityId || ''
+  ).trim();
+
+  if (!studentId) {
+    return Swal.fire(
+      'แจ้งเตือน',
+      'ไม่พบรหัสผู้เรียน กรุณา Login ใหม่',
+      'warning'
+    );
+  }
+
+  if (!activityId) {
+    return Swal.fire(
+      'แจ้งเตือน',
+      'ไม่พบรหัสกิจกรรม',
+      'warning'
+    );
+  }
+
+  try {
+    Swal.fire({
+      title: 'กำลังเพิ่มลงตะกร้า...',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      didOpen: function () {
+        Swal.showLoading();
+      }
     });
 
-    Swal.close();
-
-    Swal.fire(
-      result.ok ? 'สำเร็จ' : 'แจ้งเตือน',
-      result.message,
-      result.ok ? 'success' : 'warning'
+    const result = await learningApi(
+      'addToCart',
+      {
+        studentId: studentId,
+        activityId: activityId
+      }
     );
 
-    if (result.ok) {
-      loadLearningCartCount();
+    if (!result.ok) {
+      return Swal.fire(
+        'แจ้งเตือน',
+        result.message ||
+        'ไม่สามารถเพิ่มลงตะกร้าได้',
+        'warning'
+      );
     }
 
+    await loadLearningCartCount();
+
+    Swal.fire(
+      'สำเร็จ',
+      result.message ||
+      'เพิ่มลงตะกร้าแล้ว',
+      'success'
+    );
+
   } catch (error) {
-    Swal.close();
-    Swal.fire('ผิดพลาด', error.message, 'error');
+    console.error(
+      'เพิ่มกิจกรรมลงตะกร้าไม่สำเร็จ:',
+      error
+    );
+
+    Swal.fire(
+      'ผิดพลาด',
+      error.message,
+      'error'
+    );
   }
 }
 
@@ -554,6 +742,15 @@ async function openCart() {
 
       ${list.map(function (item) {
         const activity = item.activity || {};
+        const cartActivityId = String(
+  item.activityId ||
+  activity.activityId ||
+  ''
+).trim();
+
+const cartId = String(
+  item.cartId || ''
+).trim();
 
         const image = String(
           activity.image1 || fallbackImage
@@ -584,27 +781,23 @@ async function openCart() {
 
               <div class="learning-cart-actions">
 
-                <button
-                  type="button"
-                  class="learning-confirm-btn"
-                  onclick="confirmLearningJoin(
-                    '${escapeLearningAttr(
-                      item.activityId
-                    )}'
-                  )">
-                  ยืนยันเข้าร่วม
-                </button>
+               <button
+  type="button"
+  class="learning-confirm-btn"
+  onclick="confirmLearningJoin(
+    '${escapeLearningAttr(cartActivityId)}'
+  )">
+  ยืนยันเข้าร่วม
+</button>
 
-                <button
-                  type="button"
-                  class="learning-delete-btn"
-                  onclick="cancelLearningCartItem(
-                    '${escapeLearningAttr(
-                      item.cartId
-                    )}'
-                  )">
-                  ลบ
-                </button>
+<button
+  type="button"
+  class="learning-delete-btn"
+  onclick="cancelLearningCartItem(
+    '${escapeLearningAttr(cartId)}'
+  )">
+  ลบ
+</button>
 
               </div>
             </div>
@@ -641,6 +834,30 @@ async function openCart() {
 async function confirmLearningJoin(activityId) {
   if (!requireLearningStudent()) return;
 
+  const studentId = String(
+    LEARNING_STUDENT?.studentId || ''
+  ).trim();
+
+  activityId = String(
+    activityId || ''
+  ).trim();
+
+  if (!studentId) {
+    return Swal.fire(
+      'แจ้งเตือน',
+      'ไม่พบรหัสผู้เรียน กรุณา Login ใหม่',
+      'warning'
+    );
+  }
+
+  if (!activityId) {
+    return Swal.fire(
+      'แจ้งเตือน',
+      'ไม่พบรหัสกิจกรรม',
+      'warning'
+    );
+  }
+
   const confirmResult = await Swal.fire({
     title: 'ยืนยันเข้าร่วมกิจกรรม?',
     text: 'ต้องการยืนยันเข้าร่วมกิจกรรมนี้หรือไม่',
@@ -648,63 +865,115 @@ async function confirmLearningJoin(activityId) {
     showCancelButton: true,
     confirmButtonText: 'ยืนยันเข้าร่วม',
     cancelButtonText: 'ยกเลิก',
-    confirmButtonColor: '#16a34a'
+    confirmButtonColor: '#16a34a',
+    reverseButtons: true
   });
 
-  if (!confirmResult.isConfirmed) return;
+  if (!confirmResult.isConfirmed) {
+    return;
+  }
 
   try {
     Swal.fire({
-      title: 'กำลังบันทึก...',
+      title: 'กำลังยืนยันเข้าร่วม...',
+      text: 'กรุณารอสักครู่',
       allowOutsideClick: false,
+      allowEscapeKey: false,
       didOpen: function () {
         Swal.showLoading();
       }
     });
 
-    const result = await learningApi('confirmJoin', {
-      studentId: LEARNING_STUDENT.studentId,
-      activityId: activityId
-    });
+    const result = await learningApi(
+      'confirmJoin',
+      {
+        studentId: studentId,
+        activityId: activityId
+      }
+    );
+
+    /*
+     * สำคัญมาก:
+     * Backend เดิมอาจตอบ ok:false โดยที่
+     * success ไม่ได้เป็น false
+     */
+    if (!result.ok) {
+      return Swal.fire(
+        'แจ้งเตือน',
+        result.message ||
+        'ไม่สามารถยืนยันเข้าร่วมกิจกรรมได้',
+        'warning'
+      );
+    }
 
     await Swal.fire(
-      result.message || 'ยืนยันเข้าร่วมเรียบร้อย',
-      '',
+      'สำเร็จ',
+      result.message ||
+      'ยืนยันเข้าร่วมกิจกรรมสำเร็จ',
       'success'
     );
 
-    loadLearningCartCount();
-    openCart();
+    await loadLearningCartCount();
+
+    const cartModal =
+      document.getElementById('cartModal');
+
+    if (
+      cartModal &&
+      cartModal.style.display === 'flex'
+    ) {
+      await openCart();
+    }
 
   } catch (error) {
+    console.error(
+      'ยืนยันเข้าร่วมไม่สำเร็จ:',
+      error
+    );
+
     Swal.fire(
       'ผิดพลาด',
-      error.message,
+      error.message ||
+      'ไม่สามารถยืนยันเข้าร่วมได้',
       'error'
     );
   }
 }
 
 async function loadLearningCartCount() {
-  const count = document.getElementById('cartCount');
+  const count =
+    document.getElementById('cartCount');
 
   if (!count) return;
 
-  if (!LEARNING_STUDENT) {
+  if (!LEARNING_STUDENT?.studentId) {
     count.textContent = '0';
     return;
   }
 
   try {
-    const result = await learningApi('getMyCart', {
-      studentId: LEARNING_STUDENT.studentId
-    });
+    const result = await learningApi(
+      'getMyCart',
+      {
+        studentId:
+          LEARNING_STUDENT.studentId
+      }
+    );
 
-    count.textContent = Array.isArray(result.items)
-      ? String(result.items.length)
-      : '0';
+    const items =
+      Array.isArray(result.items)
+        ? result.items
+        : [];
 
-  } catch {
+    count.textContent =
+      String(items.length);
+
+  } catch (error) {
+    console.error(
+      'โหลดจำนวนตะกร้าไม่สำเร็จ:',
+      error
+    );
+
     count.textContent = '0';
   }
 }
@@ -733,6 +1002,18 @@ function openTeacherPage() {
   );
 }
 async function cancelLearningCartItem(cartId) {
+  if (!requireLearningStudent()) return;
+
+  cartId = String(cartId || '').trim();
+
+  if (!cartId) {
+    return Swal.fire(
+      'แจ้งเตือน',
+      'ไม่พบรหัสรายการตะกร้า',
+      'warning'
+    );
+  }
+
   const confirmResult = await Swal.fire({
     title: 'ยืนยันการลบ?',
     text: 'ต้องการลบกิจกรรมนี้ออกจากตะกร้าหรือไม่',
@@ -740,7 +1021,8 @@ async function cancelLearningCartItem(cartId) {
     showCancelButton: true,
     confirmButtonText: 'ลบ',
     cancelButtonText: 'ไม่',
-    confirmButtonColor: '#dc2626'
+    confirmButtonColor: '#dc2626',
+    reverseButtons: true
   });
 
   if (!confirmResult.isConfirmed) return;
@@ -749,26 +1031,46 @@ async function cancelLearningCartItem(cartId) {
     Swal.fire({
       title: 'กำลังลบ...',
       allowOutsideClick: false,
+      allowEscapeKey: false,
       didOpen: function () {
         Swal.showLoading();
       }
     });
 
-    const result = await learningApi('cancelCart', {
-      cartId: cartId,
-      studentId: LEARNING_STUDENT.studentId
-    });
+    const result = await learningApi(
+      'cancelCart',
+      {
+        cartId: cartId,
+        studentId:
+          LEARNING_STUDENT.studentId
+      }
+    );
+
+    if (!result.ok) {
+      return Swal.fire(
+        'แจ้งเตือน',
+        result.message ||
+        'ไม่สามารถลบรายการได้',
+        'warning'
+      );
+    }
 
     await Swal.fire(
-      result.message || 'ลบออกจากตะกร้าแล้ว',
-      '',
+      'สำเร็จ',
+      result.message ||
+      'ลบออกจากตะกร้าแล้ว',
       'success'
     );
 
-    loadLearningCartCount();
-    openCart();
+    await loadLearningCartCount();
+    await openCart();
 
   } catch (error) {
+    console.error(
+      'ลบรายการตะกร้าไม่สำเร็จ:',
+      error
+    );
+
     Swal.fire(
       'ผิดพลาด',
       error.message,
