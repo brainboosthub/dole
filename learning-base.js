@@ -2,7 +2,7 @@
 (() => {
   'use strict';
 
-  const API_URL = 'https://script.google.com/macros/s/AKfycbyFu-j4vaLGLq4jFTXyZZp_IwEzHn3cXqCf2ShjF5oWFPZ72qioRubjCbyzuu-GotIqsQ/exec';
+  const API_URL = 'https://script.google.com/macros/s/AKfycbzq9SWm2mEBe_gsusJKNEj7hlORO29BejRrOI7CoapwBj145UCyUBccmzdv4pzLAHlW/exec/exec';
   const TEACHER_URL = API_URL + '?page=teacher';
   let student = JSON.parse(localStorage.getItem('LEARN_STUDENT') || 'null');
   let activities = [];
