@@ -2,7 +2,7 @@
   'use strict';
 
   const WEB_APP_URL =
-    'https://script.google.com/macros/s/AKfycbyFu-j4vaLGLq4jFTXyZZp_IwEzHn3cXqCf2ShjF5oWFPZ72qioRubjCbyzuu-GotIqsQ/exec';
+    'https://script.google.com/macros/s/AKfycbzq9SWm2mEBe_gsusJKNEj7hlORO29BejRrOI7CoapwBj145UCyUBccmzdv4pzLAHlW/exec';
   const IMAGE_API_URL = WEB_APP_URL + '?mode=images';
   const BOOK_API_URL = WEB_APP_URL + '?mode=books';
 
