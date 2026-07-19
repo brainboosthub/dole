@@ -339,7 +339,15 @@ if (icon) {
     ? '<i class="fa fa-eye"></i>'
     : '<i class="fa fa-eye-slash"></i>';
 }
+  // เพิ่มตรงนี้
+  const icon =
+    toggleButton.querySelector('.book-toggle-icon i');
 
+  if (icon) {
+    icon.className = willOpen
+      ? 'fa fa-eye'
+      : 'fa fa-eye-slash';
+  }
       if (willOpen) {
         window.setTimeout(() => {
           panel.scrollIntoView({
