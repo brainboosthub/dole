@@ -1,311 +1,268 @@
-/* =====================================================
-   Learning Base — Apps Script original style
-   Scoped to avoid changing the existing GitHub website
-===================================================== */
 
-#learningBaseModule,
-#learningBaseModule *{box-sizing:border-box}
+(() => {
+  'use strict';
 
-#learningBaseModule{
-  width:100%;
-  margin:0;
-  padding:24px 0 60px;
-  font-family:'Prompt','Kanit',Arial,sans-serif;
-  background:#f5f7fb;
-  color:#111827;
-}
+  const API_URL = 'https://script.google.com/macros/s/AKfycbyFu-j4vaLGLq4jFTXyZZp_IwEzHn3cXqCf2ShjF5oWFPZ72qioRubjCbyzuu-GotIqsQ/exec';
+  const TEACHER_URL = API_URL + '?page=teacher';
+  let student = JSON.parse(localStorage.getItem('LEARN_STUDENT') || 'null');
+  let activities = [];
+  let detailSlideIndex = 0;
+  let detailSlideTimer = null;
 
-#learningBaseModule .learning-container{
-  width:100%;
-  max-width:1900px;
-  margin:auto;
-  padding:0 24px;
-}
+  const $ = id => document.getElementById(id);
+  const escapeHtml = value => String(value ?? '')
+    .replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
+    .replaceAll('"','&quot;').replaceAll("'",'&#039;');
 
-/* Top navigation buttons moved into the website nav-wrap */
-.learning-nav-actions{
-  display:flex;
-  gap:10px;
-  align-items:center;
-  flex-wrap:wrap;
-  margin-left:auto;
-}
+  async function callApi(action, data = {}, method = 'POST') {
+    let response;
+    if (method === 'GET') {
+      const url = new URL(API_URL);
+      url.searchParams.set('mode', 'learning');
+      url.searchParams.set('action', action);
+      Object.entries(data).forEach(([key, value]) => url.searchParams.set(key, value ?? ''));
+      response = await fetch(url.toString(), { cache: 'no-store' });
+    } else {
+      response = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ mode: 'learning', action, data })
+      });
+    }
+    const text = await response.text();
+    let result;
+    try { result = JSON.parse(text); }
+    catch { throw new Error('API ส่งข้อมูลกลับมาไม่ใช่ JSON'); }
+    if (!response.ok || result?.success === false) throw new Error(result?.message || `HTTP ${response.status}`);
+    return Object.prototype.hasOwnProperty.call(result, 'data') ? result.data : result;
+  }
 
-.learning-nav-actions button,
-.learning-nav-actions a{
-  border:0;
-  border-radius:14px;
-  padding:10px 16px;
-  font-family:'Prompt','Kanit',Arial,sans-serif;
-  font-size:13px;
-  font-weight:700;
-  line-height:1.2;
-  cursor:pointer;
-  text-decoration:none;
-  white-space:nowrap;
-  background:#2563eb;
-  color:#fff;
-}
+  function showPage(id, btn) {
+    const root = $('learningBaseModule');
+    if (!root) return;
+    root.querySelectorAll(':scope > .learning-container > section').forEach(s => s.classList.add('learning-hidden'));
+    $(id)?.classList.remove('learning-hidden');
+    root.querySelectorAll('.learning-tabs button').forEach(b => b.classList.remove('active'));
+    btn?.classList.add('active');
+    if (id === 'historyPage') loadHistory();
+  }
 
-.learning-nav-actions .learning-light{background:#fff;color:#2563eb;border:1px solid #dbeafe}
-.learning-nav-actions .learning-teacher{background:#111827;color:#fff}
-.learning-nav-actions button:hover,
-.learning-nav-actions a:hover{opacity:.9}
+  function openStudentModal() {
+    $('studentModal').style.display = 'flex';
+    $('registerBox').style.display = 'none';
+    const newBtn = $('newRegisterBtn');
+    const logoutBox = $('logoutBox');
+    if (student) {
+      $('loginPhone').value = student.phone || '';
+      logoutBox.style.display = 'block';
+      if (newBtn) newBtn.style.display = 'none';
+    } else {
+      $('loginPhone').value = '';
+      logoutBox.style.display = 'none';
+      if (newBtn) newBtn.style.display = 'inline-block';
+    }
+  }
 
-/* Buttons */
-#learningBaseModule button,
-.learning-modal button{
-  border:0;
-  border-radius:14px;
-  padding:10px 16px;
-  font-family:'Prompt','Kanit',Arial,sans-serif;
-  font-weight:700;
-  cursor:pointer;
-  background:#2563eb;
-  color:#fff;
-}
+  function closeModal(id) {
+    const modal = $(id);
+    if (modal) modal.style.display = 'none';
+    if (id === 'detailModal') clearInterval(detailSlideTimer);
+  }
 
-#learningBaseModule .btn-light,.learning-modal .btn-light{background:#fff;color:#2563eb}
-#learningBaseModule .btn-green,.learning-modal .btn-green{background:#16a34a}
-#learningBaseModule .btn-orange,.learning-modal .btn-orange{background:#f97316}
-#learningBaseModule .btn-red,.learning-modal .btn-red{background:#dc2626}
-#learningBaseModule .btn-dark,.learning-modal .btn-dark{background:#111827}
+  function updateTop() {
+    const accountBtn = $('accountBtn');
+    if (student) accountBtn.textContent = `👤 ${student.fullname}`;
+    else accountBtn.textContent = 'Login';
+    loadMyTotalHours();
+    loadCartCount();
+  }
 
-/* Tabs */
-#learningBaseModule .learning-tabs{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-bottom:18px;
-}
+  async function registerStudent() {
+    const data = {
+      fullname: $('stuFullname').value.trim(),
+      phone: $('stuPhone').value.trim(),
+      address: $('stuAddress').value.trim()
+    };
+    if (!data.fullname || !data.phone || !data.address)
+      return Swal.fire('แจ้งเตือน','กรุณากรอก ชื่อ-นามสกุล เบอร์โทร และที่อยู่ ให้ครบ','warning');
+    if (!/^0\d{9}$/.test(data.phone))
+      return Swal.fire('แจ้งเตือน','เบอร์โทรต้องขึ้นต้นด้วย 0 และมี 10 หลัก','warning');
+    try {
+      Swal.showLoading();
+      const res = await callApi('registerStudent', data);
+      Swal.close();
+      await Swal.fire(res.ok ? 'สำเร็จ':'แจ้งเตือน',res.message,res.ok?'success':'warning');
+      if (res.ok && res.student) {
+        student = res.student;
+        localStorage.setItem('LEARN_STUDENT', JSON.stringify(student));
+        closeModal('studentModal'); updateTop();
+      }
+    } catch(err) { Swal.close(); Swal.fire('ผิดพลาด',err.message,'error'); }
+  }
 
-#learningBaseModule .learning-tabs > div{
-  flex-wrap:wrap;
-}
+  async function studentLogin() {
+    try {
+      Swal.showLoading();
+      const res = await callApi('studentLogin', { phone: $('loginPhone').value.trim() });
+      Swal.close();
+      if (!res.ok) return Swal.fire('แจ้งเตือน',res.message,'warning');
+      student = res.student;
+      localStorage.setItem('LEARN_STUDENT',JSON.stringify(student));
+      closeModal('studentModal'); updateTop();
+      Swal.fire('สำเร็จ',res.message,'success');
+    } catch(err) { Swal.close(); Swal.fire('ผิดพลาด',err.message,'error'); }
+  }
 
-#learningBaseModule .learning-tabs button{
-  background:#e5e7eb;
-  color:#111827;
-}
+  async function loadActivities() {
+    const grid = $('activityGrid');
+    if (!grid) return;
+    grid.innerHTML='กำลังโหลด...';
+    try {
+      activities = await callApi('getActivities', {}, 'GET') || [];
+      renderBaseFilter(activities); renderActivities(activities);
+    } catch(err) { grid.innerHTML=`<div class="learning-list-item">โหลดกิจกรรมไม่สำเร็จ: ${escapeHtml(err.message)}</div>`; }
+  }
 
-#learningBaseModule .learning-tabs button.active{
-  background:#2563eb;
-  color:#fff;
-}
+  function renderActivities(list) {
+    const grid=$('activityGrid');
+    if (!list.length) return grid.innerHTML='<div class="learning-list-item">ยังไม่มีกิจกรรม</div>';
+    grid.innerHTML=list.map(a=>`
+      <article class="learning-card">
+        <img src="${escapeHtml(a.image1 || 'https://placehold.co/600x400?text=Learning+Base')}" alt="${escapeHtml(a.title || 'กิจกรรมฐานการเรียนรู้')}" loading="lazy">
+        <div class="learning-card-body">
+          <span class="learning-tag">${escapeHtml(a.baseNo || '-')}</span>
+          <div class="learning-title">${escapeHtml(a.title || '-')}</div>
+          <div class="learning-muted">ชั่วโมง: ${getActivityHours(a)} ชั่วโมง</div>
+          ${a.learningType ? `<div class="learning-muted">รูปแบบ: ${escapeHtml(a.learningType)}</div>`:''}
+          <div class="learning-muted">วันที่: ${formatThaiDate(a.activityDate)}</div>
+          <div class="learning-muted">ครูฐาน: ${escapeHtml(a.teacherName || '-')}</div>
+          <p class="learning-muted">${escapeHtml(a.detail || '')}</p>
+          <div class="learning-actions">
+            <button type="button" onclick="LearningBase.addToCart('${escapeHtml(a.activityId)}')">ใส่ตะกร้า</button>
+            <button type="button" class="btn-green" onclick="LearningBase.openActivityDetail('${escapeHtml(a.activityId)}')">ดูรายละเอียด</button>
+          </div>
+        </div>
+      </article>`).join('');
+  }
 
-#learningBaseModule #baseFilter{
-  width:260px;
-  padding:12px 14px;
-  border:1px solid #d1d5db;
-  border-radius:14px;
-  margin:0;
-  font-family:inherit;
-  font-size:15px;
-  background:#fff;
-  color:#111827;
-}
+  function requireStudent() {
+    if (student) return true;
+    Swal.fire('กรุณายืนยันตัวตน','กดปุ่ม Login ก่อนเลือกกิจกรรม','warning');
+    openStudentModal(); return false;
+  }
 
-/* Section heading */
-#learningBaseModule .learning-section-title{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:16px;
-  gap:10px;
-  flex-wrap:wrap;
-}
+  async function addToCart(activityId) {
+    if (!requireStudent()) return;
+    try {
+      Swal.showLoading();
+      const res=await callApi('addToCart',{studentId:student.studentId,activityId});
+      Swal.close(); Swal.fire(res.ok?'สำเร็จ':'แจ้งเตือน',res.message,res.ok?'success':'warning');
+      loadCartCount();
+    } catch(err) { Swal.close(); Swal.fire('ผิดพลาด',err.message,'error'); }
+  }
 
-#learningBaseModule .learning-section-title h2{
-  margin:0;
-  font-size:clamp(24px,3vw,30px);
-  color:#111827;
-}
+  async function openCart() {
+    if (!requireStudent()) return;
+    $('cartModal').style.display='flex'; $('cartList').innerHTML='กำลังโหลด...';
+    try {
+      const list=await callApi('getMyCart',{studentId:student.studentId},'GET') || [];
+      if (!list.length) return $('cartList').innerHTML='<div class="learning-list-item">ยังไม่มีกิจกรรมในตะกร้า</div>';
+      const total=list.reduce((s,c)=>s+getActivityHours(c.activity),0);
+      $('cartList').innerHTML=`<div class="learning-cart-summary"><b>รวมทั้งหมด ${total} ชั่วโมง</b></div>`+
+      list.map(c=>`<div class="learning-cart-item">
+        <div class="learning-cart-info">
+          <div class="learning-cart-title">${escapeHtml(c.activity?.title||'-')}</div>
+          <span class="learning-muted">ชั่วโมง: ${getActivityHours(c.activity)} ชั่วโมง</span><br>
+          <span class="learning-muted">วันที่ ${formatThaiDate(c.activity?.activityDate)}</span>
+          <div class="learning-cart-actions">
+            <button class="btn-green learning-confirm-btn" onclick="LearningBase.confirmJoin('${escapeHtml(c.activityId)}')">ยืนยันเข้าร่วม</button>
+            <button class="btn-red learning-delete-btn" onclick="LearningBase.cancelCartItem('${escapeHtml(c.cartId)}')">ลบ</button>
+          </div>
+        </div>
+        <img class="learning-cart-image"
+          src="${escapeHtml(c.activity?.image1 || 'https://placehold.co/300x200?text=Activity')}"
+          alt="${escapeHtml(c.activity?.title || 'กิจกรรม')}"
+          loading="lazy"
+          onerror="this.onerror=null;this.src='https://placehold.co/300x200?text=Activity';">
+      </div>`).join('');
+    } catch(err) { $('cartList').innerHTML=`<div class="learning-list-item">${escapeHtml(err.message)}</div>`; }
+  }
 
-/* Activity cards — same dimensions and visual style as Apps Script */
-#learningBaseModule .learning-grid,
-#learningBaseModule #activityGrid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
-  gap:22px;
-  width:100%;
-}
+  async function loadCartCount() {
+    if (!student) { $('cartCount').textContent='0'; return; }
+    try { const list=await callApi('getMyCart',{studentId:student.studentId},'GET'); $('cartCount').textContent=(list||[]).length; }
+    catch { $('cartCount').textContent='0'; }
+  }
 
-#learningBaseModule .learning-card{
-  background:#fff;
-  border-radius:22px;
-  overflow:hidden;
-  box-shadow:0 10px 25px rgba(15,23,42,.08);
-  border:1px solid #e5e7eb;
-}
+  async function confirmJoin(activityId) {
+    if (!requireStudent()) return;
+    try {
+      Swal.showLoading(); const res=await callApi('confirmJoin',{studentId:student.studentId,activityId});
+      Swal.close(); await Swal.fire(res.ok?'สำเร็จ':'แจ้งเตือน',res.message,res.ok?'success':'warning');
+      loadCartCount(); if ($('cartModal').style.display==='flex') openCart();
+    } catch(err) { Swal.close(); Swal.fire('ผิดพลาด',err.message,'error'); }
+  }
 
-#learningBaseModule .learning-card img{
-  display:block;
-  width:100%;
-  height:170px;
-  object-fit:cover;
-  background:#e5e7eb;
-}
+  async function loadHistory() {
+    if (!requireStudent()) return;
+    $('historyList').innerHTML='กำลังโหลด...';
+    try {
+      const list=await callApi('getMyHistory',{studentId:student.studentId},'GET')||[];
+      $('historyList').innerHTML=list.length?list.map(h=>`<div class="learning-list-item"><b>${escapeHtml(h.activity?.title||'-')}</b><br><span class="learning-muted">ฐาน ${escapeHtml(h.activity?.baseNo||'-')} | วันที่ ${formatThaiDate(h.activity?.activityDate)}</span><br><span class="learning-tag">ยืนยันแล้ว</span></div>`).join(''):'<div class="learning-list-item">ยังไม่มีประวัติการยืนยันกิจกรรม</div>';
+    } catch(err) { $('historyList').innerHTML=`<div class="learning-list-item">${escapeHtml(err.message)}</div>`; }
+  }
 
-#learningBaseModule .learning-card-body{padding:16px}
+  async function cancelCartItem(cartId) {
+    const result=await Swal.fire({title:'ยืนยันการยกเลิก?',text:'ต้องการลบกิจกรรมนี้ออกจากตะกร้าหรือไม่',icon:'warning',showCancelButton:true,confirmButtonText:'ใช่, ยกเลิก',cancelButtonText:'ไม่'});
+    if (!result.isConfirmed) return;
+    try { Swal.showLoading(); const res=await callApi('cancelCart',{cartId}); Swal.close(); await Swal.fire(res.ok?'สำเร็จ':'แจ้งเตือน',res.message,res.ok?'success':'warning'); openCart(); loadCartCount(); }
+    catch(err) { Swal.close(); Swal.fire('ผิดพลาด',err.message,'error'); }
+  }
 
-#learningBaseModule .learning-tag{
-  display:inline-block;
-  padding:5px 10px;
-  margin-bottom:8px;
-  background:#e0f2fe;
-  color:#0369a1;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:700;
-}
+  function showRegisterBox() { $('registerBox').style.display='block'; $('newRegisterBtn').style.display='none'; }
 
-#learningBaseModule .learning-title{
-  margin:4px 0;
-  font-size:18px;
-  font-weight:800;
-  line-height:1.4;
-  color:#111827;
-}
+  function openActivityDetail(activityId) {
+    const a=activities.find(x=>x.activityId===activityId);
+    if(!a) return Swal.fire('แจ้งเตือน','ไม่พบข้อมูลกิจกรรม','warning');
+    const images=[a.image1,a.image2,a.image3].filter(Boolean);
+    const slider=images.length?`<div class="detail-slider">${images.map((img,i)=>`<div class="detail-slide ${i===0?'active':''}"><img src="${escapeHtml(img)}" alt=""></div>`).join('')}</div><div class="detail-dots">${images.map((_,i)=>`<span class="detail-dot ${i===0?'active':''}"></span>`).join('')}</div>`:'';
+    $('detailContent').innerHTML=`${slider}<div class="detail-info"><h2>${escapeHtml(a.title||'-')}</h2><div class="line"><b>รูปแบบการเรียนรู้:</b> ${escapeHtml(a.learningType||'-')}</div><div class="line"><b>รายละเอียด:</b><br>${escapeHtml(a.detail||'-')}</div><div class="line"><b>วันที่จัดกิจกรรม:</b> ${formatThaiDate(a.activityDate)}</div></div>`;
+    $('detailAddCartBtn').onclick=()=>addToCart(activityId); $('detailModal').style.display='flex'; startDetailSlider();
+  }
 
-#learningBaseModule .learning-muted{
-  color:#64748b;
-  font-size:14px;
-  line-height:1.6;
-}
+  function startDetailSlider() {
+    clearInterval(detailSlideTimer); detailSlideIndex=0;
+    const slides=document.querySelectorAll('#detailModal .detail-slide'),dots=document.querySelectorAll('#detailModal .detail-dot');
+    if(slides.length<=1)return;
+    detailSlideTimer=setInterval(()=>{slides[detailSlideIndex].classList.remove('active');dots[detailSlideIndex]?.classList.remove('active');detailSlideIndex=(detailSlideIndex+1)%slides.length;slides[detailSlideIndex].classList.add('active');dots[detailSlideIndex]?.classList.add('active');},2500);
+  }
 
-#learningBaseModule .learning-detail{
-  white-space:pre-line;
-  display:-webkit-box;
-  -webkit-box-orient:vertical;
-  -webkit-line-clamp:3;
-  overflow:hidden;
-}
+  function renderBaseFilter(list) {
+    const bases=[...new Set(list.map(a=>String(a.baseNo||'').trim()).filter(Boolean))].sort();
+    $('baseFilter').innerHTML='<option value="">ทุกฐานการเรียนรู้</option>'+bases.map(b=>`<option value="${escapeHtml(b)}">${escapeHtml(b)}</option>`).join('');
+  }
+  function filterActivities() { const v=$('baseFilter').value; renderActivities(v?activities.filter(a=>String(a.baseNo||'').trim()===v):activities); }
+  function getActivityHours(a) { return Number(a?.hours||a?.['ชั่วโมง']||a?.hour||0); }
+  function formatThaiDate(value) { if(!value)return'-';const d=new Date(value);if(isNaN(d))return escapeHtml(value);return d.toLocaleDateString('th-TH',{day:'numeric',month:'long',year:'numeric'}); }
 
-#learningBaseModule .learning-actions{
-  display:flex;
-  gap:8px;
-  margin-top:14px;
-  flex-wrap:wrap;
-}
+  async function loadMyTotalHours() {
+    if(!student){ $('scoreBtn').textContent='รวม 0 ชั่วโมง';return; }
+    try{const total=await callApi('getStudentTotalHours',{studentId:student.studentId},'GET');$('scoreBtn').textContent=`รวม ${total||0} ชั่วโมง`;}catch{$('scoreBtn').textContent='รวม 0 ชั่วโมง';}
+  }
 
-/* History */
-#learningBaseModule .learning-list-item{
-  background:#fff;
-  border:1px solid #e5e7eb;
-  border-radius:18px;
-  padding:14px;
-  margin-bottom:10px;
-  box-shadow:0 6px 18px rgba(15,23,42,.05);
-}
+  async function openScoreModal() {
+    if(!requireStudent())return;
+    try{Swal.showLoading();const res=await callApi('getMyScoreDetail',{studentId:student.studentId},'GET');Swal.close();const list=res.list||[],total=res.total||0;if(!list.length)return Swal.fire('ชั่วโมงสะสม','ยังไม่มีรายการชั่วโมงที่ได้รับ','info');const html=`<div style="text-align:left"><h3>รวมทั้งหมด ${total} ชั่วโมง</h3><table style="width:100%;border-collapse:collapse"><tbody>${list.map(x=>`<tr><td style="padding:8px;border:1px solid #ddd">${escapeHtml(x.title)}</td><td style="padding:8px;border:1px solid #ddd">${escapeHtml(x.baseNo)}</td><td style="padding:8px;border:1px solid #ddd">${escapeHtml(x.actualHours)}</td></tr>`).join('')}</tbody></table></div>`;Swal.fire({title:'รายการชั่วโมงที่ได้รับ',html,width:800,confirmButtonText:'ปิด'});}catch(err){Swal.close();Swal.fire('ผิดพลาด',err.message,'error');}
+  }
 
-#learningBaseModule table{
-  width:100%;
-  border-collapse:collapse;
-  background:#fff;
-  border-radius:18px;
-  overflow:hidden;
-}
+  function closeStudentModal() {
+    Swal.fire({title:'ออกจากระบบ?',icon:'warning',showCancelButton:true,confirmButtonText:'ออกจากระบบ',cancelButtonText:'ยกเลิก'}).then(r=>{if(!r.isConfirmed)return;student=null;localStorage.removeItem('LEARN_STUDENT');closeModal('studentModal');updateTop();showPage('activitiesPage',$('learningBaseModule').querySelector('.learning-tabs button'));});
+  }
 
-#learningBaseModule th,
-#learningBaseModule td{
-  padding:12px;
-  border-bottom:1px solid #e5e7eb;
-  text-align:left;
-  vertical-align:top;
-}
+  window.LearningBase={showPage,openStudentModal,closeModal,registerStudent,studentLogin,loadActivities,addToCart,openCart,confirmJoin,loadHistory,cancelCartItem,showRegisterBox,openActivityDetail,filterActivities,openScoreModal,closeStudentModal};
 
-#learningBaseModule th{background:#e0f2fe;color:#075985}
-#learningBaseModule .teacher-img{width:42px!important;height:42px!important;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:6px}
-#learningBaseModule .learning-hidden{display:none!important}
-
-/* Modals */
-.learning-modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:1000;
-  align-items:center;
-  justify-content:center;
-  padding:16px;
-  background:rgba(15,23,42,.55);
-  font-family:'Prompt','Kanit',Arial,sans-serif;
-  color:#111827;
-}
-
-.learning-modal-box{
-  width:100%;
-  max-width:620px;
-  max-height:90vh;
-  overflow:auto;
-  background:#fff;
-  border-radius:24px;
-  padding:22px;
-  box-shadow:0 20px 50px rgba(0,0,0,.25);
-}
-
-.learning-modal-box h2,
-.learning-modal-box h3{color:#111827}
-
-.learning-modal input,
-.learning-modal textarea,
-.learning-modal select{
-  width:100%;
-  padding:12px 14px;
-  border:1px solid #d1d5db;
-  border-radius:14px;
-  margin:6px 0 12px;
-  font-family:inherit;
-  font-size:15px;
-  background:#fff;
-  color:#111827;
-}
-
-.learning-modal textarea{min-height:100px}
-.learning-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-
-/* Detail slider */
-.detail-slider{width:100%;height:360px;border-radius:22px;overflow:hidden;background:#e5e7eb;margin-bottom:18px;position:relative}
-.detail-slide{display:none;width:100%;height:100%}
-.detail-slide.active{display:block}
-.detail-slide img{width:100%;height:100%;object-fit:cover}
-.detail-dots{display:flex;justify-content:center;gap:8px;margin-top:-34px;margin-bottom:22px;position:relative;z-index:5}
-.detail-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.65)}
-.detail-dot.active{background:#fff}
-.detail-info h2{margin:0 0 10px;font-size:28px}
-.detail-info .line{padding:10px 0;border-bottom:1px solid #e5e7eb;font-size:17px;line-height:1.7}
-
-/* Cart */
-.learning-cart-summary{padding:14px 16px;margin-bottom:12px;background:#fff;border:1px solid #e5e7eb;border-radius:18px;font-weight:800;box-shadow:0 5px 16px rgba(15,23,42,.05)}
-.learning-cart-item{display:grid;grid-template-columns:minmax(0,1fr) 180px;gap:16px;align-items:center;padding:14px;margin-bottom:12px;background:#fff;border:1px solid #e5e7eb;border-radius:18px;box-shadow:0 5px 16px rgba(15,23,42,.05)}
-.learning-cart-info{min-width:0}
-.learning-cart-title{margin-bottom:4px;font-size:17px;font-weight:800;color:#111827}
-.learning-cart-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.learning-confirm-btn{background:#16a34a!important}
-.learning-delete-btn{background:#dc2626!important}
-.learning-cart-image{width:180px;height:120px;object-fit:cover;border-radius:16px;background:#e5e7eb}
-
-@media(min-width:1600px){
-  #learningBaseModule .learning-container{max-width:1800px}
-  #learningBaseModule .learning-grid,
-  #learningBaseModule #activityGrid{grid-template-columns:repeat(auto-fill,minmax(340px,1fr))}
-}
-
-@media(max-width:860px){
-  .learning-nav-actions{order:4;width:100%;justify-content:center;padding:8px 0 4px}
-  .learning-nav-actions button,.learning-nav-actions a{font-size:12px;padding:8px 11px}
-}
-
-@media(max-width:650px){
-  #learningBaseModule{padding-top:18px}
-  #learningBaseModule .learning-container{padding:0 14px}
-  #learningBaseModule .learning-tabs > div{align-items:stretch!important}
-  #learningBaseModule .learning-tabs > div > div:first-child{width:100%;display:grid!important;grid-template-columns:1fr 1fr}
-  #learningBaseModule .learning-tabs > div > div:last-child{width:100%;margin-left:0!important}
-  #learningBaseModule #baseFilter{width:100%!important;margin-top:10px}
-  #learningBaseModule .learning-grid,
-  #learningBaseModule #activityGrid{grid-template-columns:1fr}
-  .learning-row{grid-template-columns:1fr}
-  .detail-slider{height:230px}
-  .learning-cart-item{grid-template-columns:1fr}
-  .learning-cart-image{width:100%;height:190px;order:-1}
-}
+  document.addEventListener('DOMContentLoaded',()=>{
+    const teacherLink=$('teacherPageLink'); if(teacherLink) teacherLink.href=TEACHER_URL;
+    updateTop(); loadActivities();
+  });
+})();
