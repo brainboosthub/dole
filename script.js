@@ -324,12 +324,21 @@ function bindBookControls() {
         willOpen
       );
 
-      const text =
-        toggleButton.querySelector('.book-toggle-text');
+const text =
+  toggleButton.querySelector('.book-toggle-text');
 
-      if (text) {
-        text.textContent = 'หนังสือทั้งหมด';
-      }
+const icon =
+  toggleButton.querySelector('.book-toggle-icon');
+
+if (text) {
+  text.textContent = 'หนังสือทั้งหมด';
+}
+
+if (icon) {
+  icon.innerHTML = willOpen
+    ? '<i class="fa fa-eye"></i>'
+    : '<i class="fa fa-eye-slash"></i>';
+}
 
       if (willOpen) {
         window.setTimeout(() => {
