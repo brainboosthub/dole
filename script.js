@@ -301,7 +301,31 @@
       const willOpen = panel.hasAttribute('hidden');
       panel.toggleAttribute('hidden', !willOpen);
       toggleButton.setAttribute('aria-expanded', String(willOpen));
-      toggleButton.textContent = willOpen ? 'ซ่อนรายการทั้งหมด' : 'ดูรายการทั้งหมด';
+      const toggleButton = document.getElementById('toggleBookListBtn');
+const panel = document.getElementById('allBooksPanel');
+
+toggleButton?.addEventListener('click', () => {
+  const willOpen = panel.hasAttribute('hidden');
+
+  panel.toggleAttribute('hidden', !willOpen);
+  toggleButton.setAttribute('aria-expanded', String(willOpen));
+  toggleButton.classList.toggle('is-open', willOpen);
+
+  const text = toggleButton.querySelector('.book-toggle-text');
+
+  if (text) {
+    text.textContent = 'หนังสือทั้งหมด';
+  }
+
+  if (willOpen) {
+    window.setTimeout(() => {
+      panel.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }, 100);
+  }
+});
       if (willOpen) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
