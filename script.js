@@ -328,37 +328,29 @@ const text =
   toggleButton.querySelector('.book-toggle-text');
 
 const icon =
-  toggleButton.querySelector('.book-toggle-icon');
+  toggleButton.querySelector('.book-toggle-icon i');
 
 if (text) {
   text.textContent = 'หนังสือทั้งหมด';
 }
 
 if (icon) {
-  icon.innerHTML = willOpen
-    ? '<i class="fa fa-eye"></i>'
-    : '<i class="fa fa-eye-slash"></i>';
+  icon.className = willOpen
+    ? 'fa fa-eye'
+    : 'fa fa-eye-slash';
 }
-  // เพิ่มตรงนี้
-  const icon =
-    toggleButton.querySelector('.book-toggle-icon i');
 
-  if (icon) {
-    icon.className = willOpen
-      ? 'fa fa-eye'
-      : 'fa fa-eye-slash';
-  }
-      if (willOpen) {
-        window.setTimeout(() => {
-          panel.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-        }, 100);
-      }
+if (willOpen) {
+  window.setTimeout(() => {
+    panel.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
     });
-  }
+  }, 100);
+}
 
+});
+}
   document.getElementById('bookDetailClose')
     ?.addEventListener('click', closeBookDetail);
 
