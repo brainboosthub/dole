@@ -319,38 +319,33 @@ function bindBookControls() {
         String(willOpen)
       );
 
-      toggleButton.classList.toggle(
-        'is-open',
-        willOpen
-      );
+      const text =
+        toggleButton.querySelector('.book-toggle-text');
 
-const text =
-  toggleButton.querySelector('.book-toggle-text');
+      const icon =
+        toggleButton.querySelector('.book-toggle-icon i');
 
-const icon =
-  toggleButton.querySelector('.book-toggle-icon i');
+      if (text) {
+        text.textContent = 'หนังสือทั้งหมด';
+      }
 
-if (text) {
-  text.textContent = 'หนังสือทั้งหมด';
-}
+      if (icon) {
+        icon.className = willOpen
+          ? 'fa fa-eye'
+          : 'fa fa-eye-slash';
+      }
 
-if (icon) {
-  icon.className = willOpen
-    ? 'fa fa-eye'
-    : 'fa fa-eye-slash';
-}
-
-if (willOpen) {
-  window.setTimeout(() => {
-    panel.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start'
+      if (willOpen) {
+        window.setTimeout(() => {
+          panel.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }, 100);
+      }
     });
-  }, 100);
-}
+  }
 
-});
-}
   document.getElementById('bookDetailClose')
     ?.addEventListener('click', closeBookDetail);
 
@@ -367,7 +362,6 @@ if (willOpen) {
     }
   });
 }
-  
 
   document.addEventListener('DOMContentLoaded', () => {
     bindNewsControls();
