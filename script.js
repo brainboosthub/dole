@@ -291,52 +291,74 @@
     document.body.classList.remove('modal-open');
   }
 
-  function bindBookControls() {
-    document.getElementById('bookPrev')?.addEventListener('click', () => setActiveBook(activeBookIndex - 1));
-    document.getElementById('bookNext')?.addEventListener('click', () => setActiveBook(activeBookIndex + 1));
+function bindBookControls() {
+  document.getElementById('bookPrev')
+    ?.addEventListener('click', () => {
+      setActiveBook(activeBookIndex - 1);
+    });
 
-    const toggleButton = document.getElementById('toggleBookListBtn');
-    const panel = document.getElementById('allBooksPanel');
-    toggleButton?.addEventListener('click', () => {
+  document.getElementById('bookNext')
+    ?.addEventListener('click', () => {
+      setActiveBook(activeBookIndex + 1);
+    });
+
+  const toggleButton =
+    document.getElementById('toggleBookListBtn');
+
+  const panel =
+    document.getElementById('allBooksPanel');
+
+  if (toggleButton && panel) {
+    toggleButton.addEventListener('click', () => {
       const willOpen = panel.hasAttribute('hidden');
+
       panel.toggleAttribute('hidden', !willOpen);
-      toggleButton.setAttribute('aria-expanded', String(willOpen));
-      const toggleButton = document.getElementById('toggleBookListBtn');
-const panel = document.getElementById('allBooksPanel');
 
-toggleButton?.addEventListener('click', () => {
-  const willOpen = panel.hasAttribute('hidden');
+      toggleButton.setAttribute(
+        'aria-expanded',
+        String(willOpen)
+      );
 
-  panel.toggleAttribute('hidden', !willOpen);
-  toggleButton.setAttribute('aria-expanded', String(willOpen));
-  toggleButton.classList.toggle('is-open', willOpen);
+      toggleButton.classList.toggle(
+        'is-open',
+        willOpen
+      );
 
-  const text = toggleButton.querySelector('.book-toggle-text');
+      const text =
+        toggleButton.querySelector('.book-toggle-text');
 
-  if (text) {
-    text.textContent = 'หนังสือทั้งหมด';
-  }
+      if (text) {
+        text.textContent = 'หนังสือทั้งหมด';
+      }
 
-  if (willOpen) {
-    window.setTimeout(() => {
-      panel.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }, 100);
-  }
-});
-      if (willOpen) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-
-    document.getElementById('bookDetailClose')?.addEventListener('click', closeBookDetail);
-    document.getElementById('bookDetailModal')?.addEventListener('click', event => {
-      if (event.target.id === 'bookDetailModal') closeBookDetail();
-    });
-    document.addEventListener('keydown', event => {
-      if (event.key === 'Escape') closeBookDetail();
+      if (willOpen) {
+        window.setTimeout(() => {
+          panel.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }, 100);
+      }
     });
   }
+
+  document.getElementById('bookDetailClose')
+    ?.addEventListener('click', closeBookDetail);
+
+  document.getElementById('bookDetailModal')
+    ?.addEventListener('click', event => {
+      if (event.target.id === 'bookDetailModal') {
+        closeBookDetail();
+      }
+    });
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') {
+      closeBookDetail();
+    }
+  });
+}
+  
 
   document.addEventListener('DOMContentLoaded', () => {
     bindNewsControls();
