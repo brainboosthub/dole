@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=20260719-book1" />
   <link rel="stylesheet" href="learning-base.css" />
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -67,76 +67,40 @@
       <div class="floating-dot dot-3"></div>
     </section>
 
-<section id="featured" class="featured-section">
+<section id="featured" class="featured-section book-showcase-section">
   <div class="container">
-    <div class="section-heading">
+    <div class="section-heading book-section-heading">
       <div>
-        <span class="section-kicker">เลือกสรรพิเศษ</span>
-        <h2>รายละเอียดที่ทำให้ทุกเล่มน่าอ่าน</h2>
+        <span class="section-kicker">หนังสือที่น่าอ่าน</span>
+        <h2>เลือกหนังสือเล่มโปรดของคุณ</h2>
       </div>
-      <a class="view-all" href="#categories">ดูทั้งหมด →</a>
+      <button id="toggleBookListBtn" class="view-all book-list-toggle" type="button" aria-expanded="false">
+        ดูรายการทั้งหมด
+      </button>
     </div>
 
-    <div class="book-grid">
-      <article class="book-card">
-
-<div class="book-image">
-  <img
-    id="card1Image"
-    src="assets/card1.png"
-    alt="หนังสือภาพประกอบแนวแฟนตาซี"
-    loading="lazy"
-    onerror="this.src='assets/card1.png'"
-  >
-</div>
-            <div class="book-body">
-              <span class="badge">แนะนำ</span>
-              <h3>เรื่องเล่าจากห้องสมุดลับ</h3>
-              <p>การผจญภัยที่เต็มไปด้วยจินตนาการ ความกล้าหาญ และมิตรภาพ</p>
-              <div class="book-meta"><strong>฿329</strong><button aria-label="เพิ่มลงตะกร้า">+</button></div>
-            </div>
-          </article>
-
-      <article class="book-card">
-
-<div class="book-image">
-  <img
-    id="card2Image"
-    src="assets/card2.png"
-    alt="หนังสือการ์ตูนและงานออกแบบปก"
-    loading="lazy"
-    onerror="this.src='assets/card2.png'"
-  >
-</div>
-            <div class="book-body">
-              <span class="badge badge-dark">ขายดี</span>
-              <h3>ศิลปะการออกแบบปก</h3>
-              <p>รวมแนวคิดการจัดองค์ประกอบ สี และตัวอักษรสำหรับนักออกแบบ</p>
-              <div class="book-meta"><strong>฿425</strong><button aria-label="เพิ่มลงตะกร้า">+</button></div>
-            </div>
-          </article>
-
-      <article class="book-card">
-
-<div class="book-image">
-  <img
-    id="card3Image"
-    src="assets/card3.png"
-    alt="หนังสือภาพประกอบแนวเดินทาง"
-    loading="lazy"
-    onerror="this.src='assets/card3.png'"
-  >
-</div>
-            <div class="book-body">
-              <span class="badge">ใหม่</span>
-              <h3>เดินทางผ่านโลกสีสัน</h3>
-              <p>บันทึกการเดินทางที่ถ่ายทอดด้วยภาพประกอบอบอุ่นและสนุกสนาน</p>
-              <div class="book-meta"><strong>฿390</strong><button aria-label="เพิ่มลงตะกร้า">+</button></div>
-            </div>
-          </article>
-        </div>
+    <div id="bookSlider" class="book-coverflow" aria-label="สไลด์หนังสือที่น่าอ่าน">
+      <button id="bookPrev" class="book-slider-arrow book-slider-prev" type="button" aria-label="หนังสือก่อนหน้า">‹</button>
+      <div id="bookSlides" class="book-coverflow-track">
+        <div class="book-loading">กำลังโหลดรายการหนังสือ...</div>
       </div>
-    </section>
+      <button id="bookNext" class="book-slider-arrow book-slider-next" type="button" aria-label="หนังสือถัดไป">›</button>
+      <div id="bookDots" class="book-slider-dots"></div>
+    </div>
+
+    <div id="allBooksPanel" class="all-books-panel" hidden>
+      <div id="allBooksGrid" class="all-books-grid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Popup รายละเอียดหนังสือ -->
+<div id="bookDetailModal" class="book-detail-modal" aria-hidden="true">
+  <div class="book-detail-dialog" role="dialog" aria-modal="true" aria-labelledby="bookDetailTitle">
+    <button id="bookDetailClose" class="book-detail-close" type="button" aria-label="ปิด">×</button>
+    <div id="bookDetailContent"></div>
+  </div>
+</div>
 
 <section id="learningBaseModule"><div class="learning-container">
 
@@ -211,7 +175,7 @@
     <div class="copyright">© 2026 Book Store. All rights reserved.</div>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=20260719-book1"></script>
 
 <!-- Student Modal -->
 <div id="studentModal" class="learning-modal">
