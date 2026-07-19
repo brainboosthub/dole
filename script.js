@@ -161,15 +161,15 @@
 
     slides.innerHTML = books.map((book, index) => {
       const distance = circularDistance(index, activeBookIndex, books.length);
-      const positionClass = distance === 0
-        ? 'is-active'
-        : distance === -1
-          ? 'is-prev'
-          : distance === 1
-            ? 'is-next'
-            : distance < -1
-              ? 'is-far-prev'
-              : 'is-far-next';
+const positionClass =
+  distance === 0 ? 'is-active' :
+  distance === -1 ? 'is-prev' :
+  distance === -2 ? 'is-far-prev' :
+  distance === -3 ? 'is-super-far-prev' :
+  distance === 1 ? 'is-next' :
+  distance === 2 ? 'is-far-next' :
+  distance === 3 ? 'is-super-far-next' :
+  'is-hidden';
 
       const image = book.image || 'https://placehold.co/360x520?text=Book';
       return `
