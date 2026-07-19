@@ -651,12 +651,23 @@ background: #ffffff;
   transform: rotate(0deg);
   transition: transform 0.3s ease;
 }
+.book-toggle-icon{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
 
-/* เมื่อเปิดรายการ หมุนลูกศรให้ชี้ขึ้น */
-.book-list-toggle.is-open .book-toggle-icon {
-  transform: rotate(180deg);
+    width:30px;
+    height:30px;
+
+    font-size:24px;
+    color:#333;
+
+    transition:.25s;
 }
 
+.book-list-toggle:hover .book-toggle-icon{
+    color:#ff9800;
+}
 .book-toggle-text {
   line-height: 1;
 }
