@@ -107,12 +107,19 @@
       <button id="bookNext" class="book-slider-arrow book-slider-next" type="button" aria-label="หนังสือถัดไป">›</button>
       <div id="bookDots" class="book-slider-dots"></div>
     </div>
-<div class="section-heading">
-  <div>
-    <span class="section-kicker">หนังสือที่น่าอ่าน</span>
-    <h2>เลือกหนังสือที่น่าสนใจสำหรับคุณ</h2>
-  </div>
+
+<!-- ปุ่มเปิด/ปิดหนังสือทั้งหมด -->
+<div class="book-toggle-wrap">
+  <button id="toggleBookListBtn"
+    class="book-list-toggle"
+    type="button"
+    aria-expanded="false">
+
+    <span class="book-toggle-icon" aria-hidden="true">⌄</span>
+    <span class="book-toggle-text">หนังสือทั้งหมด</span>
+  </button>
 </div>
+
     <div id="allBooksPanel" class="all-books-panel" hidden>
       <div id="allBooksGrid" class="all-books-grid"></div>
     </div>
