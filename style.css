@@ -603,7 +603,68 @@ background: #ffffff;
    Recommended books — separate box below news slider
 ===================================================== */
 .recommended-books-section{padding-top:44px}
-.book-list-toggle{border:0;background:transparent;cursor:pointer;font:inherit}
+.book-toggle-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 18px;
+}
+
+.book-list-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+
+  min-width: 190px;
+  padding: 11px 22px;
+
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #263238;
+
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.book-list-toggle:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: translateY(-2px);
+}
+
+.book-toggle-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+
+  transform: rotate(0deg);
+  transition: transform 0.3s ease;
+}
+
+/* เมื่อเปิดรายการ หมุนลูกศรให้ชี้ขึ้น */
+.book-list-toggle.is-open .book-toggle-icon {
+  transform: rotate(180deg);
+}
+
+.book-toggle-text {
+  line-height: 1;
+}
+
+.all-books-panel {
+  padding-top: 20px;
+  scroll-margin-top: 90px;
+}
 .book-showcase{position:relative;min-height:430px;padding:34px 72px 52px;border-radius:24px;background:linear-gradient(180deg,#0877a1 0%,#0785ad 58%,#d8eef3 100%);overflow:hidden;box-shadow:0 14px 34px rgba(16,33,44,.14)}
 .book-slider-stage{position:relative;height:330px;display:flex;align-items:center;justify-content:center;perspective:1100px}
 .book-cover{position:absolute;width:175px;height:255px;padding:0;border:0;border-radius:8px;background:#fff;overflow:hidden;cursor:pointer;box-shadow:0 12px 28px rgba(0,0,0,.24);transition:transform .45s ease,opacity .45s ease,filter .45s ease;transform-origin:center bottom}
