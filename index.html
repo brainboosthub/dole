@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260719-book1" />
+  <link rel="stylesheet" href="style.css?v=20260719-7" />
   <link rel="stylesheet" href="learning-base.css" />
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -67,22 +67,42 @@
       <div class="floating-dot dot-3"></div>
     </section>
 
-<section id="featured" class="featured-section book-showcase-section">
+<!-- ข่าวสาร: คงไว้เป็น Box แยก -->
+<section id="news" class="news-section">
   <div class="container">
-    <div class="section-heading book-section-heading">
+    <div class="section-heading">
       <div>
-        <span class="section-kicker">หนังสือที่น่าอ่าน</span>
-        <h2>เลือกหนังสือเล่มโปรดของคุณ</h2>
+        <span class="section-kicker">ข่าวสารและประชาสัมพันธ์</span>
+        <h2>ข่าวสารล่าสุด</h2>
       </div>
-      <button id="toggleBookListBtn" class="view-all book-list-toggle" type="button" aria-expanded="false">
-        ดูรายการทั้งหมด
-      </button>
     </div>
 
-    <div id="bookSlider" class="book-coverflow" aria-label="สไลด์หนังสือที่น่าอ่าน">
+    <div id="newsSlider" class="news-slider">
+      <div id="newsSlides" class="news-slides">
+        <div class="news-loading">กำลังโหลดข่าวสาร...</div>
+      </div>
+      <button id="newsPrev" class="news-arrow news-prev" type="button" aria-label="ข่าวก่อนหน้า">‹</button>
+      <button id="newsNext" class="news-arrow news-next" type="button" aria-label="ข่าวถัดไป">›</button>
+      <div id="newsDots" class="news-dots"></div>
+    </div>
+  </div>
+</section>
+
+<!-- หนังสือที่น่าอ่าน: อยู่ Box ถัดลงมาจากข่าวสาร -->
+<section id="featured" class="featured-section recommended-books-section">
+  <div class="container">
+    <div class="section-heading">
+      <div>
+        <span class="section-kicker">หนังสือที่น่าอ่าน</span>
+        <h2>เลือกหนังสือที่น่าสนใจสำหรับคุณ</h2>
+      </div>
+      <button id="toggleBookListBtn" class="view-all book-list-toggle" type="button" aria-expanded="false">ดูรายการทั้งหมด</button>
+    </div>
+
+    <div class="book-showcase">
       <button id="bookPrev" class="book-slider-arrow book-slider-prev" type="button" aria-label="หนังสือก่อนหน้า">‹</button>
-      <div id="bookSlides" class="book-coverflow-track">
-        <div class="book-loading">กำลังโหลดรายการหนังสือ...</div>
+      <div id="bookSlides" class="book-slider-stage">
+        <div class="book-loading">กำลังโหลดหนังสือ...</div>
       </div>
       <button id="bookNext" class="book-slider-arrow book-slider-next" type="button" aria-label="หนังสือถัดไป">›</button>
       <div id="bookDots" class="book-slider-dots"></div>
@@ -93,14 +113,6 @@
     </div>
   </div>
 </section>
-
-<!-- Popup รายละเอียดหนังสือ -->
-<div id="bookDetailModal" class="book-detail-modal" aria-hidden="true">
-  <div class="book-detail-dialog" role="dialog" aria-modal="true" aria-labelledby="bookDetailTitle">
-    <button id="bookDetailClose" class="book-detail-close" type="button" aria-label="ปิด">×</button>
-    <div id="bookDetailContent"></div>
-  </div>
-</div>
 
 <section id="learningBaseModule"><div class="learning-container">
 
@@ -175,7 +187,7 @@
     <div class="copyright">© 2026 Book Store. All rights reserved.</div>
   </footer>
 
-  <script src="script.js?v=20260719-book1"></script>
+  <script src="script.js?v=20260719-7"></script>
 
 <!-- Student Modal -->
 <div id="studentModal" class="learning-modal">
@@ -282,6 +294,15 @@
   </div>
 </div>
 
-  <script src="learning-base.js"></script>
+
+<!-- Popup รายละเอียดหนังสือ -->
+<div id="bookDetailModal" class="book-detail-modal" aria-hidden="true">
+  <div class="book-detail-box" role="dialog" aria-modal="true" aria-labelledby="bookDetailTitle">
+    <button id="bookDetailClose" class="book-detail-close" type="button" aria-label="ปิด">×</button>
+    <div id="bookDetailContent"></div>
+  </div>
+</div>
+
+  <script src="learning-base.js?v=20260719-7"></script>
 </body>
 </html>
