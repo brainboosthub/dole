@@ -237,11 +237,32 @@ function fileToDataUrl(file) {
     } catch(err) { $('cartList').innerHTML=`<div class="learning-list-item">${escapeHtml(err.message)}</div>`; }
   }
 
-  async function loadCartCount() {
-    if (!student) { $('cartCount').textContent='0'; return; }
-    try { const list=await callApi('getMyCart',{studentId:student.studentId},'GET'); $('cartCount').textContent=(list||[]).length; }
-    catch { $('cartCount').textContent='0'; }
+async function loadCartCount() {
+  const cartCount = $('cartCount');
+
+  if (!cartCount) return;
+
+  if (!student) {
+    cartCount.textContent = '0';
+    return;
   }
+
+  try {
+    const list = await callApi(
+      'getMyCart',
+      {
+        studentId: student.studentId
+      },
+      'GET'
+    );
+
+    cartCount.textContent =
+      String((list || []).length);
+
+  } catch (error) {
+    cartCount.textContent = '0';
+  }
+}
 
   async function confirmJoin(activityId) {
     if (!requireStudent()) return;
@@ -289,22 +310,24 @@ function updateTop() {
   const accountBtn = $('accountBtn');
   const scoreBadge = $('studentScoreBadge');
 
-  if (student) {
-    accountBtn.textContent = `👤 ${student.fullname}`;
-  } else {
-    accountBtn.textContent = 'Login';
-
-    if (scoreBadge) {
-      scoreBadge.hidden = true;
-      scoreBadge.textContent = 'คะแนนรวม 0/0';
-    }
+  if (accountBtn) {
+    accountBtn.textContent = student
+      ? `👤 ${student.fullname}`
+      : 'Login';
   }
 
-  window.dispatchEvent(new CustomEvent('LEARN_AUTH_CHANGED', {
-    detail: {
-      student: student || null
-    }
-  }));
+  if (!student && scoreBadge) {
+    scoreBadge.hidden = true;
+    scoreBadge.textContent = 'คะแนนรวม 0/0';
+  }
+
+  window.dispatchEvent(
+    new CustomEvent('LEARN_AUTH_CHANGED', {
+      detail: {
+        student: student || null
+      }
+    })
+  );
 
   loadMyTotalHours();
   loadCartCount();
@@ -324,11 +347,32 @@ function updateTop() {
   function getActivityHours(a) { return Number(a?.hours||a?.['ชั่วโมง']||a?.hour||0); }
   function formatThaiDate(value) { if(!value)return'-';const d=new Date(value);if(isNaN(d))return escapeHtml(value);return d.toLocaleDateString('th-TH',{day:'numeric',month:'long',year:'numeric'}); }
 
-  async function loadMyTotalHours() {
-    if(!student){ $('scoreBtn').textContent='รวม 0 ชั่วโมง';return; }
-    try{const total=await callApi('getStudentTotalHours',{studentId:student.studentId},'GET');$('scoreBtn').textContent=`รวม ${total||0} ชั่วโมง`;}catch{$('scoreBtn').textContent='รวม 0 ชั่วโมง';}
+async function loadMyTotalHours() {
+  const scoreBtn = $('scoreBtn');
+
+  if (!scoreBtn) return;
+
+  if (!student) {
+    scoreBtn.textContent = 'รวม 0 ชั่วโมง';
+    return;
   }
 
+  try {
+    const total = await callApi(
+      'getStudentTotalHours',
+      {
+        studentId: student.studentId
+      },
+      'GET'
+    );
+
+    scoreBtn.textContent =
+      `รวม ${total || 0} ชั่วโมง`;
+
+  } catch (error) {
+    scoreBtn.textContent = 'รวม 0 ชั่วโมง';
+  }
+}
   async function openScoreModal() {
     if(!requireStudent())return;
     try{Swal.showLoading();const res=await callApi('getMyScoreDetail',{studentId:student.studentId},'GET');Swal.close();const list=res.list||[],total=res.total||0;if(!list.length)return Swal.fire('ชั่วโมงสะสม','ยังไม่มีรายการชั่วโมงที่ได้รับ','info');const html=`<div style="text-align:left"><h3>รวมทั้งหมด ${total} ชั่วโมง</h3><table style="width:100%;border-collapse:collapse"><tbody>${list.map(x=>`<tr><td style="padding:8px;border:1px solid #ddd">${escapeHtml(x.title)}</td><td style="padding:8px;border:1px solid #ddd">${escapeHtml(x.baseNo)}</td><td style="padding:8px;border:1px solid #ddd">${escapeHtml(x.actualHours)}</td></tr>`).join('')}</tbody></table></div>`;Swal.fire({title:'รายการชั่วโมงที่ได้รับ',html,width:800,confirmButtonText:'ปิด'});}catch(err){Swal.close();Swal.fire('ผิดพลาด',err.message,'error');}
@@ -367,8 +411,19 @@ function updateTop() {
   });
   window.LearningBase={showPage,openStudentModal,closeModal,registerStudent,studentLogin,loadActivities,addToCart,openCart,confirmJoin,loadHistory,cancelCartItem,showRegisterBox,openActivityDetail,filterActivities,openScoreModal,closeStudentModal,clearStudentPhoto};
 
-  document.addEventListener('DOMContentLoaded',()=>{
-    const teacherLink=$('teacherPageLink'); if(teacherLink) teacherLink.href=TEACHER_URL;
-    updateTop(); loadActivities();
-  });
+document.addEventListener('DOMContentLoaded', () => {
+  const teacherLink = $('teacherPageLink');
+
+  if (teacherLink) {
+    teacherLink.href = TEACHER_URL;
+  }
+
+  try {
+    updateTop();
+  } catch (error) {
+    console.error('updateTop error:', error);
+  }
+
+  loadActivities();
+});
 })();
