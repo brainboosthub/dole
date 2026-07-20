@@ -76,25 +76,21 @@
     if (id === 'detailModal') clearInterval(detailSlideTimer);
   }
 
-  function updateTop() {
-    const accountBtn = $('accountBtn');
-    if (student) accountBtn.textContent = `👤 ${student.fullname}`;
-    else accountBtn.textContent = 'Login';
-    window.dispatchEvent(new CustomEvent('LEARN_AUTH_CHANGED', {
-      detail: { student: student || null }
-    }));
-    loadMyTotalHours();
-    loadCartCount();
-  }
+function fileToDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
 
-  function fileToDataUrl(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(String(reader.result || ''));
-      reader.onerror = () => reject(new Error('ไม่สามารถอ่านไฟล์รูปภาพได้'));
-      reader.readAsDataURL(file);
-    });
-  }
+    reader.onload = () => {
+      resolve(String(reader.result || ''));
+    };
+
+    reader.onerror = () => {
+      reject(new Error('ไม่สามารถอ่านไฟล์รูปภาพได้'));
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
 
   function clearStudentPhoto() {
     const input = $('stuPhoto');
@@ -136,7 +132,7 @@
     try {
       Swal.fire({
         title: 'กำลังลงทะเบียน',
-        text: photoFile ? 'กำลังอัปโหลดรูปภาพไปยัง Google Drive...' : 'กรุณารอสักครู่...',
+        text: photoFile ? 'กำลังอัปโหลดรูปภาพ' : 'กรุณารอสักครู่...',
         allowOutsideClick: false,
         didOpen: () => Swal.showLoading()
       });
