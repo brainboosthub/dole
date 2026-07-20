@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="learning-source-box.css?v=20260720-1" />
   <link rel="stylesheet" href="bus-box.css?v=20260720-1" />
   <link rel="stylesheet" href="classroom-box.css?v=20260720-2" />
+  <link rel="stylesheet" href="profile-box.css?v=20260721-1" />
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -115,6 +116,29 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
         </div>
       </div>
 
+      <aside id="profileBox" class="profile-box" aria-live="polite">
+        <div class="profile-cover"></div>
+        <div class="profile-body">
+          <img
+            id="profilePhoto"
+            class="profile-photo"
+            src="https://static.wixstatic.com/media/a503e5_9064df4bf13044dab24382c889fa7d87~mv2.png"
+            alt="รูปผู้ใช้งาน">
+
+          <h3 id="profileName" class="profile-name">ยังไม่ได้เข้าสู่ระบบ</h3>
+          <p id="profileStatus" class="profile-status">สมาชิกเว็บไซต์ห้องสมุด</p>
+
+          <div class="profile-stats">
+            <div class="profile-stat">
+              <strong id="profileHours">0</strong>
+              <span>ชั่วโมงกิจกรรม</span>
+            </div>
+          </div>
+
+          <button id="profileLoginBtn" class="profile-login-btn" type="button">Login</button>
+        </div>
+      </aside>
+
     </div>
   </div>
 </section>
@@ -152,56 +176,31 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
   </div>
 </section>
 
-<!-- ห้องเรียนออนไลน์: สไลด์รายการวิดีโอ -->
+<!-- ห้องเรียนออนไลน์: ใช้ระบบ Login เดียวกับ accountBtn -->
 <section id="classroomBox" class="classroom-section">
   <div class="container">
-
     <div class="section-heading classroom-heading">
       <div>
         <span class="section-kicker">ห้องเรียนออนไลน์</span>
         <h2>วิดีโอ เอกสาร และแบบทดสอบ</h2>
       </div>
-
-      <a
-        id="classroomOpenAll"
-        class="classroom-open-all"
-        href="#"
-        target="_blank"
-        rel="noopener">
-        ดูวิดีโอทั้งหมด
-      </a>
+      <button id="classroomRefreshBtn" class="classroom-refresh" type="button">รีเฟรชห้องเรียน</button>
     </div>
 
-    <div class="classroom-slider">
-
-      <button
-        id="classroomPrev"
-        class="classroom-arrow classroom-prev"
-        type="button"
-        aria-label="รายการก่อนหน้า">
-        ‹
-      </button>
-
-      <div class="classroom-viewport">
-        <div id="classroomTrack" class="classroom-track">
-          <div class="classroom-loading">
-            กำลังโหลดวิดีโอห้องเรียน...
-          </div>
-        </div>
+    <div class="classroom-shell">
+      <div id="classroomMessage" class="classroom-message">
+        กำลังเชื่อมต่อระบบห้องเรียน...
       </div>
-
-      <button
-        id="classroomNext"
-        class="classroom-arrow classroom-next"
-        type="button"
-        aria-label="รายการถัดไป">
-        ›
-      </button>
-
-      <div id="classroomDots" class="classroom-dots"></div>
-
+      <iframe
+        id="classroomFrame"
+        class="classroom-frame"
+        scrolling="no"
+        title="ห้องเรียนออนไลน์"
+        loading="lazy"
+        allow="fullscreen; autoplay; clipboard-write"
+        referrerpolicy="strict-origin-when-cross-origin">
+      </iframe>
     </div>
-
   </div>
 </section>
 
@@ -443,6 +442,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
 </div>
 
   <script src="learning-base.js?v=20260720-3"></script>
+  <script src="profile-box.js?v=20260721-1"></script>
   <script>
 (function () {
   const params = new URLSearchParams(location.search);
