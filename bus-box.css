@@ -1,79 +1,86 @@
 /* Bus activity box — isolated styles */
 
+/* ========================================
+   ข่าว + Bus แบบลอยด้านซ้าย
+======================================== */
 
-.news-bus-layout.bus-is-hidden{
-  grid-template-columns:minmax(0,1fr);
+.news-section{
+  position:relative;
+  z-index:2;
+  overflow:visible;
 }
 
+.news-section > .container{
+  position:relative;
+}
+
+.news-bus-layout{
+  position:relative;
+  display:block;
+  width:100%;
+}
+
+.news-column{
+  position:relative;
+  width:100%;
+  min-width:0;
+  margin:0;
+  z-index:1;
+}
+
+.news-column .news-slider,
+.news-column #newsSlider{
+  position:relative;
+  width:100%;
+  margin:0;
+  inset:auto;
+  transform:none;
+}
+
+/* Box Bus ลอยด้านซ้าย */
+.bus-box{
+  position:absolute !important;
+
+  top:108px;
+  left:-285px;
+
+  width:255px;
+  max-width:255px;
+
+  margin:0 !important;
+  transform:none !important;
+
+  z-index:20;
+
+  background:#fff;
+  border:1px solid #e2e8f0;
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 14px 35px rgba(15,23,42,.14);
+}
+
+/* ไม่มีรายการ Bus */
 .news-bus-layout.bus-is-hidden .bus-box{
   display:none !important;
 }
 
-.news-bus-layout.bus-is-hidden .news-column{
-  grid-column:1;
-  width:100%;
-}
 /* ========================================
-   จัด Box Bus และ News ให้อยู่แถวเดียวกัน
+   ภายใน Box Bus
 ======================================== */
 
-.news-bus-layout {
-  width: 100%;
-
-  display: grid;
-  grid-template-columns: 255px minmax(0, 1fr);
-  align-items: start;
-  gap: 30px;
-
-  position: relative;
-}
-
-/* Box Bus */
-.bus-box {
-  position: relative !important;
-  inset: auto !important;
-
-  width: 100%;
-  max-width: 255px;
-
-  margin: 108px 0 0 !important;
-  transform: none !important;
-
-  align-self: start;
-  z-index: 2;
-}
-
-/* คอลัมน์ข่าว */
-.news-column {
-  position: relative;
-  min-width: 0;
-  width: 100%;
-
-  margin: 0;
-  transform: none;
-  z-index: 1;
-}
-
-/* ตัวสไลด์ข่าว */
-.news-column .news-slider,
-.news-column #newsSlider {
-  position: relative;
-  width: 100%;
-
-  margin: 0;
-  inset: auto;
-  transform: none;
-}
-.news-bus-layout.bus-is-hidden .bus-box{
-  display:none!important;
-}
 .bus-visual{
   height:190px;
   padding:12px 12px 0;
+
   display:flex;
   align-items:center;
   justify-content:center;
-  background:linear-gradient(180deg,#fff9ee 0%,#fff 100%);
+
+  background:linear-gradient(
+    180deg,
+    #fff9ee 0%,
+    #fff 100%
+  );
 }
 
 .bus-image{
@@ -91,15 +98,18 @@
 .bus-loading,
 .bus-empty{
   min-height:150px;
+
   display:flex;
   align-items:center;
   justify-content:center;
+
   color:#64748b;
   text-align:center;
 }
 
 .bus-title{
   margin:0 0 10px;
+
   font-size:17px;
   font-weight:800;
   line-height:1.35;
@@ -110,6 +120,7 @@
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:7px 12px;
+
   font-size:13px;
   line-height:1.45;
 }
@@ -120,6 +131,7 @@
 
 .bus-info-item strong{
   display:block;
+
   color:#475569;
   font-size:11px;
   font-weight:700;
@@ -128,6 +140,7 @@
 .bus-info-item span{
   display:block;
   overflow-wrap:anywhere;
+
   color:#111827;
   font-weight:600;
 }
@@ -136,31 +149,41 @@
   width:100%;
   margin-top:12px;
   padding:9px 12px;
+
   border:0;
   border-radius:11px;
+
   background:#2563eb;
   color:#fff;
+
   font:inherit;
   font-size:13px;
   font-weight:700;
+
   cursor:pointer;
 }
 
 .bus-detail{
   margin-top:10px;
   padding:12px;
+
   border-radius:12px;
+
   background:#f8fafc;
   color:#334155;
+
   font-size:13px;
   line-height:1.65;
   white-space:pre-line;
 }
 
-.bus-detail[hidden]{display:none!important}
+.bus-detail[hidden]{
+  display:none !important;
+}
 
 .bus-controls{
   padding:0 16px 14px;
+
   display:flex;
   align-items:center;
   justify-content:center;
@@ -171,12 +194,16 @@
   width:30px;
   height:30px;
   padding:0;
+
   border:1px solid #dbe3ee;
   border-radius:50%;
+
   background:#fff;
   color:#2563eb;
+
   font-size:21px;
   line-height:1;
+
   cursor:pointer;
 }
 
@@ -191,9 +218,12 @@
   width:8px;
   height:8px;
   padding:0;
+
   border:0;
   border-radius:999px;
+
   background:#cbd5e1;
+
   cursor:pointer;
 }
 
@@ -202,75 +232,49 @@
   background:#2563eb;
 }
 
-.news-bus-layout:not(.bus-is-hidden) .news-slider{
-  margin-bottom:0;
-}
-
-@media(max-width:900px){
-  .news-bus-layout{
-    display:flex;
-    flex-direction:column;
-    gap:24px;
-  }
-
-  .news-column{
-    order:1;
-  }
-
-  .bus-box{
-    order:2;
-    width:min(420px,100%);
-    max-width:420px;
-    margin:0 auto !important;
-  }
-}
-
-@media(max-width:560px){
-  .bus-visual{height:165px}
-  .bus-info-grid{grid-template-columns:1fr}
-}
-.news-section {
-  position: relative;
-  z-index: 2;
-  overflow: visible;
-}
-
-#learningSourceBox,
-.lsb-section {
-  position: relative;
-  z-index: 1;
-
-  clear: both;
-  margin-top: 0;
-}
-.news-bus-layout.bus-is-hidden{
-  grid-template-columns:minmax(0,1fr);
-}
-
-.news-bus-layout.bus-is-hidden .bus-box{
-  display:none !important;
-}
-
-.news-bus-layout.bus-is-hidden .news-column{
-  grid-column:1;
-  width:100%;
-}
-
-.news-section{
-  position:relative;
-  z-index:2;
-  overflow:visible;
-}
+/* ========================================
+   ป้องกันชนกับ Box แหล่งเรียนรู้
+======================================== */
 
 #learningSourceBox,
 .lsb-section{
   position:relative;
   z-index:1;
   clear:both;
-  margin-top:0;
 }
 
+/* ========================================
+   หน้าจอที่ไม่กว้างพอ ให้กลับเข้า Layout
+======================================== */
+
+@media(max-width:1450px){
+
+  .news-bus-layout{
+    display:grid;
+    grid-template-columns:255px minmax(0,1fr);
+    align-items:start;
+    gap:30px;
+  }
+
+  .bus-box{
+    position:relative !important;
+
+    top:auto;
+    left:auto;
+
+    width:100%;
+    max-width:255px;
+
+    margin:108px 0 0 !important;
+  }
+}
+
+/* ========================================
+   Tablet / Mobile
+======================================== */
+
 @media(max-width:900px){
+
   .news-bus-layout{
     display:flex;
     flex-direction:column;
@@ -283,13 +287,16 @@
 
   .bus-box{
     order:2;
+
     width:min(420px,100%);
     max-width:420px;
+
     margin:0 auto !important;
   }
 }
 
 @media(max-width:560px){
+
   .bus-visual{
     height:165px;
   }
