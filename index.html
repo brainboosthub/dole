@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="learning-base.css" />
   <link rel="stylesheet" href="learning-source-box.css?v=20260720-1" />
   <link rel="stylesheet" href="bus-box.css?v=20260720-1" />
-  <link rel="stylesheet" href="classroom-box.css?v=20260720-2" />
+  <link rel="stylesheet" href="classroom-box.css?v=20260720-3" />
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -152,30 +152,26 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
   </div>
 </section>
 
-<!-- ห้องเรียนออนไลน์: ใช้ระบบ Login เดียวกับ accountBtn -->
+<!-- ห้องเรียนออนไลน์: แสดงภาพวิดีโอแบบสไลด์ -->
 <section id="classroomBox" class="classroom-section">
   <div class="container">
     <div class="section-heading classroom-heading">
       <div>
         <span class="section-kicker">ห้องเรียนออนไลน์</span>
-        <h2>วิดีโอ เอกสาร และแบบทดสอบ</h2>
+        <h2>วิดีโอการเรียนรู้</h2>
       </div>
-      <button id="classroomRefreshBtn" class="classroom-refresh" type="button">รีเฟรชห้องเรียน</button>
+      <a id="classroomOpenAll" class="classroom-open-all" href="#" target="_blank" rel="noopener">ดูวิดีโอทั้งหมด</a>
     </div>
 
-    <div class="classroom-shell">
-      <div id="classroomMessage" class="classroom-message">
-        กำลังเชื่อมต่อระบบห้องเรียน...
+    <div class="classroom-slider">
+      <button id="classroomPrev" class="classroom-arrow classroom-prev" type="button" aria-label="วิดีโอก่อนหน้า">‹</button>
+      <div class="classroom-viewport">
+        <div id="classroomTrack" class="classroom-track">
+          <div class="classroom-loading">กำลังโหลดวิดีโอห้องเรียน...</div>
+        </div>
       </div>
-      <iframe
-        id="classroomFrame"
-        class="classroom-frame"
-        scrolling="no"
-        title="ห้องเรียนออนไลน์"
-        loading="lazy"
-        allow="fullscreen; autoplay; clipboard-write"
-        referrerpolicy="strict-origin-when-cross-origin">
-      </iframe>
+      <button id="classroomNext" class="classroom-arrow classroom-next" type="button" aria-label="วิดีโอถัดไป">›</button>
+      <div id="classroomDots" class="classroom-dots"></div>
     </div>
   </div>
 </section>
@@ -300,7 +296,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
   <script src="script.js?v=20260719-7"></script>
   <script src="learning-source-box.js?v=20260720-1"></script>
   <script src="bus-box.js?v=20260720-1"></script>
-  <script src="classroom-box.js?v=20260720-2"></script>
+  <script src="classroom-box.js?v=20260720-3"></script>
 
 <!-- Student Modal -->
 <div id="studentModal" class="learning-modal">
