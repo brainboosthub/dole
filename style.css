@@ -753,3 +753,14 @@ background: #ffffff;
     opacity:0;
     pointer-events:none;
 }
+html.classroom-embed,
+html.classroom-embed body{
+  overflow:hidden !important;
+  min-height:0 !important;
+}
+
+html.classroom-embed #appPage{
+  width:100%;
+  max-width:100%;
+  padding:15px;
+}
