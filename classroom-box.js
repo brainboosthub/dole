@@ -49,32 +49,18 @@
   }
 
 window.addEventListener('message', event => {
-  const iframe = frame();
-
-  if (!iframe || event.source !== iframe.contentWindow) {
-    return;
-  }
-
   const data = event.data || {};
 
   if (data.type === 'CLASSROOM_READY') {
-    message()?.setAttribute('hidden', '');
-    sendAuthToClassroom();
-  }
-
-  if (data.type === 'OPEN_SHARED_LOGIN') {
-    window.LearningBase?.openStudentModal?.();
-  }
-
-  if (data.type === 'CLASSROOM_HEIGHT') {
-    const requestedHeight = Number(data.height) || 900;
-    const height = Math.min(30000, Math.max(650, requestedHeight));
-
-    iframe.style.height = Math.ceil(height + 8) + 'px';
+    ...
   }
 
   if (data.type === 'CLASSROOM_SCORE') {
     updateClassroomScore(data.score);
+  }
+
+  if (data.type === 'CLASSROOM_HEIGHT') {
+    ...
   }
 });
 
