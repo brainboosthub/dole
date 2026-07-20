@@ -11,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css?v=20260719-7" />
   <link rel="stylesheet" href="learning-base.css" />
+  <link rel="stylesheet" href="learning-source-box.css?v=20260720-1" />
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -86,6 +87,39 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
       <button id="newsPrev" class="news-arrow news-prev" type="button" aria-label="ข่าวก่อนหน้า">‹</button>
       <button id="newsNext" class="news-arrow news-next" type="button" aria-label="ข่าวถัดไป">›</button>
       <div id="newsDots" class="news-dots"></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- แหล่งเรียนรู้ในพื้นที่: Box แยก ไม่กระทบระบบเดิม -->
+<section id="learningSourceBox" class="lsb-section">
+  <div class="container">
+    <div class="section-heading">
+      <div>
+        <span class="section-kicker">แหล่งเรียนรู้ในพื้นที่</span>
+        <h2>สำรวจแหล่งเรียนรู้ผ่านแผนที่</h2>
+      </div>
+      <a id="lsbOpenAll" class="lsb-open-all" href="#" target="_blank" rel="noopener">ดูรายการทั้งหมด</a>
+    </div>
+
+    <div class="lsb-box">
+      <div class="lsb-map-panel">
+        <div id="lsbMapStage" class="lsb-map-stage">
+          <div class="lsb-loading">กำลังโหลดแผนที่...</div>
+        </div>
+      </div>
+
+      <div class="lsb-slider-panel">
+        <button id="lsbPrev" class="lsb-arrow lsb-prev" type="button" aria-label="รายการก่อนหน้า">‹</button>
+        <div id="lsbViewport" class="lsb-viewport">
+          <div id="lsbTrack" class="lsb-track">
+            <div class="lsb-loading">กำลังโหลดรายการ...</div>
+          </div>
+        </div>
+        <button id="lsbNext" class="lsb-arrow lsb-next" type="button" aria-label="รายการถัดไป">›</button>
+        <div id="lsbDots" class="lsb-dots"></div>
+      </div>
     </div>
   </div>
 </section>
@@ -208,6 +242,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
   </footer>
 
   <script src="script.js?v=20260719-7"></script>
+  <script src="learning-source-box.js?v=20260720-1"></script>
 
 <!-- Student Modal -->
 <div id="studentModal" class="learning-modal">
