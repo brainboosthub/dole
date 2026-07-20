@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="learning-source-box.css?v=20260720-1" />
   <link rel="stylesheet" href="bus-box.css?v=20260720-1" />
   <link rel="stylesheet" href="classroom-box.css?v=20260720-2" />
-  <link rel="stylesheet" href="profile-box.css?v=20260721-1" />
+  <link rel="stylesheet" href="profile-box.css?v=20260721-2" />
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -135,7 +135,10 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
             </div>
           </div>
 
-          <button id="profileLoginBtn" class="profile-login-btn" type="button">Login</button>
+          <div class="profile-action-row">
+            <button id="profileLoginBtn" class="profile-login-btn" type="button">Login</button>
+            <button id="profileCartBtn" class="profile-cart-btn" type="button">🛒 ตะกร้า</button>
+          </div>
         </div>
       </aside>
 
@@ -442,7 +445,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
 </div>
 
   <script src="learning-base.js?v=20260720-3"></script>
-  <script src="profile-box.js?v=20260721-1"></script>
+  <script src="profile-box.js?v=20260721-2"></script>
   <script>
 (function () {
   const params = new URLSearchParams(location.search);
