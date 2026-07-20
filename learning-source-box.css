@@ -26,6 +26,7 @@
 .lsb-loading{display:flex;align-items:center;justify-content:center;width:100%;min-height:180px;color:#64748b;font-weight:700}.lsb-empty{padding:30px;text-align:center;color:#64748b}
 @media(max-width:980px){.lsb-box{grid-template-columns:1fr}.lsb-map-stage{min-height:330px}.lsb-slider-panel{min-height:350px}.lsb-card{flex-basis:calc((100% - 14px)/2)}}
 @media(max-width:620px){.lsb-section{padding:40px 0}.lsb-box{padding:10px;border-radius:20px}.lsb-map-stage{min-height:260px;aspect-ratio:4/3}.lsb-slider-panel{min-height:340px;padding:0 34px 26px}.lsb-card{flex-basis:100%}.lsb-card-image{height:170px}.lsb-marker-preview{width:180px}.lsb-marker-preview img{height:95px}}
+
 /* ===== Fix marker alignment and preview layer ===== */
 .lsb-box{
   overflow:visible;
@@ -68,20 +69,15 @@
   position:absolute;
   left:50%;
   top:0;
-
   width:30px;
   height:30px;
   margin-left:-15px;
-
   display:block;
-
   background:currentColor;
   border:3px solid #fff;
   border-radius:50% 50% 50% 0;
-
   transform:rotate(-45deg);
   transform-origin:50% 50%;
-
   box-shadow:0 4px 8px rgba(15,23,42,.34);
 }
 
