@@ -417,5 +417,62 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
 </div>
 
   <script src="learning-base.js?v=20260719-7"></script>
+  <script>
+(function () {
+  const params = new URLSearchParams(location.search);
+  const embedded = params.get('embed') === '1';
+
+  if (!embedded || window.parent === window) return;
+
+  document.documentElement.classList.add('classroom-embed');
+
+  function sendHeight() {
+    const body = document.body;
+    const html = document.documentElement;
+
+    const height = Math.max(
+      body.scrollHeight,
+      body.offsetHeight,
+      html.clientHeight,
+      html.scrollHeight,
+      html.offsetHeight
+    );
+
+    window.parent.postMessage({
+      type: 'CLASSROOM_HEIGHT',
+      height: height
+    }, '*');
+  }
+
+  window.parent.postMessage({
+    type: 'CLASSROOM_READY'
+  }, '*');
+
+  window.addEventListener('load', function () {
+    sendHeight();
+    setTimeout(sendHeight, 300);
+    setTimeout(sendHeight, 1000);
+  });
+
+  window.addEventListener('resize', sendHeight);
+
+  const observer = new ResizeObserver(function () {
+    sendHeight();
+  });
+
+  observer.observe(document.documentElement);
+  observer.observe(document.body);
+
+  const mutationObserver = new MutationObserver(function () {
+    requestAnimationFrame(sendHeight);
+  });
+
+  mutationObserver.observe(document.body, {
+    childList: true,
+    subtree: true,
+    attributes: true
+  });
+})();
+</script>
 </body>
 </html>
