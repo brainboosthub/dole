@@ -145,40 +145,33 @@
   font-weight:600;
 }
 
-.bus-detail-toggle{
-  width:100%;
-  margin-top:12px;
-  padding:9px 12px;
-
-  border:0;
-  border-radius:11px;
-
-  background:#2563eb;
-  color:#fff;
-
-  font:inherit;
-  font-size:13px;
-  font-weight:700;
-
-  cursor:pointer;
-}
 
 .bus-detail{
-  margin-top:10px;
-  padding:12px;
+    margin-top:12px;
+    padding:12px;
 
-  border-radius:12px;
+    border-radius:12px;
 
-  background:#f8fafc;
-  color:#334155;
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
 
-  font-size:13px;
-  line-height:1.65;
-  white-space:pre-line;
+    color:#334155;
+    font-size:13px;
+    line-height:1.7;
+
+    white-space:pre-line;
 }
 
-.bus-detail[hidden]{
-  display:none !important;
+.bus-detail strong{
+    display:block;
+    margin-bottom:6px;
+
+    color:#111827;
+    font-size:12px;
+}
+
+.bus-detail-text{
+    color:#475569;
 }
 
 .bus-controls{
