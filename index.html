@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="learning-base.css" />
   <link rel="stylesheet" href="learning-source-box.css?v=20260720-1" />
   <link rel="stylesheet" href="bus-box.css?v=20260720-1" />
-  <link rel="stylesheet" href="classroom-box.css?v=20260720-1" />
+  <link rel="stylesheet" href="classroom-box.css?v=20260720-2" />
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -46,6 +46,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
 
 <div class="learning-nav-actions" aria-label="ระบบฐานการเรียนรู้">
   <button id="scoreBtn" class="learning-light" type="button" onclick="LearningBase.openScoreModal()">รวม 0 ชั่วโมง</button>
+  <span id="studentScoreBadge" class="learning-score-badge" hidden>คะแนนรวม 0/0</span>
   <button id="accountBtn" class="learning-light" type="button" onclick="LearningBase.openStudentModal()">Login</button>
   <button class="learning-light" type="button" onclick="LearningBase.openCart()">🛒 ตะกร้า <span id="cartCount">0</span></button>
   <a class="learning-teacher" id="teacherPageLink" href="#" target="_blank" rel="noopener">ครูประจำฐาน</a>
@@ -169,6 +170,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
       <iframe
         id="classroomFrame"
         class="classroom-frame"
+        scrolling="no"
         title="ห้องเรียนออนไลน์"
         loading="lazy"
         allow="fullscreen; autoplay; clipboard-write"
@@ -298,7 +300,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
   <script src="script.js?v=20260719-7"></script>
   <script src="learning-source-box.js?v=20260720-1"></script>
   <script src="bus-box.js?v=20260720-1"></script>
-  <script src="classroom-box.js?v=20260720-1"></script>
+  <script src="classroom-box.js?v=20260720-2"></script>
 
 <!-- Student Modal -->
 <div id="studentModal" class="learning-modal">
