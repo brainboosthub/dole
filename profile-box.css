@@ -139,3 +139,32 @@
   }
 }
 
+.profile-action-row{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  flex-wrap:wrap;
+  width:100%;
+}
+
+.profile-cart-btn{
+  min-width:112px;
+  min-height:38px;
+  padding:9px 18px;
+  border:1px solid #dbeafe;
+  border-radius:999px;
+  background:#fff;
+  color:#2563eb;
+  font-family:inherit;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+  transition:transform .2s ease,box-shadow .2s ease,background .2s ease;
+}
+
+.profile-cart-btn:hover{
+  transform:translateY(-1px);
+  background:#eff6ff;
+  box-shadow:0 8px 18px rgba(37,99,235,.15);
+}
