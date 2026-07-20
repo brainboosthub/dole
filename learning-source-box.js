@@ -3,7 +3,7 @@
 
   /* เปลี่ยน URL นี้เป็น URL /exec ของโปรเจกต์ฐานแหล่งเรียนรู้ */
   const LEARNING_SOURCE_WEB_APP_URL =
-    'PASTE_LEARNING_SOURCE_WEB_APP_EXEC_URL_HERE';
+    'https://script.google.com/macros/s/AKfycbzq9SWm2mEBe_gsusJKNEj7hlORO29BejRrOI7CoapwBj145UCyUBccmzdv4pzLAHlW/exec';
   const API_URL = LEARNING_SOURCE_WEB_APP_URL + '?mode=learningBox';
 
   let sources = [];
