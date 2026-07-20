@@ -1,33 +1,63 @@
 /* Bus activity box — isolated styles */
-.news-bus-layout{
-  display:grid;
-  grid-template-columns:minmax(230px, 290px) minmax(0, 1fr);
-  gap:36px;
-  align-items:start;
-}
+
 
 .news-bus-layout.bus-is-hidden{
   grid-template-columns:1fr;
 }
+/* ========================================
+   จัด Box Bus และ News ให้อยู่แถวเดียวกัน
+======================================== */
 
+.news-bus-layout {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: 255px minmax(0, 1fr);
+  align-items: start;
+  gap: 30px;
+
+  position: relative;
+}
+
+/* Box Bus */
+.bus-box {
+  position: relative !important;
+  inset: auto !important;
+
+  width: 100%;
+  max-width: 255px;
+
+  margin: 108px 0 0 !important;
+  transform: none !important;
+
+  align-self: start;
+  z-index: 2;
+}
+
+/* คอลัมน์ข่าว */
+.news-column {
+  position: relative;
+  min-width: 0;
+  width: 100%;
+
+  margin: 0;
+  transform: none;
+  z-index: 1;
+}
+
+/* ตัวสไลด์ข่าว */
+.news-column .news-slider,
+.news-column #newsSlider {
+  position: relative;
+  width: 100%;
+
+  margin: 0;
+  inset: auto;
+  transform: none;
+}
 .news-bus-layout.bus-is-hidden .bus-box{
   display:none!important;
 }
-
-.news-column{min-width:0}
-
-.bus-box{
-  position:relative;
-  overflow:hidden;
-  align-self:stretch;
-  min-height:100%;
-  margin-top:0;
-  border:1px solid rgba(226,232,240,.95);
-  border-radius:20px;
-  background:#fff;
-  box-shadow:0 14px 35px rgba(4,35,52,.15);
-}
-
 .bus-visual{
   height:190px;
   padding:12px 12px 0;
@@ -181,4 +211,18 @@
 @media(max-width:560px){
   .bus-visual{height:165px}
   .bus-info-grid{grid-template-columns:1fr}
+}
+.news-section {
+  position: relative;
+  z-index: 2;
+  overflow: visible;
+}
+
+#learningSourceBox,
+.lsb-section {
+  position: relative;
+  z-index: 1;
+
+  clear: both;
+  margin-top: 0;
 }
