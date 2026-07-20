@@ -2,7 +2,7 @@
   'use strict';
 
   /* วาง URL /exec ของโปรเจกต์ Apps Script ห้องเรียนหลัง Deploy เวอร์ชันใหม่ */
-  const CLASSROOM_WEB_APP_URL = 'PUT_CLASSROOM_WEB_APP_URL_HERE';
+  const CLASSROOM_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbysu0yLm0UuP0t5HN_PouiI2-C9OR9TD9XI31hKcdqLpfscWlAAumMEx6JcXukh3twGJg/exec';
 
   const frame = () => document.getElementById('classroomFrame');
   const message = () => document.getElementById('classroomMessage');
