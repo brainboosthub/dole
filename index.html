@@ -10,10 +10,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css?v=20260719-7" />
-  <link rel="stylesheet" href="learning-base.css" />
+  <link rel="stylesheet" href="learning-base.css?v=20260720-3" />
   <link rel="stylesheet" href="learning-source-box.css?v=20260720-1" />
   <link rel="stylesheet" href="bus-box.css?v=20260720-1" />
-  <link rel="stylesheet" href="classroom-box.css?v=20260720-3" />
+  <link rel="stylesheet" href="classroom-box.css?v=20260720-2" />
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -152,26 +152,30 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
   </div>
 </section>
 
-<!-- ห้องเรียนออนไลน์: แสดงภาพวิดีโอแบบสไลด์ -->
+<!-- ห้องเรียนออนไลน์: ใช้ระบบ Login เดียวกับ accountBtn -->
 <section id="classroomBox" class="classroom-section">
   <div class="container">
     <div class="section-heading classroom-heading">
       <div>
         <span class="section-kicker">ห้องเรียนออนไลน์</span>
-        <h2>สื่อวิดีโอการเรียนรู้ตลอดชีวิต</h2>
+        <h2>วิดีโอ เอกสาร และแบบทดสอบ</h2>
       </div>
-      <a id="classroomOpenAll" class="classroom-open-all" href="#" target="_blank" rel="noopener">ดูวิดีโอทั้งหมด</a>
+      <button id="classroomRefreshBtn" class="classroom-refresh" type="button">รีเฟรชห้องเรียน</button>
     </div>
 
-    <div class="classroom-slider">
-      <button id="classroomPrev" class="classroom-arrow classroom-prev" type="button" aria-label="วิดีโอก่อนหน้า">‹</button>
-      <div class="classroom-viewport">
-        <div id="classroomTrack" class="classroom-track">
-          <div class="classroom-loading">กำลังโหลดวิดีโอห้องเรียน...</div>
-        </div>
+    <div class="classroom-shell">
+      <div id="classroomMessage" class="classroom-message">
+        กำลังเชื่อมต่อระบบห้องเรียน...
       </div>
-      <button id="classroomNext" class="classroom-arrow classroom-next" type="button" aria-label="วิดีโอถัดไป">›</button>
-      <div id="classroomDots" class="classroom-dots"></div>
+      <iframe
+        id="classroomFrame"
+        class="classroom-frame"
+        scrolling="no"
+        title="ห้องเรียนออนไลน์"
+        loading="lazy"
+        allow="fullscreen; autoplay; clipboard-write"
+        referrerpolicy="strict-origin-when-cross-origin">
+      </iframe>
     </div>
   </div>
 </section>
@@ -253,7 +257,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
 
   <section id="activitiesPage">
     <div class="learning-section-title">
-      <h2>กิจกรรมการเรียนรู้ตลอดชีวิต</h2>
+      <h2>รายการกิจกรรมฐานการเรียนรู้</h2>
       <button onclick="LearningBase.loadActivities()">รีเฟรช</button>
     </div>
     <div id="activityGrid" class="learning-grid"></div>
@@ -296,72 +300,73 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
   <script src="script.js?v=20260719-7"></script>
   <script src="learning-source-box.js?v=20260720-1"></script>
   <script src="bus-box.js?v=20260720-1"></script>
-  <script src="classroom-box.js?v=20260720-3"></script>
+  <script src="classroom-box.js?v=20260720-2"></script>
 
 <!-- Student Modal -->
 <div id="studentModal" class="learning-modal">
   <div class="learning-modal-box">
-    <div style="
-  display:flex;
-  justify-content:flex-end;
-">
-
-  <button
-    class="btn-red"
-    onclick="LearningBase.closeModal('studentModal')"
-    style="
-      width:42px;
-      height:42px;
-      border-radius:999px;
-      padding:0;
-      font-size:20px;
-      line-height:1;
-    ">
-    ×
-  </button>
-
-</div>
-    <h2>👤 Login</h2>
-
-    <label>เบอร์โทร</label>
-    <input id="loginPhone" maxlength="10" inputmode="numeric">
-
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-      <button onclick="LearningBase.studentLogin()">Login</button>
+    <div class="learning-modal-close-row">
       <button
-  id="newRegisterBtn"
-  class="btn-green"
-  onclick="LearningBase.showRegisterBox()"
-  style="margin-left:auto">
-  ลงทะเบียนผู้ใช้ใหม่
-</button>
+        class="btn-red learning-modal-close"
+        type="button"
+        onclick="LearningBase.closeModal('studentModal')"
+        aria-label="ปิดหน้าต่าง">
+        ×
+      </button>
     </div>
 
-    <div id="registerBox" style="display:none;margin-top:18px">
-      <hr>
-      <h3>ยังไม่มีบัญชี ลงทะเบียน</h3>
+    <!-- ส่วน Login จะแสดงเฉพาะเมื่อเปิดจากปุ่ม accountBtn -->
+    <div id="loginSection">
+      <h2>👤 Login</h2>
 
-      <label>ชื่อ-นามสกุล</label>
-      <input id="stuFullname">
+      <label for="loginPhone">เบอร์โทร</label>
+      <input id="loginPhone" maxlength="10" inputmode="numeric">
 
-      <label>เบอร์โทร</label>
-      <input id="stuPhone" maxlength="10" inputmode="numeric">
+      <div class="learning-login-actions">
+        <button type="button" onclick="LearningBase.studentLogin()">Login</button>
+        <button
+          id="newRegisterBtn"
+          class="btn-green"
+          type="button"
+          onclick="LearningBase.showRegisterBox()">
+          ลงทะเบียนผู้ใช้ใหม่
+        </button>
+      </div>
+    </div>
 
-      <label>ที่อยู่</label>
-      <textarea id="stuAddress"></textarea>
-      <div style="
-  display:flex;
-  justify-content:flex-end;
-  margin-top:14px;
-">
+    <!-- เมื่อกดลงทะเบียน จะแสดงเฉพาะส่วนนี้ ไม่มีส่วน Login -->
+    <div id="registerBox" style="display:none">
+      <h2>👤 ลงทะเบียนสมาชิก</h2>
 
-  <button
-    class="btn-green"
-    onclick="LearningBase.registerStudent()">
-    ลงทะเบียน
-  </button>
+      <label for="stuFullname">ชื่อ-นามสกุล</label>
+      <input id="stuFullname" autocomplete="name">
 
-</div>
+      <label for="stuPhone">เบอร์โทร</label>
+      <input id="stuPhone" maxlength="10" inputmode="numeric" autocomplete="tel">
+
+      <label for="stuAddress">ที่อยู่</label>
+      <textarea id="stuAddress" autocomplete="street-address"></textarea>
+
+      <label for="stuPhoto">แนบรูปภาพ</label>
+      <input
+        id="stuPhoto"
+        class="learning-file-input"
+        type="file"
+        accept="image/jpeg,image/png,image/webp,image/gif">
+      <div class="learning-photo-help">รองรับ JPG, PNG, WEBP หรือ GIF ขนาดไม่เกิน 5 MB</div>
+      <div id="stuPhotoPreviewWrap" class="learning-photo-preview-wrap" hidden>
+        <img id="stuPhotoPreview" class="learning-photo-preview" alt="ตัวอย่างรูปที่แนบ">
+        <button type="button" class="learning-photo-remove" onclick="LearningBase.clearStudentPhoto()">ลบรูป</button>
+      </div>
+
+      <div class="learning-register-actions">
+        <button
+          class="btn-green"
+          type="button"
+          onclick="LearningBase.registerStudent()">
+          ลงทะเบียน
+        </button>
+      </div>
     </div>
 
 <div id="logoutBox" style="margin-top:15px;display:none">
@@ -412,7 +417,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
   </div>
 </div>
 
-  <script src="learning-base.js?v=20260719-7"></script>
+  <script src="learning-base.js?v=20260720-3"></script>
   <script>
 (function () {
   const params = new URLSearchParams(location.search);
