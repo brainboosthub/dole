@@ -48,10 +48,17 @@
   }
 
   function openStudentModal() {
-    $('studentModal').style.display = 'flex';
-    $('registerBox').style.display = 'none';
+    const modal = $('studentModal');
+    const loginSection = $('loginSection');
+    const registerBox = $('registerBox');
     const newBtn = $('newRegisterBtn');
     const logoutBox = $('logoutBox');
+
+    modal.style.display = 'flex';
+    registerBox.style.display = 'none';
+    loginSection.style.display = 'block';
+    clearStudentPhoto();
+
     if (student) {
       $('loginPhone').value = student.phone || '';
       logoutBox.style.display = 'block';
@@ -80,25 +87,68 @@
     loadCartCount();
   }
 
+  function fileToDataUrl(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result || ''));
+      reader.onerror = () => reject(new Error('ไม่สามารถอ่านไฟล์รูปภาพได้'));
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function clearStudentPhoto() {
+    const input = $('stuPhoto');
+    const wrap = $('stuPhotoPreviewWrap');
+    const preview = $('stuPhotoPreview');
+    if (input) input.value = '';
+    if (preview) preview.removeAttribute('src');
+    if (wrap) wrap.hidden = true;
+  }
+
   async function registerStudent() {
+    const photoInput = $('stuPhoto');
+    const photoFile = photoInput?.files?.[0] || null;
+
     const data = {
       fullname: $('stuFullname').value.trim(),
       phone: $('stuPhone').value.trim(),
-      address: $('stuAddress').value.trim()
+      address: $('stuAddress').value.trim(),
+      photoBase64: '',
+      photoName: ''
     };
+
     if (!data.fullname || !data.phone || !data.address)
       return Swal.fire('แจ้งเตือน','กรุณากรอก ชื่อ-นามสกุล เบอร์โทร และที่อยู่ ให้ครบ','warning');
     if (!/^0\d{9}$/.test(data.phone))
       return Swal.fire('แจ้งเตือน','เบอร์โทรต้องขึ้นต้นด้วย 0 และมี 10 หลัก','warning');
+
+    if (photoFile) {
+      if (!photoFile.type.startsWith('image/')) {
+        return Swal.fire('แจ้งเตือน','กรุณาเลือกไฟล์รูปภาพเท่านั้น','warning');
+      }
+      if (photoFile.size > 5 * 1024 * 1024) {
+        return Swal.fire('แจ้งเตือน','รูปภาพต้องมีขนาดไม่เกิน 5 MB','warning');
+      }
+      data.photoBase64 = await fileToDataUrl(photoFile);
+      data.photoName = photoFile.name || `student-${Date.now()}.jpg`;
+    }
+
     try {
-      Swal.showLoading();
+      Swal.fire({
+        title: 'กำลังลงทะเบียน',
+        text: photoFile ? 'กำลังอัปโหลดรูปภาพไปยัง Google Drive...' : 'กรุณารอสักครู่...',
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading()
+      });
       const res = await callApi('registerStudent', data);
       Swal.close();
       await Swal.fire(res.ok ? 'สำเร็จ':'แจ้งเตือน',res.message,res.ok?'success':'warning');
       if (res.ok && res.student) {
         student = res.student;
         localStorage.setItem('LEARN_STUDENT', JSON.stringify(student));
-        closeModal('studentModal'); updateTop();
+        closeModal('studentModal');
+        clearStudentPhoto();
+        updateTop();
       }
     } catch(err) { Swal.close(); Swal.fire('ผิดพลาด',err.message,'error'); }
   }
@@ -222,7 +272,14 @@
     catch(err) { Swal.close(); Swal.fire('ผิดพลาด',err.message,'error'); }
   }
 
-  function showRegisterBox() { $('registerBox').style.display='block'; $('newRegisterBtn').style.display='none'; }
+  function showRegisterBox() {
+    $('studentModal').style.display = 'flex';
+    $('loginSection').style.display = 'none';
+    $('logoutBox').style.display = 'none';
+    $('registerBox').style.display = 'block';
+    clearStudentPhoto();
+    setTimeout(() => $('stuFullname')?.focus(), 0);
+  }
 
   function openActivityDetail(activityId) {
     const a=activities.find(x=>x.activityId===activityId);
@@ -285,7 +342,34 @@ function updateTop() {
     Swal.fire({title:'ออกจากระบบ?',icon:'warning',showCancelButton:true,confirmButtonText:'ออกจากระบบ',cancelButtonText:'ยกเลิก'}).then(r=>{if(!r.isConfirmed)return;student=null;localStorage.removeItem('LEARN_STUDENT');closeModal('studentModal');updateTop();showPage('activitiesPage',$('learningBaseModule').querySelector('.learning-tabs button'));});
   }
 
-  window.LearningBase={showPage,openStudentModal,closeModal,registerStudent,studentLogin,loadActivities,addToCart,openCart,confirmJoin,loadHistory,cancelCartItem,showRegisterBox,openActivityDetail,filterActivities,openScoreModal,closeStudentModal};
+
+  document.addEventListener('change', event => {
+    if (event.target?.id !== 'stuPhoto') return;
+    const file = event.target.files?.[0];
+    const wrap = $('stuPhotoPreviewWrap');
+    const preview = $('stuPhotoPreview');
+
+    if (!file) {
+      clearStudentPhoto();
+      return;
+    }
+    if (!file.type.startsWith('image/')) {
+      clearStudentPhoto();
+      Swal.fire('แจ้งเตือน','กรุณาเลือกไฟล์รูปภาพเท่านั้น','warning');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      clearStudentPhoto();
+      Swal.fire('แจ้งเตือน','รูปภาพต้องมีขนาดไม่เกิน 5 MB','warning');
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(file);
+    preview.src = objectUrl;
+    preview.onload = () => URL.revokeObjectURL(objectUrl);
+    wrap.hidden = false;
+  });
+  window.LearningBase={showPage,openStudentModal,closeModal,registerStudent,studentLogin,loadActivities,addToCart,openCart,confirmJoin,loadHistory,cancelCartItem,showRegisterBox,openActivityDetail,filterActivities,openScoreModal,closeStudentModal,clearStudentPhoto};
 
   document.addEventListener('DOMContentLoaded',()=>{
     const teacherLink=$('teacherPageLink'); if(teacherLink) teacherLink.href=TEACHER_URL;
