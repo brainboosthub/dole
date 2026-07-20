@@ -86,8 +86,15 @@
     }
   }
 
+  function openCart() {
+    if (window.LearningBase?.openCart) {
+      window.LearningBase.openCart();
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     $('profileLoginBtn')?.addEventListener('click', openAccount);
+    $('profileCartBtn')?.addEventListener('click', openCart);
     renderProfile();
   });
 
