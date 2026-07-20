@@ -152,31 +152,56 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
   </div>
 </section>
 
-<!-- ห้องเรียนออนไลน์: ใช้ระบบ Login เดียวกับ accountBtn -->
+<!-- ห้องเรียนออนไลน์: สไลด์รายการวิดีโอ -->
 <section id="classroomBox" class="classroom-section">
   <div class="container">
+
     <div class="section-heading classroom-heading">
       <div>
         <span class="section-kicker">ห้องเรียนออนไลน์</span>
         <h2>วิดีโอ เอกสาร และแบบทดสอบ</h2>
       </div>
-      <button id="classroomRefreshBtn" class="classroom-refresh" type="button">รีเฟรชห้องเรียน</button>
+
+      <a
+        id="classroomOpenAll"
+        class="classroom-open-all"
+        href="#"
+        target="_blank"
+        rel="noopener">
+        ดูวิดีโอทั้งหมด
+      </a>
     </div>
 
-    <div class="classroom-shell">
-      <div id="classroomMessage" class="classroom-message">
-        กำลังเชื่อมต่อระบบห้องเรียน...
+    <div class="classroom-slider">
+
+      <button
+        id="classroomPrev"
+        class="classroom-arrow classroom-prev"
+        type="button"
+        aria-label="รายการก่อนหน้า">
+        ‹
+      </button>
+
+      <div class="classroom-viewport">
+        <div id="classroomTrack" class="classroom-track">
+          <div class="classroom-loading">
+            กำลังโหลดวิดีโอห้องเรียน...
+          </div>
+        </div>
       </div>
-      <iframe
-        id="classroomFrame"
-        class="classroom-frame"
-        scrolling="no"
-        title="ห้องเรียนออนไลน์"
-        loading="lazy"
-        allow="fullscreen; autoplay; clipboard-write"
-        referrerpolicy="strict-origin-when-cross-origin">
-      </iframe>
+
+      <button
+        id="classroomNext"
+        class="classroom-arrow classroom-next"
+        type="button"
+        aria-label="รายการถัดไป">
+        ›
+      </button>
+
+      <div id="classroomDots" class="classroom-dots"></div>
+
     </div>
+
   </div>
 </section>
 
