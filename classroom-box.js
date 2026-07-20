@@ -2,7 +2,7 @@
   'use strict';
 
   /* วาง URL /exec ของโปรเจกต์ Apps Script ห้องเรียนหลัง Deploy เวอร์ชันใหม่ */
-  const CLASSROOM_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbysu0yLm0UuP0t5HN_PouiI2-C9OR9TD9XI31hKcdqLpfscWlAAumMEx6JcXukh3twGJg/exec';
+  const CLASSROOM_WEB_APP_URL = 'PUT_CLASSROOM_WEB_APP_URL_HERE';
 
   const frame = () => document.getElementById('classroomFrame');
   const message = () => document.getElementById('classroomMessage');
@@ -58,8 +58,19 @@
       if (window.LearningBase?.openStudentModal) window.LearningBase.openStudentModal();
     }
     if (data.type === 'CLASSROOM_HEIGHT') {
-      const height = Math.max(650, Math.min(Number(data.height) || 900, 1800));
-      if (frame()) frame().style.height = height + 'px';
+      const height = Math.max(650, Number(data.height) || 900);
+      if (frame()) frame().style.height = Math.ceil(height + 8) + 'px';
+    }
+    if (data.type === 'CLASSROOM_SCORE') {
+      const badge = document.getElementById('studentScoreBadge');
+      if (!badge) return;
+      if (!data.score || !getSharedStudent()) {
+        badge.hidden = true;
+        badge.textContent = 'คะแนนรวม 0/0';
+        return;
+      }
+      badge.textContent = `คะแนนรวม ${data.score.totalScore}/${data.score.totalFull} (${data.score.percent}%)`;
+      badge.hidden = false;
     }
   });
 
@@ -70,4 +81,3 @@
     loadClassroom();
   });
 })();
-
