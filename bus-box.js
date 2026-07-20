@@ -41,8 +41,7 @@
     const controls = document.getElementById('busControls');
     if (!content || !dots || !controls || !busItems.length) return;
 
-    const item = busItems[busIndex];
-    const detailId = `busDetail-${busIndex}`;
+const item = busItems[busIndex];
 
     content.innerHTML = `
       <h3 class="bus-title">กิจกรรมรถโมบาย</h3>
