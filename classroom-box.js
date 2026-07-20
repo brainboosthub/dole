@@ -48,31 +48,35 @@
     iframe.src = CLASSROOM_WEB_APP_URL + separator + 'embed=1&_t=' + Date.now();
   }
 
-  window.addEventListener('message', event => {
-    const data = event.data || {};
-    if (data.type === 'CLASSROOM_READY') {
-      message()?.setAttribute('hidden', '');
-      sendAuthToClassroom();
-    }
-    if (data.type === 'OPEN_SHARED_LOGIN') {
-      if (window.LearningBase?.openStudentModal) window.LearningBase.openStudentModal();
-    }
-    if (data.type === 'CLASSROOM_HEIGHT') {
-      const height = Math.max(650, Number(data.height) || 900);
-      if (frame()) frame().style.height = Math.ceil(height + 8) + 'px';
-    }
-    if (data.type === 'CLASSROOM_SCORE') {
-      const badge = document.getElementById('studentScoreBadge');
-      if (!badge) return;
-      if (!data.score || !getSharedStudent()) {
-        badge.hidden = true;
-        badge.textContent = 'คะแนนรวม 0/0';
-        return;
-      }
-      badge.textContent = `คะแนนรวม ${data.score.totalScore}/${data.score.totalFull} (${data.score.percent}%)`;
-      badge.hidden = false;
-    }
-  });
+window.addEventListener('message', event => {
+  const iframe = frame();
+
+  if (!iframe || event.source !== iframe.contentWindow) {
+    return;
+  }
+
+  const data = event.data || {};
+
+  if (data.type === 'CLASSROOM_READY') {
+    message()?.setAttribute('hidden', '');
+    sendAuthToClassroom();
+  }
+
+  if (data.type === 'OPEN_SHARED_LOGIN') {
+    window.LearningBase?.openStudentModal?.();
+  }
+
+  if (data.type === 'CLASSROOM_HEIGHT') {
+    const requestedHeight = Number(data.height) || 900;
+    const height = Math.min(30000, Math.max(650, requestedHeight));
+
+    iframe.style.height = Math.ceil(height + 8) + 'px';
+  }
+
+  if (data.type === 'CLASSROOM_SCORE') {
+    updateClassroomScore(data.score);
+  }
+});
 
   window.addEventListener('LEARN_AUTH_CHANGED', sendAuthToClassroom);
   document.addEventListener('DOMContentLoaded', () => {
