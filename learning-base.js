@@ -232,7 +232,30 @@
     $('detailContent').innerHTML=`${slider}<div class="detail-info"><h2>${escapeHtml(a.title||'-')}</h2><div class="line"><b>รูปแบบการเรียนรู้:</b> ${escapeHtml(a.learningType||'-')}</div><div class="line"><b>รายละเอียด:</b><br>${escapeHtml(a.detail||'-')}</div><div class="line"><b>วันที่จัดกิจกรรม:</b> ${formatThaiDate(a.activityDate)}</div></div>`;
     $('detailAddCartBtn').onclick=()=>addToCart(activityId); $('detailModal').style.display='flex'; startDetailSlider();
   }
+function updateTop() {
+  const accountBtn = $('accountBtn');
+  const scoreBadge = $('studentScoreBadge');
 
+  if (student) {
+    accountBtn.textContent = `👤 ${student.fullname}`;
+  } else {
+    accountBtn.textContent = 'Login';
+
+    if (scoreBadge) {
+      scoreBadge.hidden = true;
+      scoreBadge.textContent = 'คะแนนรวม 0/0';
+    }
+  }
+
+  window.dispatchEvent(new CustomEvent('LEARN_AUTH_CHANGED', {
+    detail: {
+      student: student || null
+    }
+  }));
+
+  loadMyTotalHours();
+  loadCartCount();
+}
   function startDetailSlider() {
     clearInterval(detailSlideTimer); detailSlideIndex=0;
     const slides=document.querySelectorAll('#detailModal .detail-slide'),dots=document.querySelectorAll('#detailModal .detail-dot');
