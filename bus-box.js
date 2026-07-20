@@ -64,29 +64,15 @@
           <span>${escapeHtml(item.time || '-')}</span>
         </div>
       </div>
-      ${item.detail ? `
-        <button
-          class="bus-detail-toggle"
-          type="button"
-          aria-expanded="false"
-          aria-controls="${detailId}">
-          ดูรายละเอียดกิจกรรม
-        </button>
-        <div id="${detailId}" class="bus-detail" hidden>${escapeHtml(item.detail)}</div>
-      ` : ''}
+${item.detail ? `
+    <div class="bus-detail">
+        <strong>กิจกรรมที่น่าสนใจ</strong>
+        <div class="bus-detail-text">
+            ${escapeHtml(item.detail)}
+        </div>
+    </div>
+` : ''}
     `;
-
-    const toggle = content.querySelector('.bus-detail-toggle');
-    if (toggle) {
-      toggle.addEventListener('click', () => {
-        const detail = document.getElementById(detailId);
-        if (!detail) return;
-        const willOpen = detail.hasAttribute('hidden');
-        detail.toggleAttribute('hidden', !willOpen);
-        toggle.setAttribute('aria-expanded', String(willOpen));
-        toggle.textContent = willOpen ? 'ซ่อนรายละเอียดกิจกรรม' : 'ดูรายละเอียดกิจกรรม';
-      });
-    }
 
     dots.innerHTML = busItems.map((_, index) => `
       <button
