@@ -504,5 +504,70 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
   </a>
 
 </nav>
+  <script>
+document.addEventListener('DOMContentLoaded', function () {
+  const mobileLinks = Array.from(
+    document.querySelectorAll('.mobile-bottom-link')
+  );
+
+  const sectionIds = [
+    'home',
+    'newsSlider',
+    'learningSourceBox',
+    'classroomBox',
+    'featured',
+    'learningBaseModule'
+  ];
+
+  const setActiveMenu = function (targetId) {
+    mobileLinks.forEach(function (link) {
+      const href = link.getAttribute('href');
+      link.classList.toggle(
+        'active',
+        href === '#' + targetId
+      );
+    });
+  };
+
+  mobileLinks.forEach(function (link) {
+    link.addEventListener('click', function () {
+      const targetId = link
+        .getAttribute('href')
+        .replace('#', '');
+
+      setActiveMenu(targetId);
+    });
+  });
+
+  const observer = new IntersectionObserver(
+    function (entries) {
+      const visibleEntries = entries
+        .filter(function (entry) {
+          return entry.isIntersecting;
+        })
+        .sort(function (a, b) {
+          return b.intersectionRatio - a.intersectionRatio;
+        });
+
+      if (visibleEntries.length) {
+        setActiveMenu(visibleEntries[0].target.id);
+      }
+    },
+    {
+      root: null,
+      rootMargin: '-20% 0px -60% 0px',
+      threshold: [0.01, 0.1, 0.25]
+    }
+  );
+
+  sectionIds.forEach(function (id) {
+    const section = document.getElementById(id);
+
+    if (section) {
+      observer.observe(section);
+    }
+  });
+});
+</script>
 </body>
 </html>
