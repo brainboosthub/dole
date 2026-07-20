@@ -758,3 +758,10 @@ html.classroom-embed #appPage{
   max-width:100%;
   padding:15px;
 }
+#newsSlider,
+#learningSourceBox,
+#classroomBox,
+#featured,
+#learningBaseModule {
+  scroll-margin-top: 90px;
+}
