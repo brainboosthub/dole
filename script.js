@@ -359,18 +359,18 @@ if (heroOverlayUrl) {
 
     try {
       const result = await Swal.fire({
-        title: safeTitle,
-        html: popupHtml,
-        width: 760,
-        showCancelButton: true,
-        showConfirmButton: hasDetailUrl,
-        confirmButtonText: 'รายละเอียด',
-        cancelButtonText: 'ปิด',
-        confirmButtonColor: '#198754',
-        cancelButtonColor: '#6c757d',
-        allowOutsideClick: true,
-        allowEscapeKey: true
-      });
+    title: title,
+    html: html,
+
+    showCloseButton: true,
+    showConfirmButton: detailUrl ? true : false,
+
+    confirmButtonText: "รายละเอียด",
+
+    customClass:{
+        closeButton:"news-close-btn"
+    }
+});
 
       if (result.isConfirmed && hasDetailUrl) {
         window.open(item.detailUrl, '_blank', 'noopener,noreferrer');
