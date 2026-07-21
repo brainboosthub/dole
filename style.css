@@ -1009,24 +1009,20 @@ html.classroom-embed #appPage{
   }
 
   /* Login */
-  .mobile-profile-nav #profileLoginBtn{
+.mobile-profile-nav #profileLoginBtn{
     flex:0 0 auto;
 
-    height:36px;
-    padding:0 14px;
-    margin:0;
+    height:30px;
+    min-width:70px;
+    padding:0 10px;
 
-    border:0;
-    border-radius:999px;
+    border-radius:15px;
 
-    background:#06b6d4;
-    color:#fff;
-
-    font-family:"Kanit",sans-serif;
-    font-size:12px;
+    font-size:11px;
     font-weight:600;
-    white-space:nowrap;
-  }
+    line-height:30px;
+}
+
 
   /* ชื่อ */
   .mobile-profile-nav #profileName{
@@ -1066,51 +1062,17 @@ html.classroom-embed #appPage{
 }
 @media (max-width:590px){
 
-  .nav-wrap{
-    width:calc(100% - 14px);
-    min-height:64px;
-    gap:8px;
-  }
+    .mobile-profile-nav #profileLoginBtn,
+    .mobile-profile-nav #profileCartBtn{
 
-  .nav-wrap > .brand{
-    flex:0 0 auto;
-  }
+        height:28px;
+        min-width:58px;
+        padding:0 8px;
 
-  .brand span:not(.brand-icon){
-    display:none;
-  }
+        border-radius:14px;
 
-  .mobile-profile-nav{
-    gap:5px;
-  }
+        font-size:10px;
+        line-height:28px;
+    }
 
-  .mobile-profile-nav #profileCartBtn,
-  .mobile-profile-nav #profileLoginBtn{
-    height:32px;
-    padding:0 8px;
-    font-size:10px;
-  }
-
-  .mobile-profile-nav #profileHours{
-    height:32px;
-    padding:0 8px;
-    font-size:11px;
-  }
-
-  .mobile-profile-nav #profileHours::before{
-    content:"ชม.";
-    font-size:10px;
-  }
-
-  .mobile-profile-nav #profileName{
-    flex:1 1 auto;
-    min-width:40px;
-    max-width:95px;
-    font-size:11px;
-  }
-
-  .mobile-profile-nav #profilePhoto{
-    width:38px;
-    height:38px;
-  }
 }
