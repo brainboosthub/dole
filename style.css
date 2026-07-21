@@ -1138,3 +1138,25 @@ html.classroom-embed #appPage{
     font-size: 10px;
   }
 }
+/* Freeze Header บนสมาร์ทโฟนและแท็บเล็ต */
+@media screen and (max-width: 1024px) {
+
+  .site-header {
+    position: sticky !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999;
+
+    background: #ffffff;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  .site-header .nav-wrap {
+    position: relative;
+    width: 100%;
+    min-height: 58px;
+    margin: 0 auto;
+    background: #ffffff;
+  }
+}
