@@ -48,7 +48,43 @@
     btn?.classList.add('active');
     if (id === 'historyPage') loadHistory();
   }
+async function loadSetting() {
 
+    try{
+
+        const res = await fetch(API_URL + "?mode=setting");
+        const json = await res.json();
+
+        if(json.success){
+
+            hourText = json.data.hourText || "ชั่วโมง";
+
+            updateHourText();
+
+            if(typeof loadActivities==="function"){
+                loadActivities();
+            }
+
+            if(typeof loadHistory==="function"){
+                loadHistory();
+            }
+
+            if(typeof renderProfile==="function"){
+                renderProfile();
+            }
+
+        }
+
+    }catch(err){
+        console.log(err);
+    }
+
+}
+  function getHourText(){
+
+    return hourText || "ชั่วโมง";
+
+}
   function openStudentModal() {
     const modal = $('studentModal');
     const loginSection = $('loginSection');
