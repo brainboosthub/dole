@@ -487,8 +487,10 @@ document.addEventListener('DOMContentLoaded', function () {
   const profileActionRow =
     profileBox?.querySelector('.profile-action-row');
 
+const profileCartBtn =
+  document.getElementById('profileCartBtn');
+
 const elements = [
-  document.getElementById('profileCartBtn'),
   document.getElementById('profileHours'),
   document.getElementById('profileLoginBtn'),
   document.getElementById('profileName'),
@@ -511,9 +513,13 @@ const elements = [
   function moveToMobileHeader() {
     if (!mobileProfileNav) return;
 
-    elements.forEach(function (element) {
-      mobileProfileNav.appendChild(element);
-    });
+elements.forEach(function (element) {
+    mobileProfileNav.appendChild(element);
+});
+
+if (profileCartBtn) {
+    mobileProfileNav.prepend(profileCartBtn);
+}
 
     if (profileBox) {
       profileBox.hidden = true;
@@ -523,6 +529,9 @@ const elements = [
 
   function restoreToProfileBox() {
     elements.forEach(function (element) {
+      if (profileCartBtn) {
+    profileCartBtn.remove();
+}
       const position = originalPositions.get(element);
 
       if (!position?.parent) return;
@@ -541,7 +550,14 @@ const elements = [
     });
 
     if (profileBox) {
-      profileBox.hidden = false;
+const navWrap =
+    document.querySelector(".nav-wrap");
+
+if (profileCartBtn) {
+    navWrap.appendChild(profileCartBtn);
+}
+
+profileBox.hidden = false;
       profileBox.removeAttribute('aria-hidden');
     }
   }
