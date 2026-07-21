@@ -1463,3 +1463,12 @@ html.classroom-embed #appPage{
     }
 
 }
+#learningBaseModule button,
+.learning-modal button{
+
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+
+}
