@@ -161,11 +161,15 @@ async function renderProfile(studentOverride) {
 
 }
 
-  function openAccount() {
-    if (window.LearningBase?.openStudentModal) {
-      window.LearningBase.openStudentModal();
-    }
+function openAccount() {
+  const currentStudent = getStudent();
+
+  if (currentStudent) {
+    window.LearningBase?.openEditProfile();
+  } else {
+    window.LearningBase?.openStudentModal();
   }
+}
 
   function openCart() {
     if (window.LearningBase?.openCart) {
