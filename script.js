@@ -155,124 +155,32 @@ if (heroOverlayUrl) {
   let newsSlides = [];
   let newsIndex = 0;
   let newsTimer = null;
-  let newsAutoEnabled = false;
-  let newsAutoStoppedByUser = false;
-  let newsPopupOpen = false;
-
-  function stopNewsAutoSlide() {
-    if (newsTimer) {
-      clearInterval(newsTimer);
-      newsTimer = null;
-    }
-  }
-
-  function startNewsAutoSlide() {
-    stopNewsAutoSlide();
-
-    if (
-      !newsAutoEnabled ||
-      newsAutoStoppedByUser ||
-      newsPopupOpen ||
-      newsSlides.length <= 1
-    ) {
-      return;
-    }
-
-    newsTimer = setInterval(() => {
-      newsIndex = (newsIndex + 1) % newsSlides.length;
-      renderNews();
-    }, 3000);
-  }
-
-  function stopNewsAutoByUser() {
-    newsAutoStoppedByUser = true;
-    stopNewsAutoSlide();
-  }
-
-  function normalizeNewsItem(item, index) {
-    if (typeof item === 'string') {
-      return {
-        newsNo: index + 1,
-        title: `ข่าวสาร ${index + 1}`,
-        image: String(item).trim(),
-        detail: '',
-        detailUrl: '',
-        date: ''
-      };
-    }
-
-    const source = item && typeof item === 'object' ? item : {};
-
-    return {
-      newsNo: source.newsNo || source.no || source.id || index + 1,
-      title: String(
-        source.title || source.heading || source.mainTitle || `ข่าวสาร ${index + 1}`
-      ).trim(),
-      image: String(
-        source.image || source.url || source.imageUrl || source.poster || ''
-      ).trim(),
-      detail: String(
-        source.detail || source.description || source.summary || ''
-      ).trim(),
-      detailUrl: String(
-        source.detailUrl || source.link || source.moreUrl || source.urlDetail || ''
-      ).trim(),
-      date: String(
-        source.date || source.newsDate || source.publishedAt || ''
-      ).trim()
-    };
-  }
 
   async function loadNews() {
     const slider = document.getElementById('newsSlider');
     const slidesBox = document.getElementById('newsSlides');
     if (!slider || !slidesBox) return;
-
     try {
-      const response = await fetch(
-        NEWS_API_URL + '&_t=' + Date.now(),
-        { cache: 'no-store' }
-      );
-
+      const response = await fetch(NEWS_API_URL + '&_t=' + Date.now(), { cache: 'no-store' });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
       const result = await response.json();
-      if (result.success === false) {
-        throw new Error(result.message || 'โหลดข่าวสารไม่สำเร็จ');
-      }
-
+      if (result.success === false) throw new Error(result.message || 'โหลดข่าวสารไม่สำเร็จ');
       const raw = result.slides || result.data?.slides || result.data || [];
-
-      newsSlides = (Array.isArray(raw) ? raw : [])
-        .map(normalizeNewsItem)
-        .filter(item => item.image);
-
-      const mode = String(
-        result.mode || result.data?.mode || ''
-      ).toLowerCase();
-
-      if (!newsSlides.length) {
-        slider.classList.add('is-empty');
-        return;
-      }
-
+      newsSlides = (Array.isArray(raw) ? raw : []).map(item =>
+        typeof item === 'string' ? item : (item.image || item.url || item.imageUrl || '')
+      ).map(String).map(x => x.trim()).filter(Boolean);
+      const mode = String(result.mode || result.data?.mode || '').toLowerCase();
+      if (!newsSlides.length) { slider.classList.add('is-empty'); return; }
       slider.classList.remove('is-empty');
-      slider.classList.toggle(
-        'single-slide',
-        mode !== 'block' || newsSlides.length <= 1
-      );
-
+      slider.classList.toggle('single-slide', mode !== 'block' || newsSlides.length <= 1);
       newsIndex = 0;
-      newsAutoEnabled = mode === 'block' && newsSlides.length > 1;
-      newsAutoStoppedByUser = false;
-      newsPopupOpen = false;
-
       renderNews();
-      startNewsAutoSlide();
-
+      clearInterval(newsTimer);
+      if (mode === 'block' && newsSlides.length > 1) {
+        newsTimer = setInterval(() => { newsIndex = (newsIndex + 1) % newsSlides.length; renderNews(); }, 3000);
+      }
     } catch (error) {
-      slidesBox.innerHTML =
-        `<div class="news-loading">โหลดข่าวสารไม่สำเร็จ: ${escapeHtml(error.message)}</div>`;
+      slidesBox.innerHTML = `<div class="news-loading">โหลดข่าวสารไม่สำเร็จ: ${escapeHtml(error.message)}</div>`;
     }
   }
 
@@ -280,176 +188,17 @@ if (heroOverlayUrl) {
     const slidesBox = document.getElementById('newsSlides');
     const dots = document.getElementById('newsDots');
     if (!slidesBox || !dots || !newsSlides.length) return;
-
-    slidesBox.innerHTML = newsSlides.map((item, index) => `
-      <div
-        class="news-slide ${index === newsIndex ? 'active' : ''}"
-        data-news-slide="${index}"
-        role="button"
-        tabindex="${index === newsIndex ? '0' : '-1'}"
-        aria-label="เปิดรายละเอียด ${escapeHtml(item.title)}">
-        <img
-          src="${escapeHtml(item.image)}"
-          alt="${escapeHtml(item.title)}"
-          loading="lazy">
+    slidesBox.innerHTML = newsSlides.map((url,index) => `
+      <div class="news-slide ${index === newsIndex ? 'active' : ''}">
+        <img src="${escapeHtml(url)}" alt="ข่าวสาร ${index+1}" loading="lazy">
       </div>`).join('');
-
-    slidesBox.querySelectorAll('[data-news-slide]').forEach(slide => {
-      const openCurrentNews = () => {
-        const index = Number(slide.dataset.newsSlide);
-        if (!Number.isInteger(index) || !newsSlides[index]) return;
-        openNewsPopup(newsSlides[index]);
-      };
-
-      slide.addEventListener('click', openCurrentNews);
-      slide.addEventListener('keydown', event => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          openCurrentNews();
-        }
-      });
-    });
-
-    dots.innerHTML = newsSlides.map((_, index) => `
-      <button
-        class="news-dot ${index === newsIndex ? 'active' : ''}"
-        type="button"
-        data-news-dot="${index}"
-        aria-label="ข่าวลำดับที่ ${index + 1}">
-      </button>`).join('');
-
-    dots.querySelectorAll('[data-news-dot]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        stopNewsAutoByUser();
-        newsIndex = Number(btn.dataset.newsDot);
-        renderNews();
-      });
-    });
+    dots.innerHTML = newsSlides.map((_,index) => `<button class="news-dot ${index===newsIndex?'active':''}" type="button" data-news-dot="${index}"></button>`).join('');
+    dots.querySelectorAll('[data-news-dot]').forEach(btn => btn.addEventListener('click', () => { newsIndex = Number(btn.dataset.newsDot); renderNews(); }));
   }
 
-async function openNewsPopup(item) {
-  if (!item) return;
-
-  newsPopupOpen = true;
-  stopNewsAutoSlide();
-
-  const hasDetailUrl = Boolean(
-    String(item.detailUrl || '').trim()
-  );
-
-  const safeTitle = escapeHtml(
-    item.title || 'ข่าวสาร'
-  );
-
-  const safeImage = escapeHtml(
-    item.image || ''
-  );
-
-  const safeDetail = escapeHtml(
-    item.detail || 'ไม่มีรายละเอียดเพิ่มเติม'
-  ).replace(/\n/g, '<br>');
-
-  const safeDate = escapeHtml(
-    item.date || ''
-  );
-
-  const popupHtml = `
-    <div class="news-popup-content">
-
-      ${safeDate ? `
-        <div class="news-popup-date">
-          <i class="fa fa-calendar" aria-hidden="true"></i>
-          ${safeDate}
-        </div>
-      ` : ''}
-
-      ${safeImage ? `
-        <img
-          class="news-popup-image"
-          src="${safeImage}"
-          alt="${safeTitle}">
-      ` : ''}
-
-      <div class="news-popup-detail">
-        ${safeDetail}
-      </div>
-
-    </div>
-  `;
-
-  try {
-    const result = await Swal.fire({
-      title: safeTitle,
-      html: popupHtml,
-
-      showCloseButton: true,
-      showCancelButton: false,
-
-      showConfirmButton: hasDetailUrl,
-      confirmButtonText: 'รายละเอียด',
-
-      allowOutsideClick: true,
-      allowEscapeKey: true,
-
-      width: 760,
-
-      customClass: {
-        popup: 'news-popup-box',
-        title: 'news-popup-title',
-        closeButton: 'news-close-btn',
-        confirmButton: 'news-detail-btn'
-      },
-
-      buttonsStyling: false
-    });
-
-    if (result.isConfirmed && hasDetailUrl) {
-      window.open(
-        item.detailUrl,
-        '_blank',
-        'noopener,noreferrer'
-      );
-    }
-
-  } catch (error) {
-    console.error('เปิด Popup ข่าวไม่สำเร็จ:', error);
-
-  } finally {
-    newsPopupOpen = false;
-
-    /*
-     * เมื่อปิด Popup ให้ Slider กลับมาทำงาน
-     * เฉพาะกรณีที่ผู้ใช้ไม่ได้กด Prev, Next หรือ Dot
-     */
-    startNewsAutoSlide();
-  }
-}
   function bindNewsControls() {
-    const slider = document.getElementById('newsSlider');
-    const prev = document.getElementById('newsPrev');
-    const next = document.getElementById('newsNext');
-
-    slider?.addEventListener('mouseenter', () => {
-      stopNewsAutoSlide();
-    });
-
-    slider?.addEventListener('mouseleave', () => {
-      startNewsAutoSlide();
-    });
-
-    prev?.addEventListener('click', () => {
-      if (!newsSlides.length) return;
-      stopNewsAutoByUser();
-      newsIndex = (newsIndex - 1 + newsSlides.length) % newsSlides.length;
-      renderNews();
-    });
-
-    next?.addEventListener('click', () => {
-      if (!newsSlides.length) return;
-      stopNewsAutoByUser();
-      newsIndex = (newsIndex + 1) % newsSlides.length;
-      renderNews();
-    });
+    document.getElementById('newsPrev')?.addEventListener('click', () => { if (!newsSlides.length) return; newsIndex=(newsIndex-1+newsSlides.length)%newsSlides.length; renderNews(); });
+    document.getElementById('newsNext')?.addEventListener('click', () => { if (!newsSlides.length) return; newsIndex=(newsIndex+1)%newsSlides.length; renderNews(); });
   }
 
   let books = [];
