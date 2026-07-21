@@ -13,17 +13,7 @@
       return null;
     }
   }
-function getCartCount() {
-  try {
-    const cart = JSON.parse(
-      localStorage.getItem('LEARN_CART') || '[]'
-    );
 
-    return Array.isArray(cart) ? cart.length : 0;
-  } catch (_) {
-    return 0;
-  }
-}
   function safePhoto(url) {
     const value = String(url || '').trim();
     return value || FALLBACK_PHOTO;
@@ -168,10 +158,7 @@ async function renderProfile(studentOverride) {
    * จำนวนตะกร้าจะอัปเดตจาก learning-base.js
    * ภายหลังสามารถเชื่อมกับ API ได้
    */
-if (cartBtn) {
-  cartBtn.innerHTML =
-    `<i class="fa fa-shopping-cart"></i> ${getCartCount()} ตะกร้า`;
-}
+
 }
 
   function openAccount() {
