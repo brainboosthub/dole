@@ -129,7 +129,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
           <div class="profile-stats">
             <div class="profile-stat">
 <strong id="profileHours">0</strong>
-<span id="profileHoursLabel">ชั่วโมงกิจกรรม</span>
+<span id="profileHoursLabel"></span>
             </div>
           </div>
 
@@ -771,17 +771,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 });
-    function updateHourText() {
-
-  const label =
-    document.getElementById('profileHoursLabel');
-
-  if(label){
-    label.textContent =
-      hourText + "กิจกรรม";
-  }
-
-}
 </script>
 </body>
 </html>
