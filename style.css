@@ -1209,3 +1209,8 @@ html.classroom-embed #appPage{
     margin-left:auto;
   }
 }
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
