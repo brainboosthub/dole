@@ -695,7 +695,7 @@ async function loadMyTotalHours() {
 
   function updateHourText() {
     const label = $('profileHoursLabel');
-    if (label) label.textContent = `${hourText}กิจกรรม`;
+    if (label) label.textContent = `${hourText}`;
   }
 
   async function loadSetting() {
