@@ -404,7 +404,7 @@ function openEditProfile() {
         <div class="learning-card-body">
           <span class="learning-tag">${escapeHtml(a.baseNo || '-')}</span>
           <div class="learning-title">${escapeHtml(a.title || '-')}</div>
-          <div class="learning-muted">ชั่วโมง: ${getActivityHours(a)} ชั่วโมง</div>
+          <div class="learning-muted">ชั่วโมง: ${getActivityHours(a)}</div>
           ${a.learningType ? `<div class="learning-muted">รูปแบบ: ${escapeHtml(a.learningType)}</div>`:''}
           <div class="learning-muted">วันที่: ${formatThaiDate(a.activityDate)}</div>
           <div class="learning-muted">ครูฐาน: ${escapeHtml(a.teacherName || '-')}</div>
