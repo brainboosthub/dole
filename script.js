@@ -94,25 +94,36 @@ async function loadWebsiteImages() {
       document.title = brandName;
     }
 
-    if (heroOverlayUrl) {
-      const overlay =
-        document.getElementById('websiteHeroOverlay');
+if (heroOverlayUrl) {
+  const overlay = document.getElementById('websiteHeroOverlay');
 
-      if (overlay) {
-        overlay.style.backgroundImage =
-          `linear-gradient(
-            90deg,
-            rgba(5,28,44,.96) 0%,
-            rgba(5,28,44,.79) 40%,
-            rgba(5,28,44,.1) 78%
-          ),
-          url("${heroOverlayUrl}")`;
+  if (overlay) {
+    const heroImage = new Image();
 
-        overlay.style.backgroundSize = 'cover';
-        overlay.style.backgroundPosition = 'center';
-        overlay.style.backgroundRepeat = 'no-repeat';
-      }
-    }
+    heroImage.onload = () => {
+      overlay.style.backgroundImage =
+        `linear-gradient(
+          90deg,
+          rgba(5,28,44,.96) 0%,
+          rgba(5,28,44,.79) 40%,
+          rgba(5,28,44,.1) 78%
+        ),
+        url("${heroOverlayUrl}")`;
+
+      overlay.style.backgroundSize = 'cover';
+      overlay.style.backgroundPosition = 'center';
+      overlay.style.backgroundRepeat = 'no-repeat';
+
+      overlay.classList.add('website-hero-ready');
+    };
+
+    heroImage.onerror = () => {
+      overlay.classList.add('website-hero-ready');
+    };
+
+    heroImage.src = heroOverlayUrl;
+  }
+}
 
     if (heroTitleLine1) {
       const line1 =
