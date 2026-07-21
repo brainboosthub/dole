@@ -1076,3 +1076,47 @@ html.classroom-embed #appPage{
     }
 
 }
+/* ===============================
+   Mobile Profile Header
+================================ */
+@media (max-width:1024px){
+
+  /* ซ่อนข้อความ orange เหลือเฉพาะโลโก้ O */
+  .nav-wrap > .brand span:not(.brand-icon){
+      display:none;
+  }
+
+  /* ปุ่มทั้งหมดไม่มีพื้นหลัง */
+  .mobile-profile-nav #profileCartBtn,
+  .mobile-profile-nav #profileLoginBtn{
+      background:transparent !important;
+      border:none !important;
+      box-shadow:none !important;
+
+      color:#000 !important;
+
+      padding:0 6px;
+      min-width:auto;
+  }
+
+  /* ชั่วโมงกิจกรรม ไม่มีพื้นหลัง */
+  .mobile-profile-nav #profileHours{
+      background:transparent !important;
+      border:none !important;
+      box-shadow:none !important;
+
+      color:#000 !important;
+
+      padding:0;
+  }
+
+  .mobile-profile-nav #profileHours::before{
+      color:#000;
+  }
+
+  /* ชื่อผู้ใช้ */
+  .mobile-profile-nav #profileName{
+      color:#000;
+      font-weight:600;
+  }
+}
