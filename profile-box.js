@@ -32,7 +32,7 @@
     const result = await response.json();
 
     if (!response.ok || result?.success === false) {
-      throw new Error(result?.message || 'โหลดชั่วโมงกิจกรรมไม่สำเร็จ');
+      throw new Error(result?.message || `โหลด${window.LearningBase?.getHourText?.() || 'ข้อมูลกิจกรรม'}ไม่สำเร็จ`);
     }
 
     const value = Object.prototype.hasOwnProperty.call(result, 'data')
@@ -146,7 +146,7 @@ async function renderProfile(studentOverride) {
         String(totalHours || 0);
     } catch (error) {
       console.error(
-        'โหลดชั่วโมงใน Profile ไม่สำเร็จ:',
+        `โหลด${window.LearningBase?.getHourText?.() || 'ข้อมูล'}ใน Profile ไม่สำเร็จ:`,
         error
       );
 
