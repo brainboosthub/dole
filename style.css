@@ -1258,3 +1258,134 @@ html.classroom-embed #appPage{
     background:#49515c !important;
 
 }
+/* =================================
+   Popup รายละเอียดข่าว
+================================= */
+
+.news-popup-box {
+  position: relative !important;
+  overflow: visible !important;
+  border-radius: 22px !important;
+  padding: 28px !important;
+}
+
+.news-popup-title {
+  padding: 0 38px;
+  font-family: "Kanit", sans-serif;
+  font-size: 25px;
+  line-height: 1.45;
+  color: #10212c;
+}
+
+.news-popup-content {
+  text-align: left;
+}
+
+.news-popup-date {
+  margin: 0 0 14px;
+  color: #6b7280;
+  font-size: 14px;
+  text-align: center;
+}
+
+.news-popup-image {
+  display: block;
+  width: 100%;
+  max-height: 430px;
+  object-fit: contain;
+  border-radius: 14px;
+  margin: 0 auto 18px;
+  background: #f5f5f5;
+}
+
+.news-popup-detail {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #374151;
+  white-space: normal;
+}
+
+/* ปุ่ม X มุมขวาบน ยื่นออกนอกกรอบ */
+.news-close-btn {
+  position: absolute !important;
+  top: -18px !important;
+  right: -18px !important;
+
+  width: 52px !important;
+  height: 52px !important;
+  min-width: 52px !important;
+
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  border: 4px solid #ffffff !important;
+  border-radius: 50% !important;
+
+  background: #5f6774 !important;
+  color: #ffffff !important;
+
+  font-family: Arial, sans-serif !important;
+  font-size: 34px !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+
+  box-shadow: 0 7px 18px rgba(0, 0, 0, 0.28) !important;
+  opacity: 1 !important;
+  cursor: pointer;
+}
+
+.news-close-btn:hover {
+  background: #444b55 !important;
+  transform: scale(1.06);
+}
+
+.news-close-btn:focus {
+  box-shadow:
+    0 7px 18px rgba(0, 0, 0, 0.28),
+    0 0 0 4px rgba(95, 103, 116, 0.25) !important;
+}
+
+.news-detail-btn {
+  border: 0;
+  border-radius: 999px;
+  padding: 11px 25px;
+  background: #ff7d61;
+  color: #ffffff;
+  font-family: "Kanit", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.news-detail-btn:hover {
+  background: #ff6848;
+}
+
+@media (max-width: 600px) {
+  .news-popup-box {
+    width: calc(100% - 28px) !important;
+    padding: 22px 16px !important;
+  }
+
+  .news-popup-title {
+    padding: 0 25px;
+    font-size: 20px;
+  }
+
+  .news-close-btn {
+    top: -14px !important;
+    right: -10px !important;
+    width: 46px !important;
+    height: 46px !important;
+    min-width: 46px !important;
+    font-size: 30px !important;
+  }
+
+  .news-popup-image {
+    max-height: 300px;
+  }
+}
