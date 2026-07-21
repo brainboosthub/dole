@@ -416,3 +416,156 @@
 .learning-photo-remove{
   background:#dc2626!important;
 }
+/* ==================================================
+   Popup แก้ไขโปรไฟล์
+================================================== */
+
+.edit-profile-modal-box {
+  position: relative;
+  width: min(620px, calc(100% - 28px));
+  max-height: calc(100vh - 30px);
+  overflow-y: auto;
+  padding: 28px 22px 24px;
+  border-radius: 22px;
+  box-sizing: border-box;
+}
+
+.edit-profile-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 44px 0 22px;
+  color: #111827;
+  font-size: 25px;
+  font-weight: 700;
+}
+
+.edit-profile-title i {
+  color: #5b2a86;
+}
+
+.edit-profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.edit-profile-form label {
+  margin-top: 8px;
+  color: #111827;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.edit-profile-form .learning-input {
+  width: 100%;
+  min-height: 50px;
+  padding: 11px 14px;
+  border: 1px solid #cfd6df;
+  border-radius: 15px;
+  background: #ffffff;
+  color: #111827;
+  font-family: "Kanit", sans-serif;
+  font-size: 15px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.edit-profile-form textarea.learning-input {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.edit-profile-form .learning-input:focus {
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
+}
+
+.edit-profile-file-box {
+  width: 100%;
+  padding: 9px;
+  border: 1px solid #cfd6df;
+  border-radius: 15px;
+  background: #f8fafc;
+  box-sizing: border-box;
+}
+
+.edit-profile-file-box input[type="file"] {
+  display: block;
+  width: 100%;
+  font-family: "Kanit", sans-serif;
+}
+
+.edit-profile-file-box input[type="file"]::file-selector-button {
+  margin-right: 10px;
+  padding: 10px 15px;
+  border: 0;
+  border-radius: 10px;
+  background: #2563eb;
+  color: #ffffff;
+  font-family: "Kanit", sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.edit-profile-help {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.edit-profile-preview-wrap {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.edit-profile-preview {
+  display: block;
+  width: 130px;
+  height: 130px;
+  margin: 0 auto 10px;
+  border: 4px solid #ffffff;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #e5e7eb;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.16);
+}
+
+.edit-profile-remove-photo {
+  width: auto;
+  padding: 8px 17px;
+  border: 0;
+  border-radius: 999px;
+}
+
+.edit-profile-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.edit-profile-actions .btn-green {
+  min-width: 100px;
+  padding: 11px 22px;
+  border: 0;
+  border-radius: 14px;
+  font-family: "Kanit", sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+  .edit-profile-modal-box {
+    width: calc(100% - 20px);
+    padding: 20px 16px;
+    border-radius: 18px;
+  }
+
+  .edit-profile-title {
+    margin-top: 38px;
+    font-size: 21px;
+  }
+
+  .edit-profile-actions .btn-green {
+    width: 100%;
+  }
+}
