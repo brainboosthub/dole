@@ -7,6 +7,7 @@
   let student = JSON.parse(localStorage.getItem('LEARN_STUDENT') || 'null');
   let editProfileRemovePhoto = false;
   let activities = [];
+  let hourText = "ชั่วโมง";
   let detailSlideIndex = 0;
   let detailSlideTimer = null;
 
@@ -730,3 +731,20 @@ document.addEventListener('DOMContentLoaded', () => {
   loadActivities();
 });
 })();
+async function loadSetting() {
+
+  try {
+
+    const res = await fetch(API_URL + '?mode=setting');
+    const json = await res.json();
+
+    if (json.success) {
+      hourText = json.data.hourText || "ชั่วโมง";
+      updateHourText();
+    }
+
+  } catch(e) {
+    console.log(e);
+  }
+
+}
