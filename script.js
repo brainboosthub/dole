@@ -327,65 +327,103 @@ if (heroOverlayUrl) {
     });
   }
 
-  async function openNewsPopup(item) {
-    if (!item) return;
+async function openNewsPopup(item) {
+  if (!item) return;
 
-    newsPopupOpen = true;
-    stopNewsAutoSlide();
+  newsPopupOpen = true;
+  stopNewsAutoSlide();
 
-    const hasDetailUrl = Boolean(item.detailUrl);
-    const safeTitle = escapeHtml(item.title || 'ข่าวสาร');
-    const safeImage = escapeHtml(item.image || '');
-    const safeDetail = escapeHtml(item.detail || 'ไม่มีรายละเอียดเพิ่มเติม')
-      .replace(/\n/g, '<br>');
-    const safeDate = escapeHtml(item.date || '');
+  const hasDetailUrl = Boolean(
+    String(item.detailUrl || '').trim()
+  );
 
-    const popupHtml = `
-      <div class="news-popup-content" style="text-align:left">
-        ${safeDate ? `
-          <div style="margin:0 0 12px;color:#6b7280;font-size:14px;text-align:center">
-            <i class="fa fa-calendar" aria-hidden="true"></i>
-            ${safeDate}
-          </div>` : ''}
-        ${safeImage ? `
-          <img
-            src="${safeImage}"
-            alt="${safeTitle}"
-            style="display:block;width:100%;max-height:430px;object-fit:contain;border-radius:12px;margin:0 auto 18px;background:#f5f5f5">` : ''}
-        <div style="font-size:16px;line-height:1.75;white-space:normal">
-          ${safeDetail}
+  const safeTitle = escapeHtml(
+    item.title || 'ข่าวสาร'
+  );
+
+  const safeImage = escapeHtml(
+    item.image || ''
+  );
+
+  const safeDetail = escapeHtml(
+    item.detail || 'ไม่มีรายละเอียดเพิ่มเติม'
+  ).replace(/\n/g, '<br>');
+
+  const safeDate = escapeHtml(
+    item.date || ''
+  );
+
+  const popupHtml = `
+    <div class="news-popup-content">
+
+      ${safeDate ? `
+        <div class="news-popup-date">
+          <i class="fa fa-calendar" aria-hidden="true"></i>
+          ${safeDate}
         </div>
-      </div>`;
+      ` : ''}
 
-    try {
-      const result = await Swal.fire({
-    title: title,
-    html: html,
+      ${safeImage ? `
+        <img
+          class="news-popup-image"
+          src="${safeImage}"
+          alt="${safeTitle}">
+      ` : ''}
 
-    showCloseButton: true,
-    showConfirmButton: detailUrl ? true : false,
+      <div class="news-popup-detail">
+        ${safeDetail}
+      </div>
 
-    confirmButtonText: "รายละเอียด",
+    </div>
+  `;
 
-    customClass:{
-        closeButton:"news-close-btn"
+  try {
+    const result = await Swal.fire({
+      title: safeTitle,
+      html: popupHtml,
+
+      showCloseButton: true,
+      showCancelButton: false,
+
+      showConfirmButton: hasDetailUrl,
+      confirmButtonText: 'รายละเอียด',
+
+      allowOutsideClick: true,
+      allowEscapeKey: true,
+
+      width: 760,
+
+      customClass: {
+        popup: 'news-popup-box',
+        title: 'news-popup-title',
+        closeButton: 'news-close-btn',
+        confirmButton: 'news-detail-btn'
+      },
+
+      buttonsStyling: false
+    });
+
+    if (result.isConfirmed && hasDetailUrl) {
+      window.open(
+        item.detailUrl,
+        '_blank',
+        'noopener,noreferrer'
+      );
     }
-});
 
-      if (result.isConfirmed && hasDetailUrl) {
-        window.open(item.detailUrl, '_blank', 'noopener,noreferrer');
-      }
+  } catch (error) {
+    console.error('เปิด Popup ข่าวไม่สำเร็จ:', error);
 
-    } finally {
-      newsPopupOpen = false;
+  } finally {
+    newsPopupOpen = false;
 
-      // การคลิกข่าวเป็นเพียงการพักสไลด์ชั่วคราว
-      // เมื่อปิด Popup ให้กลับมาสไลด์ต่อ แม้ก่อนหน้านี้ผู้ใช้เคยกดปุ่มควบคุม
-      newsAutoStoppedByUser = false;
-      startNewsAutoSlide();
-    }
+    /*
+     * เมื่อปิด Popup ให้ Slider กลับมาทำงาน
+     * เฉพาะกรณีที่ผู้ใช้ไม่ได้กด Prev, Next หรือ Dot
+     */
+    startNewsAutoSlide();
   }
-
+}
   function bindNewsControls() {
     const slider = document.getElementById('newsSlider');
     const prev = document.getElementById('newsPrev');
