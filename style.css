@@ -1053,3 +1053,29 @@ html.classroom-embed #appPage{
     }
 
 }
+.mobile-profile-nav #profileHours::before{
+    content:"ชั่วโมงกิจกรรม ";
+    color:#475569;
+    font-size:12px;
+    font-weight:500;
+    margin-right:4px;
+}
+
+.mobile-profile-nav #profileHours{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:4px;
+
+    width:auto;
+    min-width:unset;
+    padding:0 12px;
+    height:32px;
+
+    border-radius:18px;
+    background:#eef7ff;
+
+    color:#0ea5e9;
+    font-size:14px;
+    font-weight:700;
+}
