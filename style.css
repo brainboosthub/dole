@@ -1224,3 +1224,37 @@ html.classroom-embed #appPage{
   outline: 3px solid currentColor;
   outline-offset: -4px;
 }
+/* ปุ่ม X ของ Popup ข่าว */
+.news-close-btn{
+
+    width:52px;
+    height:52px;
+
+    border-radius:50%;
+
+    background:#5f6774 !important;
+    color:#fff !important;
+
+    font-size:28px !important;
+    font-weight:700;
+
+    position:absolute;
+
+    top:-18px;
+    right:-18px;
+
+    box-shadow:0 8px 18px rgba(0,0,0,.25);
+
+    transition:.2s;
+
+    display:flex !important;
+    align-items:center;
+    justify-content:center;
+}
+
+.news-close-btn:hover{
+
+    transform:scale(1.08);
+    background:#49515c !important;
+
+}
