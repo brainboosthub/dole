@@ -1214,3 +1214,13 @@ html.classroom-embed #appPage{
   align-items: center;
   gap: 10px;
 }
+
+/* ข่าวสารคลิกเพื่อเปิดรายละเอียด */
+.news-slide.active {
+  cursor: pointer;
+}
+
+.news-slide.active:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: -4px;
+}
