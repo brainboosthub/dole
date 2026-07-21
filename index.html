@@ -435,7 +435,94 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
 </div>
   </div>
 </div>
+<!-- =====================================================
+     Popup แก้ไขโปรไฟล์
+     แยกจาก Popup ลงทะเบียนเดิมทั้งหมด
+====================================================== -->
+<div id="editProfileModal" class="learning-modal">
+  <div class="learning-modal-box edit-profile-modal-box">
 
+    <button
+      class="learning-modal-close"
+      type="button"
+      aria-label="ปิด"
+      onclick="LearningBase.closeEditProfile()">
+      ×
+    </button>
+
+    <h2 class="edit-profile-title">
+      <i class="fa fa-user" aria-hidden="true"></i>
+      แก้ไขโปรไฟล์
+    </h2>
+
+    <div class="edit-profile-form">
+
+      <label for="editFullname">ชื่อ-นามสกุล</label>
+      <input
+        id="editFullname"
+        class="learning-input"
+        type="text"
+        autocomplete="name">
+
+      <label for="editPhone">เบอร์โทร</label>
+      <input
+        id="editPhone"
+        class="learning-input"
+        type="tel"
+        maxlength="10"
+        inputmode="numeric"
+        autocomplete="tel">
+
+      <label for="editAddress">ที่อยู่</label>
+      <textarea
+        id="editAddress"
+        class="learning-input"
+        rows="4"></textarea>
+
+      <label for="editPhoto">แนบรูปภาพ</label>
+
+      <div class="edit-profile-file-box">
+        <input
+          id="editPhoto"
+          type="file"
+          accept="image/jpeg,image/png,image/webp,image/gif">
+      </div>
+
+      <small class="edit-profile-help">
+        รองรับ JPG, PNG, WEBP หรือ GIF ขนาดไม่เกิน 5 MB
+      </small>
+
+      <div
+        id="editPhotoPreviewWrap"
+        class="edit-profile-preview-wrap"
+        hidden>
+
+        <img
+          id="editPhotoPreview"
+          class="edit-profile-preview"
+          alt="ตัวอย่างรูปโปรไฟล์">
+
+        <button
+          class="btn-red edit-profile-remove-photo"
+          type="button"
+          onclick="LearningBase.removeEditProfilePhoto()">
+          ลบรูป
+        </button>
+      </div>
+
+      <div class="edit-profile-actions">
+        <button
+          id="saveEditProfileBtn"
+          class="btn-green"
+          type="button"
+          onclick="LearningBase.saveEditProfile()">
+          บันทึก
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
 <!-- Cart Modal -->
 <div id="cartModal" class="learning-modal">
   <div class="learning-modal-box">
