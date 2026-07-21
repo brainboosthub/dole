@@ -413,7 +413,10 @@ function openEditProfile() {
           <div class="learning-muted">ครูฐาน: ${escapeHtml(a.teacherName || '-')}</div>
           <p class="learning-muted">${escapeHtml(a.detail || '')}</p>
           <div class="learning-actions">
-            <button type="button" onclick="LearningBase.addToCart('${escapeHtml(a.activityId)}')">ใส่ตะกร้า</button>
+           <button type="button" onclick="LearningBase.addToCart('${escapeHtml(a.activityId)}')">
+  <i class="bi bi-bag-plus-fill"></i>
+  ใส่ตะกร้า
+</button>
             <button type="button" class="btn-green" onclick="LearningBase.openActivityDetail('${escapeHtml(a.activityId)}')">ดูรายละเอียด</button>
           </div>
         </div>
