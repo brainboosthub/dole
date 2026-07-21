@@ -79,10 +79,36 @@ async function renderProfile(studentOverride) {
     photo.src = FALLBACK_PHOTO;
   };
 
-cartBtn.innerHTML =
-  `<i class="fa fa-shopping-cart"></i> ${getCartCount()} ตะกร้า`;
+  // แสดงจำนวนตะกร้า
+  cartBtn.innerHTML =
+    `<i class="fa fa-shopping-cart"></i> ${getCartCount()} ตะกร้า`;
 
-  // โค้ดเดิมต่อจากนี้
+  if (!student) {
+    photo.src = FALLBACK_PHOTO;
+    name.textContent = 'ยังไม่ได้เข้าสู่ระบบ';
+    status.textContent = 'กรุณา Login เพื่อดูข้อมูลกิจกรรม';
+    hours.textContent = '0';
+    loginBtn.textContent = 'Login';
+    return;
+  }
+
+  photo.src = safePhoto(student.photo);
+  name.textContent = student.fullname || 'สมาชิก';
+  status.textContent = student.phone
+    ? `เบอร์โทร ${student.phone}`
+    : 'สมาชิกเว็บไซต์ห้องสมุด';
+
+  loginBtn.textContent = 'บัญชีผู้ใช้';
+  hours.textContent = '...';
+
+  try {
+    hours.textContent = String(
+      await getTotalHours(student.studentId)
+    );
+  } catch (error) {
+    console.error('โหลดชั่วโมงใน Profile ไม่สำเร็จ:', error);
+    hours.textContent = '0';
+  }
 }
 
   function openAccount() {
