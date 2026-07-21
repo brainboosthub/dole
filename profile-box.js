@@ -13,7 +13,17 @@
       return null;
     }
   }
+function getCartCount() {
+  try {
+    const cart = JSON.parse(
+      localStorage.getItem('LEARN_CART') || '[]'
+    );
 
+    return Array.isArray(cart) ? cart.length : 0;
+  } catch (_) {
+    return 0;
+  }
+}
   function safePhoto(url) {
     const value = String(url || '').trim();
     return value || FALLBACK_PHOTO;
@@ -42,43 +52,38 @@
     return Number(value) || 0;
   }
 
-  async function renderProfile(studentOverride) {
-    const student = studentOverride === undefined ? getStudent() : studentOverride;
-    const photo = $('profilePhoto');
-    const name = $('profileName');
-    const status = $('profileStatus');
-    const hours = $('profileHours');
-    const loginBtn = $('profileLoginBtn');
+async function renderProfile(studentOverride) {
+  const student =
+    studentOverride === undefined
+      ? getStudent()
+      : studentOverride;
 
-    if (!photo || !name || !status || !hours || !loginBtn) return;
+  const photo = $('profilePhoto');
+  const name = $('profileName');
+  const status = $('profileStatus');
+  const hours = $('profileHours');
+  const loginBtn = $('profileLoginBtn');
+  const cartBtn = $('profileCartBtn');
 
-    photo.onerror = () => {
-      photo.onerror = null;
-      photo.src = FALLBACK_PHOTO;
-    };
+  if (
+    !photo ||
+    !name ||
+    !status ||
+    !hours ||
+    !loginBtn ||
+    !cartBtn
+  ) return;
 
-    if (!student) {
-      photo.src = FALLBACK_PHOTO;
-      name.textContent = 'ยังไม่ได้เข้าสู่ระบบ';
-      status.textContent = 'กรุณา Login เพื่อดูข้อมูลกิจกรรม';
-      hours.textContent = '0';
-      loginBtn.textContent = 'Login';
-      return;
-    }
+  photo.onerror = () => {
+    photo.onerror = null;
+    photo.src = FALLBACK_PHOTO;
+  };
 
-    photo.src = safePhoto(student.photo);
-    name.textContent = student.fullname || 'สมาชิก';
-    status.textContent = student.phone ? `เบอร์โทร ${student.phone}` : 'สมาชิกเว็บไซต์ห้องสมุด';
-    loginBtn.textContent = 'บัญชีผู้ใช้';
-    hours.textContent = '...';
+cartBtn.innerHTML =
+  `<i class="fa fa-shopping-cart"></i> ${getCartCount()} ตะกร้า`;
 
-    try {
-      hours.textContent = String(await getTotalHours(student.studentId));
-    } catch (error) {
-      console.error('โหลดชั่วโมงใน Profile ไม่สำเร็จ:', error);
-      hours.textContent = '0';
-    }
-  }
+  // โค้ดเดิมต่อจากนี้
+}
 
   function openAccount() {
     if (window.LearningBase?.openStudentModal) {
