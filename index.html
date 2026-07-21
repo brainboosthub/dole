@@ -771,6 +771,17 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 });
+    function updateHourText() {
+
+  const label =
+    document.getElementById('profileHoursLabel');
+
+  if(label){
+    label.textContent =
+      hourText + "กิจกรรม";
+  }
+
+}
 </script>
 </body>
 </html>
