@@ -26,68 +26,119 @@
     });
   }
 
-  async function loadWebsiteImages() {
-    try {
-      const response = await fetch(IMAGE_API_URL + '&_t=' + Date.now(), {
+async function loadWebsiteImages() {
+  try {
+    const response = await fetch(
+      IMAGE_API_URL + '&_t=' + Date.now(),
+      {
         method: 'GET',
         cache: 'no-store'
-      });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      }
+    );
 
-      const result = await response.json();
-      if (result.success === false) throw new Error(result.message || 'โหลดรูปภาพไม่สำเร็จ');
-      const images = result.data || result;
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
 
-      // อ่านค่าจากตำแหน่งคงที่ในชีต website_image
-      // B2 = URL โลโก้, B3 = ชื่อเว็บไซต์, B4 = URL รูปหัวเว็บ
-      // B5 = หัวข้อบรรทัดที่ 1, B6 = หัวข้อบรรทัดที่ 2
-      const brandIconUrl = String(images.brandIcon || images.logo || '').trim();
-      const brandName = String(images.brandName || images.bookStore || '').trim();
-      const heroOverlayUrl = String(images.heroOverlay || images.hero || '').trim();
-      const heroTitleLine1 = String(images.heroTitleLine1 || '').trim();
-      const heroTitleLine2 = String(images.heroTitleLine2 || '').trim();
+    const result = await response.json();
 
-      if (brandIconUrl) {
-        document.querySelectorAll('[data-website-brand-icon]').forEach(icon => {
+    if (result.success === false) {
+      throw new Error(
+        result.message || 'โหลดรูปภาพไม่สำเร็จ'
+      );
+    }
+
+    const images = result.data || result;
+
+    // B2 = URL โลโก้
+    // B3 = ชื่อเว็บไซต์
+    // B4 = URL รูปหัวเว็บ
+    // B5 = หัวข้อบรรทัดที่ 1
+    // B6 = หัวข้อบรรทัดที่ 2
+    const brandIconUrl =
+      String(images.brandIcon || '').trim();
+
+    const brandName =
+      String(images.siteTitle || '').trim();
+
+    const heroOverlayUrl =
+      String(images.heroImage || '').trim();
+
+    const heroTitleLine1 =
+      String(images.heroTitle1 || '').trim();
+
+    const heroTitleLine2 =
+      String(images.heroTitle2 || '').trim();
+
+    if (brandIconUrl) {
+      document
+        .querySelectorAll('[data-website-brand-icon]')
+        .forEach(icon => {
           icon.textContent = '';
-          icon.style.backgroundImage = `url("${brandIconUrl}")`;
+          icon.style.backgroundImage =
+            `url("${brandIconUrl}")`;
+
           icon.style.backgroundSize = 'cover';
           icon.style.backgroundPosition = 'center';
           icon.style.backgroundRepeat = 'no-repeat';
         });
-      }
+    }
 
-      if (brandName) {
-        document.querySelectorAll('[data-website-brand-name]').forEach(name => {
+    if (brandName) {
+      document
+        .querySelectorAll('[data-website-brand-name]')
+        .forEach(name => {
           name.textContent = brandName;
         });
-        document.title = brandName;
-      }
 
-      if (heroOverlayUrl) {
-        const overlay = document.getElementById('websiteHeroOverlay');
-        if (overlay) {
-          overlay.style.backgroundImage =
-            `linear-gradient(90deg, rgba(5,28,44,.96) 0%, rgba(5,28,44,.79) 40%, rgba(5,28,44,.1) 78%), url("${heroOverlayUrl}")`;
-          overlay.style.backgroundSize = 'cover';
-          overlay.style.backgroundPosition = 'center';
-          overlay.style.backgroundRepeat = 'no-repeat';
-        }
-      }
-
-      if (heroTitleLine1) {
-        const line1 = document.getElementById('heroTitleLine1');
-        if (line1) line1.textContent = heroTitleLine1;
-      }
-
-      if (heroTitleLine2) {
-        const line2 = document.getElementById('heroTitleLine2');
-        if (line2) line2.textContent = heroTitleLine2;
-      }
-    } catch (error) {
-      console.error('โหลด URL รูปภาพเว็บไซต์ไม่สำเร็จ:', error);
+      document.title = brandName;
     }
+
+    if (heroOverlayUrl) {
+      const overlay =
+        document.getElementById('websiteHeroOverlay');
+
+      if (overlay) {
+        overlay.style.backgroundImage =
+          `linear-gradient(
+            90deg,
+            rgba(5,28,44,.96) 0%,
+            rgba(5,28,44,.79) 40%,
+            rgba(5,28,44,.1) 78%
+          ),
+          url("${heroOverlayUrl}")`;
+
+        overlay.style.backgroundSize = 'cover';
+        overlay.style.backgroundPosition = 'center';
+        overlay.style.backgroundRepeat = 'no-repeat';
+      }
+    }
+
+    if (heroTitleLine1) {
+      const line1 =
+        document.getElementById('heroTitleLine1');
+
+      if (line1) {
+        line1.textContent = heroTitleLine1;
+      }
+    }
+
+    if (heroTitleLine2) {
+      const line2 =
+        document.getElementById('heroTitleLine2');
+
+      if (line2) {
+        line2.textContent = heroTitleLine2;
+      }
+    }
+
+  } catch (error) {
+    console.error(
+      'โหลด URL รูปภาพเว็บไซต์ไม่สำเร็จ:',
+      error
+    );
   }
+}
 
 
   let newsSlides = [];
