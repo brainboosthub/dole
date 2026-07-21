@@ -65,49 +65,118 @@ async function renderProfile(studentOverride) {
   const loginBtn = $('profileLoginBtn');
   const cartBtn = $('profileCartBtn');
 
-  if (
-    !photo ||
-    !name ||
-    !status ||
-    !hours ||
-    !loginBtn ||
-    !cartBtn
-  ) return;
+  // ไม่บังคับ profileStatus และ cartBtn
+  // เพราะบางขนาดหน้าจออาจถูกซ่อนหรือย้ายตำแหน่ง
+  if (!photo || !name || !hours || !loginBtn) {
+    console.error('ไม่พบ Element สำหรับแสดง Profile', {
+      photo,
+      name,
+      hours,
+      loginBtn
+    });
+    return;
+  }
 
   photo.onerror = () => {
     photo.onerror = null;
     photo.src = FALLBACK_PHOTO;
   };
 
-  // แสดงจำนวนตะกร้า
-  cartBtn.innerHTML =
-    `<i class="fa fa-shopping-cart"></i> ${getCartCount()} ตะกร้า`;
-
+  /*
+   * ยังไม่เข้าสู่ระบบ
+   */
   if (!student) {
     photo.src = FALLBACK_PHOTO;
     name.textContent = 'ยังไม่ได้เข้าสู่ระบบ';
-    status.textContent = 'กรุณา Login เพื่อดูข้อมูลกิจกรรม';
     hours.textContent = '0';
     loginBtn.textContent = 'Login';
+
+    if (status) {
+      status.textContent =
+        'กรุณา Login เพื่อดูข้อมูลกิจกรรม';
+    }
+
+    if (cartBtn) {
+      cartBtn.innerHTML =
+        '<i class="fa fa-shopping-cart"></i> 0 ตะกร้า';
+    }
+
     return;
   }
 
-  photo.src = safePhoto(student.photo);
-  name.textContent = student.fullname || 'สมาชิก';
-  status.textContent = student.phone
-    ? `เบอร์โทร ${student.phone}`
-    : 'สมาชิกเว็บไซต์ห้องสมุด';
+  /*
+   * รองรับชื่อฟิลด์หลายรูปแบบ
+   */
+  const studentPhoto =
+    student.photo ||
+    student.photoUrl ||
+    student.image ||
+    student.imageUrl ||
+    '';
 
+  const studentName =
+    student.fullname ||
+    student.fullName ||
+    student.name ||
+    'สมาชิก';
+
+  const studentId =
+    student.studentId ||
+    student.studentID ||
+    student.id ||
+    '';
+
+  photo.src = safePhoto(studentPhoto);
+  name.textContent = studentName;
   loginBtn.textContent = 'บัญชีผู้ใช้';
   hours.textContent = '...';
 
-  try {
-    hours.textContent = String(
-      await getTotalHours(student.studentId)
+  if (status) {
+    status.textContent = student.phone
+      ? `เบอร์โทร ${student.phone}`
+      : 'สมาชิกเว็บไซต์ห้องสมุด';
+  }
+
+  /*
+   * โหลดชั่วโมงกิจกรรม
+   */
+  if (!studentId) {
+    console.warn(
+      'ข้อมูลนักเรียนไม่มี studentId:',
+      student
     );
-  } catch (error) {
-    console.error('โหลดชั่วโมงใน Profile ไม่สำเร็จ:', error);
+
     hours.textContent = '0';
+  } else {
+    try {
+      const totalHours =
+        await getTotalHours(studentId);
+
+      hours.textContent =
+        String(totalHours || 0);
+    } catch (error) {
+      console.error(
+        'โหลดชั่วโมงใน Profile ไม่สำเร็จ:',
+        error
+      );
+
+      hours.textContent = '0';
+    }
+  }
+
+  /*
+   * จำนวนตะกร้าจะอัปเดตจาก learning-base.js
+   * ภายหลังสามารถเชื่อมกับ API ได้
+   */
+  if (cartBtn) {
+    const cartCountElement =
+      document.getElementById('cartCount');
+
+    const cartCount =
+      cartCountElement?.textContent?.trim() || '0';
+
+    cartBtn.innerHTML =
+      `<i class="fa fa-shopping-cart"></i> ${cartCount} ตะกร้า`;
   }
 }
 
