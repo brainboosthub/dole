@@ -48,43 +48,7 @@
     btn?.classList.add('active');
     if (id === 'historyPage') loadHistory();
   }
-async function loadSetting() {
 
-    try{
-
-        const res = await fetch(API_URL + "?mode=setting");
-        const json = await res.json();
-
-        if(json.success){
-
-            hourText = json.data.hourText || "ชั่วโมง";
-
-            updateHourText();
-
-            if(typeof loadActivities==="function"){
-                loadActivities();
-            }
-
-            if(typeof loadHistory==="function"){
-                loadHistory();
-            }
-
-            if(typeof renderProfile==="function"){
-                renderProfile();
-            }
-
-        }
-
-    }catch(err){
-        console.log(err);
-    }
-
-}
-  function getHourText(){
-
-    return hourText || "ชั่วโมง";
-
-}
   function openStudentModal() {
     const modal = $('studentModal');
     const loginSection = $('loginSection');
@@ -479,11 +443,11 @@ function openEditProfile() {
       const list=await callApi('getMyCart',{studentId:student.studentId},'GET') || [];
       if (!list.length) return $('cartList').innerHTML='<div class="learning-list-item">ยังไม่มีกิจกรรมในตะกร้า</div>';
       const total=list.reduce((s,c)=>s+getActivityHours(c.activity),0);
-      $('cartList').innerHTML=`<div class="learning-cart-summary"><b>รวมทั้งหมด ${total} ชั่วโมง</b></div>`+
+      $('cartList').innerHTML=`<div class="learning-cart-summary"><b>รวมทั้งหมด ${total} ${escapeHtml(hourText)}</b></div>`+
       list.map(c=>`<div class="learning-cart-item">
         <div class="learning-cart-info">
           <div class="learning-cart-title">${escapeHtml(c.activity?.title||'-')}</div>
-          <span class="learning-muted">ชั่วโมง: ${getActivityHours(c.activity)} ชั่วโมง</span><br>
+          <span class="learning-muted">${escapeHtml(hourText)}: ${getActivityHours(c.activity)} ${escapeHtml(hourText)}</span><br>
           <span class="learning-muted">วันที่ ${formatThaiDate(c.activity?.activityDate)}</span>
           <div class="learning-cart-actions">
             <button class="btn-green learning-confirm-btn" onclick="LearningBase.confirmJoin('${escapeHtml(c.activityId)}')">ยืนยันเข้าร่วม</button>
@@ -672,7 +636,7 @@ async function loadMyTotalHours() {
   if (!scoreBtn) return;
 
   if (!student) {
-    scoreBtn.textContent = 'รวม 0 ชั่วโมง';
+    scoreBtn.textContent = `รวม 0 ${hourText}`;
     return;
   }
 
@@ -686,15 +650,15 @@ async function loadMyTotalHours() {
     );
 
     scoreBtn.textContent =
-      `รวม ${total || 0} ชั่วโมง`;
+      `รวม ${total || 0} ${hourText}`;
 
   } catch (error) {
-    scoreBtn.textContent = 'รวม 0 ชั่วโมง';
+    scoreBtn.textContent = `รวม 0 ${hourText}`;
   }
 }
   async function openScoreModal() {
     if(!requireStudent())return;
-    try{Swal.showLoading();const res=await callApi('getMyScoreDetail',{studentId:student.studentId},'GET');Swal.close();const list=res.list||[],total=res.total||0;if(!list.length)return Swal.fire('ชั่วโมงสะสม','ยังไม่มีรายการชั่วโมงที่ได้รับ','info');const html=`<div style="text-align:left"><h3>รวมทั้งหมด ${total} ชั่วโมง</h3><table style="width:100%;border-collapse:collapse"><tbody>${list.map(x=>`<tr><td style="padding:8px;border:1px solid #ddd">${escapeHtml(x.title)}</td><td style="padding:8px;border:1px solid #ddd">${escapeHtml(x.baseNo)}</td><td style="padding:8px;border:1px solid #ddd">${escapeHtml(x.actualHours)}</td></tr>`).join('')}</tbody></table></div>`;Swal.fire({title:'รายการชั่วโมงที่ได้รับ',html,width:800,confirmButtonText:'ปิด'});}catch(err){Swal.close();Swal.fire('ผิดพลาด',err.message,'error');}
+    try{Swal.showLoading();const res=await callApi('getMyScoreDetail',{studentId:student.studentId},'GET');Swal.close();const list=res.list||[],total=res.total||0;if(!list.length)return Swal.fire(`${hourText}สะสม`,`ยังไม่มีรายการ${hourText}ที่ได้รับ`,'info');const html=`<div style="text-align:left"><h3>รวมทั้งหมด ${total} ${escapeHtml(hourText)}</h3><table style="width:100%;border-collapse:collapse"><tbody>${list.map(x=>`<tr><td style="padding:8px;border:1px solid #ddd">${escapeHtml(x.title)}</td><td style="padding:8px;border:1px solid #ddd">${escapeHtml(x.baseNo)}</td><td style="padding:8px;border:1px solid #ddd">${escapeHtml(x.actualHours)}</td></tr>`).join('')}</tbody></table></div>`;Swal.fire({title:`รายการ${hourText}ที่ได้รับ`,html,width:800,confirmButtonText:'ปิด'});}catch(err){Swal.close();Swal.fire('ผิดพลาด',err.message,'error');}
   }
 
   function closeStudentModal() {
@@ -728,6 +692,27 @@ async function loadMyTotalHours() {
     preview.onload = () => URL.revokeObjectURL(objectUrl);
     wrap.hidden = false;
   });
+
+  function updateHourText() {
+    const label = $('profileHoursLabel');
+    if (label) label.textContent = `${hourText}กิจกรรม`;
+  }
+
+  async function loadSetting() {
+    try {
+      const url = new URL(API_URL);
+      url.searchParams.set('mode', 'setting');
+      const response = await fetch(url.toString(), { cache: 'no-store' });
+      const json = await response.json();
+      if (json?.success !== false) {
+        hourText = String(json?.data?.hourText || json?.hourText || 'ชั่วโมง').trim() || 'ชั่วโมง';
+      }
+    } catch (error) {
+      console.error('loadSetting error:', error);
+    }
+    updateHourText();
+  }
+
  window.LearningBase = {
   showPage,
   openStudentModal,
@@ -746,6 +731,7 @@ async function loadMyTotalHours() {
   openScoreModal,
   closeStudentModal,
   clearStudentPhoto,
+  getHourText: () => hourText,
 
   // ระบบแก้ไขโปรไฟล์ใหม่
   openEditProfile,
@@ -753,12 +739,14 @@ async function loadMyTotalHours() {
   removeEditProfilePhoto,
   saveEditProfile
 };
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const teacherLink = $('teacherPageLink');
 
   if (teacherLink) {
     teacherLink.href = TEACHER_URL;
   }
+
+  await loadSetting();
 
   try {
     updateTop();
@@ -769,20 +757,3 @@ document.addEventListener('DOMContentLoaded', () => {
   loadActivities();
 });
 })();
-async function loadSetting() {
-
-  try {
-
-    const res = await fetch(API_URL + '?mode=setting');
-    const json = await res.json();
-
-    if (json.success) {
-      hourText = json.data.hourText || "ชั่วโมง";
-      updateHourText();
-    }
-
-  } catch(e) {
-    console.log(e);
-  }
-
-}
