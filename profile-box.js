@@ -198,10 +198,15 @@ async function renderProfile(studentOverride) {
     renderProfile();
   });
 
-  window.addEventListener('LEARN_AUTH_CHANGED', event => {
-    renderProfile(event.detail?.student || null);
-  });
+window.addEventListener(
+  'LEARN_AUTH_CHANGED',
+  event => {
+    const newStudent =
+      event.detail?.student || getStudent();
 
+    renderProfile(newStudent);
+  }
+);
   window.addEventListener('storage', event => {
     if (event.key === 'LEARN_STUDENT') renderProfile();
   });
