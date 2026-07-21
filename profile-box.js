@@ -168,16 +168,10 @@ async function renderProfile(studentOverride) {
    * จำนวนตะกร้าจะอัปเดตจาก learning-base.js
    * ภายหลังสามารถเชื่อมกับ API ได้
    */
-  if (cartBtn) {
-    const cartCountElement =
-      document.getElementById('cartCount');
-
-    const cartCount =
-      cartCountElement?.textContent?.trim() || '0';
-
-    cartBtn.innerHTML =
-      `<i class="fa fa-shopping-cart"></i> ${cartCount} ตะกร้า`;
-  }
+if (cartBtn) {
+  cartBtn.innerHTML =
+    `<i class="fa fa-shopping-cart"></i> ${getCartCount()} ตะกร้า`;
+}
 }
 
   function openAccount() {
