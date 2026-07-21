@@ -238,16 +238,19 @@ function fileToDataUrl(file) {
   }
 
 async function loadCartCount() {
-  const cartCount = $('cartCount');
 
-  if (!cartCount) return;
+  const profileCartBtn = $('profileCartBtn');
 
   if (!student) {
-    cartCount.textContent = '0';
+    if (profileCartBtn) {
+      profileCartBtn.innerHTML =
+        '<i class="fa fa-shopping-cart"></i> 0 ตะกร้า';
+    }
     return;
   }
 
   try {
+
     const list = await callApi(
       'getMyCart',
       {
@@ -256,12 +259,22 @@ async function loadCartCount() {
       'GET'
     );
 
-    cartCount.textContent =
-      String((list || []).length);
+    const count = (list || []).length;
+
+    if (profileCartBtn) {
+      profileCartBtn.innerHTML =
+        `<i class="fa fa-shopping-cart"></i> ${count} ตะกร้า`;
+    }
 
   } catch (error) {
-    cartCount.textContent = '0';
+
+    if (profileCartBtn) {
+      profileCartBtn.innerHTML =
+        '<i class="fa fa-shopping-cart"></i> 0 ตะกร้า';
+    }
+
   }
+
 }
 
   async function confirmJoin(activityId) {
