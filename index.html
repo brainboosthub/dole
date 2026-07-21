@@ -23,8 +23,8 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
   <div class="announcement">
     <div class="container announcement-inner">
       <a class="brand brand-light" href="#home" aria-label="Book Store home">
-        <span class="brand-icon">B</span>
-        <span>book store</span>
+        <span class="brand-icon" data-website-brand-icon>B</span>
+        <span data-website-brand-name>book store</span>
       </a>
       <p>"ห้องสมุดแหล่งความรู้ คือคู่การศึกษา หนังสือมีคุณค่า ดั่งตำราที่เราเรียน"</p>
     </div>
@@ -34,8 +34,8 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
   <div class="container nav-wrap">
 
     <a class="brand" href="#home">
-      <span class="brand-icon">O</span>
-      <span>orange</span>
+      <span class="brand-icon" data-website-brand-icon>O</span>
+      <span data-website-brand-name>orange</span>
     </a>
 
     <nav class="main-nav" aria-label="เมนูหลัก">
@@ -58,10 +58,10 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
 
   <main>
     <section id="home" class="hero">
-      <div class="hero-overlay"></div>
+      <div id="websiteHeroOverlay" class="hero-overlay"></div>
       <div class="container hero-content">
         <div class="eyebrow">อ่าน • เรียนรู้ • สร้างแรงบันดาลใจ</div>
-        <h1>ดีไซน์พื้นที่แห่ง<br>การเรียนรู้ของคุณ</h1>
+        <h1><span id="heroTitleLine1">ดีไซน์พื้นที่แห่ง</span><br><span id="heroTitleLine2">การเรียนรู้ของคุณ</span></h1>
         <p>ค้นพบหนังสือ ภาพประกอบ และเรื่องราวที่ช่วยเปิดมุมมองใหม่ในทุกวัน</p>
         <div class="hero-actions">
           <a class="primary-btn" href="#featured">ดูหนังสือแนะนำ</a>
@@ -337,7 +337,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
 
   <footer id="contact" class="footer">
     <div class="container footer-inner">
-      <div><a class="brand brand-light" href="#home"><span class="brand-icon">B</span><span>book store</span></a><p>พื้นที่เล็ก ๆ สำหรับคนรักหนังสือและงานออกแบบ</p></div>
+      <div><a class="brand brand-light" href="#home"><span class="brand-icon" data-website-brand-icon>B</span><span data-website-brand-name>book store</span></a><p>พื้นที่เล็ก ๆ สำหรับคนรักหนังสือและงานออกแบบ</p></div>
       <div><h4>ติดต่อเรา</h4><p>hello@bookstore.example</p><p>โทร. 02-000-0000</p></div>
       <div><h4>ติดตามข่าวสาร</h4><form class="subscribe-form"><input type="email" placeholder="อีเมลของคุณ" required><button>สมัคร</button></form></div>
     </div>
