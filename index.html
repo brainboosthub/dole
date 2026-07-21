@@ -550,7 +550,13 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
     <div id="detailContent"></div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:15px">
       <button id="detailAddCartBtn">ใส่ตะกร้า</button>
-      <button class="btn-red" onclick="LearningBase.closeModal('detailModal')">ปิด</button>
+     <button
+    class="detail-close-btn"
+    type="button"
+    aria-label="ปิด"
+    onclick="LearningBase.closeModal('detailModal')">
+    ×
+</button>
     </div>
   </div>
 </div>
