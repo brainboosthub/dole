@@ -1181,3 +1181,31 @@ html.classroom-embed #appPage{
     }
 
 }
+/* Desktop */
+@media screen and (min-width:1025px){
+
+  .container.nav-wrap{
+    display:flex;
+    align-items:center;
+  }
+
+  /* โลโก้ */
+  .brand{
+    flex:0 0 auto;
+  }
+
+  /* เมนูอยู่กึ่งกลาง */
+  .main-nav{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:30px;
+  }
+
+  /* ปุ่มตะกร้าอยู่ขวาสุด */
+  #profileCartBtn{
+    flex:0 0 auto;
+    margin-left:auto;
+  }
+}
