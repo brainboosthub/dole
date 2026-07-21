@@ -155,6 +155,33 @@ if (heroOverlayUrl) {
   let newsSlides = [];
   let newsIndex = 0;
   let newsTimer = null;
+  let newsAutoEnabled = false;
+  let newsAutoStoppedByUser = false;
+
+  function stopNewsAutoSlide() {
+    if (newsTimer) {
+      clearInterval(newsTimer);
+      newsTimer = null;
+    }
+  }
+
+  function startNewsAutoSlide() {
+    stopNewsAutoSlide();
+
+    if (!newsAutoEnabled || newsAutoStoppedByUser || newsSlides.length <= 1) {
+      return;
+    }
+
+    newsTimer = setInterval(() => {
+      newsIndex = (newsIndex + 1) % newsSlides.length;
+      renderNews();
+    }, 3000);
+  }
+
+  function stopNewsAutoByUser() {
+    newsAutoStoppedByUser = true;
+    stopNewsAutoSlide();
+  }
 
   async function loadNews() {
     const slider = document.getElementById('newsSlider');
@@ -174,11 +201,10 @@ if (heroOverlayUrl) {
       slider.classList.remove('is-empty');
       slider.classList.toggle('single-slide', mode !== 'block' || newsSlides.length <= 1);
       newsIndex = 0;
+      newsAutoEnabled = mode === 'block' && newsSlides.length > 1;
+      newsAutoStoppedByUser = false;
       renderNews();
-      clearInterval(newsTimer);
-      if (mode === 'block' && newsSlides.length > 1) {
-        newsTimer = setInterval(() => { newsIndex = (newsIndex + 1) % newsSlides.length; renderNews(); }, 3000);
-      }
+      startNewsAutoSlide();
     } catch (error) {
       slidesBox.innerHTML = `<div class="news-loading">โหลดข่าวสารไม่สำเร็จ: ${escapeHtml(error.message)}</div>`;
     }
@@ -193,12 +219,41 @@ if (heroOverlayUrl) {
         <img src="${escapeHtml(url)}" alt="ข่าวสาร ${index+1}" loading="lazy">
       </div>`).join('');
     dots.innerHTML = newsSlides.map((_,index) => `<button class="news-dot ${index===newsIndex?'active':''}" type="button" data-news-dot="${index}"></button>`).join('');
-    dots.querySelectorAll('[data-news-dot]').forEach(btn => btn.addEventListener('click', () => { newsIndex = Number(btn.dataset.newsDot); renderNews(); }));
+    dots.querySelectorAll('[data-news-dot]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        stopNewsAutoByUser();
+        newsIndex = Number(btn.dataset.newsDot);
+        renderNews();
+      });
+    });
   }
 
   function bindNewsControls() {
-    document.getElementById('newsPrev')?.addEventListener('click', () => { if (!newsSlides.length) return; newsIndex=(newsIndex-1+newsSlides.length)%newsSlides.length; renderNews(); });
-    document.getElementById('newsNext')?.addEventListener('click', () => { if (!newsSlides.length) return; newsIndex=(newsIndex+1)%newsSlides.length; renderNews(); });
+    const slider = document.getElementById('newsSlider');
+    const prev = document.getElementById('newsPrev');
+    const next = document.getElementById('newsNext');
+
+    slider?.addEventListener('mouseenter', () => {
+      stopNewsAutoSlide();
+    });
+
+    slider?.addEventListener('mouseleave', () => {
+      startNewsAutoSlide();
+    });
+
+    prev?.addEventListener('click', () => {
+      if (!newsSlides.length) return;
+      stopNewsAutoByUser();
+      newsIndex = (newsIndex - 1 + newsSlides.length) % newsSlides.length;
+      renderNews();
+    });
+
+    next?.addEventListener('click', () => {
+      if (!newsSlides.length) return;
+      stopNewsAutoByUser();
+      newsIndex = (newsIndex + 1) % newsSlides.length;
+      renderNews();
+    });
   }
 
   let books = [];
