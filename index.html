@@ -38,21 +38,19 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
       <span>orange</span>
     </a>
 
-
-
     <nav class="main-nav" aria-label="เมนูหลัก">
-
       <a href="#newsSlider">ข่าวสาร</a>
-
       <a href="#learningSourceBox">แหล่งเรียนรู้</a>
-
       <a href="#classroomBox">สื่อวิดีโอการเรียนรู้ตลอดชีวิต</a>
-
       <a href="#featured">หนังสือที่น่าสนใจ</a>
-
       <a href="#learningBaseModule">กิจกรรม</a>
-
     </nav>
+
+    <!-- แสดงข้อมูลสมาชิกเฉพาะสมาร์ทโฟนและแท็บเล็ต -->
+    <div id="mobileProfileNav"
+         class="mobile-profile-nav"
+         aria-label="ข้อมูลสมาชิก">
+    </div>
 
   </div>
 </header>
@@ -467,6 +465,107 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
 
   <script src="learning-base.js?v=20260720-3"></script>
   <script src="profile-box.js?v=20260721-2"></script>
+  <script>
+document.addEventListener('DOMContentLoaded', function () {
+  const breakpoint = window.matchMedia('(max-width: 1024px)');
+
+  const mobileProfileNav =
+    document.getElementById('mobileProfileNav');
+
+  const profileBox =
+    document.getElementById('profileBox');
+
+  const profileBody =
+    profileBox?.querySelector('.profile-body');
+
+  const profileStats =
+    profileBox?.querySelector('.profile-stats');
+
+  const profileStat =
+    profileBox?.querySelector('.profile-stat');
+
+  const profileActionRow =
+    profileBox?.querySelector('.profile-action-row');
+
+  const elements = [
+    document.getElementById('profilePhoto'),
+    document.getElementById('profileName'),
+    document.getElementById('profileHours'),
+    document.getElementById('profileLoginBtn'),
+    document.getElementById('profileCartBtn')
+  ].filter(Boolean);
+
+  /*
+   * เก็บตำแหน่งเดิมของแต่ละ Element
+   * เพื่อให้ย้ายกลับได้เมื่อเปิดบนคอมพิวเตอร์
+   */
+  const originalPositions = new Map();
+
+  elements.forEach(function (element) {
+    originalPositions.set(element, {
+      parent: element.parentNode,
+      nextSibling: element.nextSibling
+    });
+  });
+
+  function moveToMobileHeader() {
+    if (!mobileProfileNav) return;
+
+    elements.forEach(function (element) {
+      mobileProfileNav.appendChild(element);
+    });
+
+    if (profileBox) {
+      profileBox.hidden = true;
+      profileBox.setAttribute('aria-hidden', 'true');
+    }
+  }
+
+  function restoreToProfileBox() {
+    elements.forEach(function (element) {
+      const position = originalPositions.get(element);
+
+      if (!position?.parent) return;
+
+      if (
+        position.nextSibling &&
+        position.nextSibling.parentNode === position.parent
+      ) {
+        position.parent.insertBefore(
+          element,
+          position.nextSibling
+        );
+      } else {
+        position.parent.appendChild(element);
+      }
+    });
+
+    if (profileBox) {
+      profileBox.hidden = false;
+      profileBox.removeAttribute('aria-hidden');
+    }
+  }
+
+  function updateProfileLocation(event) {
+    if (event.matches) {
+      moveToMobileHeader();
+    } else {
+      restoreToProfileBox();
+    }
+  }
+
+  updateProfileLocation(breakpoint);
+
+  if (typeof breakpoint.addEventListener === 'function') {
+    breakpoint.addEventListener(
+      'change',
+      updateProfileLocation
+    );
+  } else {
+    breakpoint.addListener(updateProfileLocation);
+  }
+});
+</script>
 <!-- เมนูด้านล่างสำหรับสมาร์ทโฟนและแท็บเล็ต -->
 <nav id="mobileBottomNav"
      class="mobile-bottom-nav"
