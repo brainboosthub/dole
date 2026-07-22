@@ -143,7 +143,15 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
       </div>
 
       <aside id="profileBox" class="profile-box" aria-live="polite">
-       
+         <button
+      id="profilePopupClose"
+      class="profile-popup-close"
+      type="button"
+      aria-label="ปิดข้อมูลสมาชิก"
+      hidden>
+      ×
+  </button>
+
         <div class="profile-cover"></div>
         <div class="profile-body">
           <img
@@ -379,30 +387,34 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
   <script src="classroom-box.js?v=20260720-2"></script>
 
 <!-- Student Modal -->
-<div id="cartModal" class="learning-modal">
- <div class="learning-modal-box">
+<div id="studentModal" class="learning-modal">
+  <div class="learning-modal-box">
 
-    <button class="btn-red learning-modal-close"
-        onclick="LearningBase.closeModal('cartModal')">×</button>
+    <button
+      class="btn-red learning-modal-close"
+      type="button"
+      aria-label="ปิด"
+      onclick="LearningBase.closeModal('studentModal')">
+      ×
+    </button>
 
-    <h2>🛒 ตะกร้ากิจกรรม</h2>
-
-    <div class="learning-modal-content">
-        <div id="cartList"></div>
-    </div>
-
-</div>
-</div>
-
-    <!-- ส่วน Login จะแสดงเฉพาะเมื่อเปิดจากปุ่ม accountBtn -->
+    <!-- ส่วน Login -->
     <div id="loginSection">
       <h2>👤 Login</h2>
 
       <label for="loginPhone">เบอร์โทร</label>
-      <input id="loginPhone" maxlength="10" inputmode="numeric">
+      <input
+        id="loginPhone"
+        maxlength="10"
+        inputmode="numeric">
 
       <div class="learning-login-actions">
-        <button type="button" onclick="LearningBase.studentLogin()">Login</button>
+        <button
+          type="button"
+          onclick="LearningBase.studentLogin()">
+          Login
+        </button>
+
         <button
           id="newRegisterBtn"
           class="btn-green"
@@ -413,29 +425,68 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
       </div>
     </div>
 
-    <!-- เมื่อกดลงทะเบียน จะแสดงเฉพาะส่วนนี้ ไม่มีส่วน Login -->
+    <!-- ส่วนลงทะเบียน -->
     <div id="registerBox" style="display:none">
       <h2>👤 ลงทะเบียนสมาชิก</h2>
 
-      <label for="stuFullname">ชื่อ-นามสกุล</label>
-      <input id="stuFullname" autocomplete="name">
+      <label for="stuFullname">
+        ชื่อ-นามสกุล
+      </label>
 
-      <label for="stuPhone">เบอร์โทร</label>
-      <input id="stuPhone" maxlength="10" inputmode="numeric" autocomplete="tel">
+      <input
+        id="stuFullname"
+        autocomplete="name">
 
-      <label for="stuAddress">ที่อยู่</label>
-      <textarea id="stuAddress" autocomplete="street-address"></textarea>
+      <label for="stuPhone">
+        เบอร์โทร
+      </label>
 
-      <label for="stuPhoto">แนบรูปภาพ</label>
+      <input
+        id="stuPhone"
+        maxlength="10"
+        inputmode="numeric"
+        autocomplete="tel">
+
+      <label for="stuAddress">
+        ที่อยู่
+      </label>
+
+      <textarea
+        id="stuAddress"
+        autocomplete="street-address">
+      </textarea>
+
+      <label for="stuPhoto">
+        แนบรูปภาพ
+      </label>
+
       <input
         id="stuPhoto"
         class="learning-file-input"
         type="file"
         accept="image/jpeg,image/png,image/webp,image/gif">
-      <div class="learning-photo-help">รองรับ JPG, PNG, WEBP หรือ GIF ขนาดไม่เกิน 5 MB</div>
-      <div id="stuPhotoPreviewWrap" class="learning-photo-preview-wrap" hidden>
-        <img id="stuPhotoPreview" class="learning-photo-preview" alt="ตัวอย่างรูปที่แนบ">
-        <button type="button" class="learning-photo-remove" onclick="LearningBase.clearStudentPhoto()">ลบรูป</button>
+
+      <div class="learning-photo-help">
+        รองรับ JPG, PNG, WEBP หรือ GIF
+        ขนาดไม่เกิน 5 MB
+      </div>
+
+      <div
+        id="stuPhotoPreviewWrap"
+        class="learning-photo-preview-wrap"
+        hidden>
+
+        <img
+          id="stuPhotoPreview"
+          class="learning-photo-preview"
+          alt="ตัวอย่างรูปที่แนบ">
+
+        <button
+          type="button"
+          class="learning-photo-remove"
+          onclick="LearningBase.clearStudentPhoto()">
+          ลบรูป
+        </button>
       </div>
 
       <div class="learning-register-actions">
@@ -448,16 +499,27 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
       </div>
     </div>
 
-<div id="logoutBox" style="margin-top:15px;display:none">
-  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <!-- ส่วนหลังเข้าสู่ระบบ -->
+    <div
+      id="logoutBox"
+      style="margin-top:15px;display:none">
 
-    <button
-      class="btn-green"
-      onclick="LearningBase.showRegisterBox()">
-      ลงทะเบียน
-    </button>
-  </div>
-</div>
+      <div
+        style="
+          display:flex;
+          gap:8px;
+          flex-wrap:wrap;
+        ">
+
+        <button
+          class="btn-green"
+          type="button"
+          onclick="LearningBase.showRegisterBox()">
+          ลงทะเบียน
+        </button>
+      </div>
+    </div>
+
   </div>
 </div>
 <!-- =====================================================
@@ -554,18 +616,23 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
 </div>
 <!-- Cart Modal -->
 <div id="cartModal" class="learning-modal">
-<div class="learning-modal-box">
+  <div class="learning-modal-box">
 
-    <button class="btn-red learning-modal-close"
-        onclick="LearningBase.closeModal('cartModal')">×</button>
+    <button
+      class="btn-red learning-modal-close"
+      type="button"
+      aria-label="ปิด"
+      onclick="LearningBase.closeModal('cartModal')">
+      ×
+    </button>
 
     <h2>🛒 ตะกร้ากิจกรรม</h2>
 
     <div class="learning-modal-content">
-        <div id="cartList"></div>
+      <div id="cartList"></div>
     </div>
 
-</div>
+  </div>
 </div>
 
 <div id="detailModal" class="learning-modal">
