@@ -666,26 +666,15 @@ function syncMobileProfile() {
   mobileHoursLabel.textContent =
     profileHoursLabel?.textContent?.trim() || 'Point';
 }
-function openProfilePopup() {
-  if (!breakpoint.matches) return;
+function closeProfilePopup() {
+  profileBox.hidden = true;
+  backdrop.hidden = true;
 
-  syncMobileProfile();
+  // ซ่อนปุ่ม X
+  popupClose.hidden = true;
 
-  // ย้าย profileBox ออกจาก newsBusLayout ไปไว้ใต้ body
-  if (profileBox.parentNode !== document.body) {
-    document.body.appendChild(profileBox);
-  }
-
-  profileBox.hidden = false;
-  profileBox.removeAttribute('aria-hidden');
-  profileBox.classList.add('profile-box-popup-open');
-
-  backdrop.hidden = false;
-  document.body.classList.add('profile-popup-lock');
-
-  popupClose?.focus();
+  document.body.classList.remove('profile-popup-lock');
 }
-
 function closeProfilePopup() {
   if (!breakpoint.matches) return;
 
