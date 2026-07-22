@@ -53,6 +53,7 @@ async function renderProfile(studentOverride) {
   const status = $('profileStatus');
   const hours = $('profileHours');
   const loginBtn = $('profileLoginBtn');
+  const logoutBtn = $('profileLogoutBtn');
   const cartBtn = $('profileCartBtn');
 
   // ไม่บังคับ profileStatus และ cartBtn
@@ -80,6 +81,7 @@ async function renderProfile(studentOverride) {
     name.textContent = 'ยังไม่ได้เข้าสู่ระบบ';
     hours.textContent = '0';
     loginBtn.textContent = 'Login';
+    if (logoutBtn) logoutBtn.style.display = 'none';
 
     if (status) {
       status.textContent =
@@ -119,6 +121,7 @@ async function renderProfile(studentOverride) {
   photo.src = safePhoto(studentPhoto);
   name.textContent = studentName;
   loginBtn.textContent = 'บัญชีผู้ใช้';
+  if (logoutBtn) logoutBtn.style.display = 'inline-block';
   hours.textContent = '...';
 
   if (status) {
@@ -176,10 +179,41 @@ function openAccount() {
       window.LearningBase.openCart();
     }
   }
+function logout() {
 
+  Swal.fire({
+    title: 'ออกจากระบบ?',
+    text: 'คุณต้องการออกจากระบบใช่หรือไม่',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Logout',
+    cancelButtonText: 'ยกเลิก'
+  }).then(result => {
+
+    if (!result.isConfirmed) return;
+
+    localStorage.removeItem('LEARN_STUDENT');
+
+    window.dispatchEvent(
+      new CustomEvent('LEARN_AUTH_CHANGED', {
+        detail: { student: null }
+      })
+    );
+
+    Swal.fire({
+      icon: 'success',
+      title: 'ออกจากระบบแล้ว',
+      timer: 1200,
+      showConfirmButton: false
+    });
+
+  });
+
+}
   document.addEventListener('DOMContentLoaded', () => {
     $('profileLoginBtn')?.addEventListener('click', openAccount);
     $('profileCartBtn')?.addEventListener('click', openCart);
+    $('profileLogoutBtn')?.addEventListener('click', logout);
     renderProfile();
   });
 
