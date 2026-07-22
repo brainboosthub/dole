@@ -1773,8 +1773,8 @@ html.classroom-embed #appPage{
 }
 
 #bookDetailClose{
-    position: sticky;
+    position: absolute;
     top: 15px;
-    float: right;
+    right: 15px;
     z-index: 1000;
 }
