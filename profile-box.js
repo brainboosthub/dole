@@ -246,7 +246,9 @@ document.addEventListener('DOMContentLoaded', () => {
     openCart
   );
 
-  $('profileHours')?.addEventListener(
+document
+  .querySelector('.profile-stat')
+  ?.addEventListener(
     'click',
     event => {
       event.preventDefault();
