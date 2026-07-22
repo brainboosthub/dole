@@ -428,3 +428,8 @@
     object-fit:cover;
   }
 }
+#profileBox.editing-profile{
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
