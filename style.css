@@ -1743,3 +1743,6 @@ html.classroom-embed #appPage{
 .swal2-popup{
     z-index: 999999 !important;
 }
+#mobileProfilePoint{
+    cursor:pointer;
+}
