@@ -1968,21 +1968,24 @@ html.classroom-embed #appPage{
     margin-top: 15px;
     padding-right: 6px;
 }
+/* ปุ่ม X ซ่อนเป็นค่าเริ่มต้น */
 #profilePopupClose{
-    display:none !important;
-}
-/* Desktop */
-@media (min-width:1025px){
-    #profilePopupClose{
-        display:none !important;
-    }
+  display:none !important;
 }
 
-/* Mobile */
+/* แสดงเฉพาะตอน Profile Popup เปิดบนมือถือ */
 @media (max-width:1024px){
-    #profilePopupClose{
-        display:flex !important;
-        align-items:center;
-        justify-content:center;
-    }
+  #profileBox.profile-box-popup-open
+  #profilePopupClose:not([hidden]){
+    display:flex !important;
+    align-items:center;
+    justify-content:center;
+  }
+}
+
+/* Desktop ไม่แสดงปุ่ม X */
+@media (min-width:1025px){
+  #profilePopupClose{
+    display:none !important;
+  }
 }
