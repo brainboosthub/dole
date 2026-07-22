@@ -1746,3 +1746,12 @@ html.classroom-embed #appPage{
 #mobileProfilePoint{
     cursor:pointer;
 }
+.learning-login-actions{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.learning-login-actions #newRegisterBtn{
+    margin-left:auto;
+}
