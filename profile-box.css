@@ -431,3 +431,7 @@
 #profileBox.editing-profile{
   display:none !important;
 }
+#profileBox.editing-profile,
+#profilePopupBackdrop.editing-profile{
+  display:none !important;
+}
