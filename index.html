@@ -712,20 +712,33 @@ function closeProfilePopup() {
   }
 }
 
-  function updateProfileLocation(event) {
-    syncMobileProfile();
-    if (event.matches) {
-      mobileProfileNav.hidden = false;
-      closeProfilePopup();
-    } else {
-      mobileProfileNav.hidden = true;
-      profileBox.hidden = false;
-      profileBox.removeAttribute('aria-hidden');
-      profileBox.classList.remove('profile-box-popup-open');
-      backdrop.hidden = true;
-      document.body.classList.remove('profile-popup-lock');
-    }
+function updateProfileLocation(event) {
+  syncMobileProfile();
+
+  if (event.matches) {
+    // Mobile
+    mobileProfileNav.hidden = false;
+
+    // แสดงปุ่ม X
+    popupClose.hidden = false;
+
+    closeProfilePopup();
+
+  } else {
+    // Desktop
+    mobileProfileNav.hidden = true;
+
+    profileBox.hidden = false;
+    profileBox.removeAttribute('aria-hidden');
+    profileBox.classList.remove('profile-box-popup-open');
+
+    backdrop.hidden = true;
+    document.body.classList.remove('profile-popup-lock');
+
+    // ซ่อนปุ่ม X
+    popupClose.hidden = true;
   }
+}
 
  // กดรูปโปรไฟล์ → เปิด profile-body
 mobilePhoto.addEventListener(
