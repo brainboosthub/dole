@@ -731,13 +731,49 @@ function closeProfilePopup() {
     }
   }
 
-  mobilePhoto.addEventListener('click', openProfilePopup);
-  mobilePhoto.addEventListener('keydown', function (event) {
-    if (event.key === 'Enter' || event.key === ' ') {
+ // กดรูปโปรไฟล์ → เปิด profile-body
+mobilePhoto.addEventListener(
+  'click',
+  openProfilePopup
+);
+
+// กดจำนวนชั่วโมง → เปิดตารางรายการกิจกรรม
+mobilePoint.addEventListener(
+  'click',
+  function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    window.LearningBase?.openScoreModal();
+  }
+);
+mobilePhoto.addEventListener(
+  'keydown',
+  function (event) {
+    if (
+      event.key === 'Enter' ||
+      event.key === ' '
+    ) {
       event.preventDefault();
       openProfilePopup();
     }
-  });
+  }
+);
+
+mobilePoint.addEventListener(
+  'keydown',
+  function (event) {
+    if (
+      event.key === 'Enter' ||
+      event.key === ' '
+    ) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      window.LearningBase?.openScoreModal();
+    }
+  }
+);
   popupClose?.addEventListener('click', closeProfilePopup);
   backdrop.addEventListener('click', closeProfilePopup);
   document.addEventListener('keydown', function (event) {
