@@ -23,13 +23,36 @@ function getProfileBody() {
 }
 
 function hideProfileBody() {
-  const profileBody = getProfileBody();
+  const profileBody =
+    document.querySelector('#profileBox .profile-body');
+
+  const profileCover =
+    document.querySelector('#profileBox .profile-cover');
 
   if (profileBody) {
     profileBody.style.display = 'none';
   }
+
+  if (profileCover) {
+    profileCover.style.display = 'none';
+  }
 }
 
+function showProfileBody() {
+  const profileBody =
+    document.querySelector('#profileBox .profile-body');
+
+  const profileCover =
+    document.querySelector('#profileBox .profile-cover');
+
+  if (profileBody) {
+    profileBody.style.display = '';
+  }
+
+  if (profileCover) {
+    profileCover.style.display = '';
+  }
+}
 function showProfileBody() {
   const profileBody = getProfileBody();
 
