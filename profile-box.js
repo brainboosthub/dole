@@ -230,12 +230,40 @@ function openAccount() {
     );
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    $('profileLoginBtn')?.addEventListener('click', openAccount);
-    $('profileLogoutBtn')?.addEventListener('click', logout);
-    $('profileCartBtn')?.addEventListener('click', openCart);
-    renderProfile();
-  });
+document.addEventListener('DOMContentLoaded', () => {
+  $('profileLoginBtn')?.addEventListener(
+    'click',
+    openAccount
+  );
+
+  $('profileLogoutBtn')?.addEventListener(
+    'click',
+    logout
+  );
+
+  $('profileCartBtn')?.addEventListener(
+    'click',
+    openCart
+  );
+
+  // กดจำนวนชั่วโมง เพื่อดูตารางรายการกิจกรรม
+  $('profileHours')?.addEventListener(
+    'click',
+    () => {
+      resetProfileBox();
+
+      if (
+        window.LearningBase &&
+        typeof window.LearningBase.openScoreModal ===
+          'function'
+      ) {
+        window.LearningBase.openScoreModal();
+      }
+    }
+  );
+
+  renderProfile();
+});
 
 window.addEventListener(
   'LEARN_AUTH_CHANGED',
