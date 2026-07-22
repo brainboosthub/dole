@@ -23,19 +23,19 @@ function getProfileBody() {
 }
 
 function hideProfileBody() {
-  const profileBody =
-    document.querySelector('#profileBox .profile-body');
 
-  const profileCover =
-    document.querySelector('#profileBox .profile-cover');
+  const profileBox = document.getElementById('profileBox');
 
-  if (profileBody) {
-    profileBody.style.display = 'none';
+  if (profileBox) {
+    profileBox.classList.add('editing-profile');
   }
 
-  if (profileCover) {
-    profileCover.style.display = 'none';
-  }
+  document.querySelectorAll(
+    '#profileBox .profile-cover, #profileBox .profile-body'
+  ).forEach(el => {
+    el.style.display = 'none';
+  });
+
 }
 
 function showProfileBody() {
