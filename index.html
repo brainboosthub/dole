@@ -716,7 +716,32 @@ document.addEventListener('DOMContentLoaded', function () {
         ?.trim() ||
       'Point';
   }
+function openProfilePopup() {
+  if (!breakpoint.matches) return;
 
+  syncMobileProfile();
+
+  // ย้าย profileBox ไปใต้ body เฉพาะตอนเปิดบนมือถือ
+  if (profileBox.parentNode !== document.body) {
+    document.body.appendChild(profileBox);
+  }
+
+  profileBox.hidden = false;
+  profileBox.removeAttribute('aria-hidden');
+  profileBox.classList.add(
+    'profile-box-popup-open'
+  );
+
+  backdrop.hidden = false;
+
+  if (popupClose) {
+    popupClose.hidden = false;
+  }
+
+  document.body.classList.add(
+    'profile-popup-lock'
+  );
+}
   function restoreProfilePosition() {
     if (!profileOriginalParent) {
       return;
