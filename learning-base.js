@@ -142,7 +142,7 @@ function openEditProfile() {
     $('editFullname')?.focus();
   }, 0);
 }
-  function closeEditProfile() {
+function closeEditProfile() {
   const modal = $('editProfileModal');
 
   if (modal) {
@@ -159,6 +159,9 @@ function openEditProfile() {
   }
 
   editProfileRemovePhoto = false;
+
+  // แสดง profile-body กลับ
+  window.ProfileBox?.showProfileBody();
 }
   function removeEditProfilePhoto() {
   const input = $('editPhoto');
