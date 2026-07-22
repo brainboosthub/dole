@@ -1755,3 +1755,15 @@ html.classroom-embed #appPage{
 .learning-login-actions #newRegisterBtn{
     margin-left:auto;
 }
+/* พื้นหลัง Popup */
+.book-detail-modal{
+    position: fixed;
+    inset: 0;
+    z-index: 99998;
+}
+
+/* กล่อง Popup */
+.book-detail-box{
+    position: relative;
+    z-index: 99999;
+}
