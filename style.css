@@ -1586,13 +1586,12 @@ html.classroom-embed #appPage{
     cursor:pointer;
   }
 
-  .profile-popup-backdrop{
+.profile-popup-backdrop{
     position:fixed;
     inset:0;
+    background:rgba(15,23,42,.45);
     z-index:10000;
-    background:rgba(15,23,42,.58);
-    backdrop-filter:blur(2px);
-  }
+}
 
   .profile-popup-backdrop[hidden]{
     display:none !important;
@@ -1602,23 +1601,26 @@ html.classroom-embed #appPage{
     overflow:hidden;
   }
 
-  #profileBox.profile-box-popup-open{
+/* Popup */
+#profileBox.profile-box-popup-open{
     display:block !important;
     position:fixed !important;
     top:50% !important;
     left:50% !important;
     right:auto !important;
     transform:translate(-50%,-50%) !important;
+
     width:min(320px,calc(100vw - 28px)) !important;
     max-width:320px !important;
     max-height:calc(100vh - 34px);
-    min-height:0 !important;
-    margin:0 !important;
     overflow:auto;
+
     z-index:10001 !important;
+    isolation:isolate;          /* เพิ่มบรรทัดนี้ */
+
     border-radius:20px;
     box-shadow:0 24px 70px rgba(15,23,42,.35);
-  }
+}
 
   #profileBox.profile-box-popup-open .profile-popup-close{
     position:absolute;
