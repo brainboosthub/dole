@@ -634,14 +634,7 @@ mobilePoint.tabIndex = 0;
 mobilePoint.setAttribute('role', 'button');
 mobilePoint.setAttribute('aria-label', 'เปิดข้อมูลสมาชิก');
 
-mobilePoint.addEventListener('click', openProfilePopup);
 
-mobilePoint.addEventListener('keydown', function (event) {
-  if (event.key === 'Enter' || event.key === ' ') {
-    event.preventDefault();
-    openProfilePopup();
-  }
-});
 
 const backdrop = document.createElement('div');
 backdrop.id = 'profilePopupBackdrop';
