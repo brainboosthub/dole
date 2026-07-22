@@ -51,17 +51,11 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
 
     <nav class="main-nav">...</nav>
 
-    <button
-        id="profileCartBtn"
-        class="profile-cart-btn"
-        type="button">
-        🛒 <span id="profileCartCount">0</span> รายการ
-    </button>
 <button
-  id="profileCartBtn"
-  class="profile-cart-btn"
-  type="button">
-  🛒 <span id="profileCartCount">0</span> ตะกร้า
+    id="profileCartBtn"
+    class="profile-cart-btn"
+    type="button">
+    🛒 <span id="profileCartCount">0</span> รายการ
 </button>
 
 <div id="mobileProfileNav"
@@ -587,6 +581,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const profileHours = document.getElementById('profileHours');
   const profileHoursLabel = document.getElementById('profileHoursLabel');
   const profileCartBtn = document.getElementById('profileCartBtn');
+  const popupClose = document.getElementById('profilePopupClose');
 const profileOriginalParent = profileBox?.parentNode;
 const profileOriginalNextSibling = profileBox?.nextSibling;
 
