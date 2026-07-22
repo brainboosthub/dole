@@ -1989,3 +1989,9 @@ html.classroom-embed #appPage{
     display:none !important;
   }
 }
+@media (max-width: 768px){
+    .learning-modal-box{
+        width: 90%;
+        max-width: 90%;
+    }
+}
