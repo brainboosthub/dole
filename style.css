@@ -1472,3 +1472,24 @@ html.classroom-embed #appPage{
     gap:8px;
 
 }
+.profile-logout-btn{
+  width:112px;
+  min-height:38px;
+  margin-top:10px;
+  padding:9px 20px;
+  border:0;
+  border-radius:999px;
+  background:#ef4444;
+  color:#fff;
+  font-family:inherit;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.profile-logout-btn:hover{
+  background:#dc2626;
+  transform:translateY(-1px);
+  box-shadow:0 8px 18px rgba(239,68,68,.25);
+}
