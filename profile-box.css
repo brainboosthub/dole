@@ -461,3 +461,13 @@
   position:relative;
   z-index:20001 !important;
 }
+.profile-cart-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;   /* ระยะห่างระหว่างไอคอนกับข้อความ */
+}
+
+.profile-cart-btn .cart-icon{
+    font-size:18px;
+}
