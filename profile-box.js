@@ -18,7 +18,25 @@
     const value = String(url || '').trim();
     return value || FALLBACK_PHOTO;
   }
+function getProfileBody() {
+  return document.querySelector('#profileBox .profile-body');
+}
 
+function hideProfileBody() {
+  const profileBody = getProfileBody();
+
+  if (profileBody) {
+    profileBody.style.display = 'none';
+  }
+}
+
+function showProfileBody() {
+  const profileBody = getProfileBody();
+
+  if (profileBody) {
+    profileBody.style.display = '';
+  }
+}
   async function getTotalHours(studentId) {
     if (!studentId) return 0;
 
@@ -166,16 +184,19 @@ async function renderProfile(studentOverride) {
 
 function openAccount() {
   const currentStudent = getStudent();
-  const profileBody = document.querySelector('#profileBox .profile-body');
 
-  if (currentStudent) {
-    if (profileBody) {
-      profileBody.style.display = 'none';
-    }
-
-    window.LearningBase?.openEditProfile();
-  } else {
+  if (!currentStudent) {
     window.LearningBase?.openStudentModal();
+    return;
+  }
+
+  hideProfileBody();
+
+  try {
+    window.LearningBase?.openEditProfile();
+  } catch (e) {
+    showProfileBody();
+    console.error(e);
   }
 }
 
@@ -214,4 +235,9 @@ window.addEventListener(
   window.addEventListener('storage', event => {
     if (event.key === 'LEARN_STUDENT') renderProfile();
   });
+window.ProfileBox = {
+  showProfileBody,
+  hideProfileBody,
+  renderProfile
+};
 })();
