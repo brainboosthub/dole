@@ -45,24 +45,39 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
   </div>
 
 <header class="site-header">
-<div class="container nav-wrap">
+  <div class="container nav-wrap">
 
-    <a class="brand"...></a>
+    <a class="brand" href="#home" aria-label="หน้าหลัก">
+      <span class="brand-icon" data-website-brand-icon></span>
+      <span data-website-brand-name></span>
+    </a>
 
-    <nav class="main-nav">...</nav>
+    <nav class="main-nav" aria-label="เมนูหลัก">
+      <a href="#newsSlider">ข่าวสาร</a>
+      <a href="#learningSourceBox">แหล่งเรียนรู้</a>
+      <a href="#classroomBox">สื่อวิดีโอการเรียนรู้ตลอดชีวิต</a>
+      <a href="#featured">หนังสือที่น่าสนใจ</a>
+      <a href="#learningBaseModule">กิจกรรม</a>
+    </nav>
 
-<button
-    id="profileCartBtn"
-    class="profile-cart-btn"
-    type="button">
-    🛒 <span id="profileCartCount">0</span> รายการ
-</button>
+    <div class="nav-profile-actions">
 
-<div id="mobileProfileNav"
-     class="mobile-profile-nav"
-     aria-label="ข้อมูลสมาชิก">
-</div>
-</div>
+      <button
+        id="profileCartBtn"
+        class="profile-cart-btn"
+        type="button">
+        🛒 <span id="profileCartCount">0</span> รายการ
+      </button>
+
+      <div
+        id="mobileProfileNav"
+        class="mobile-profile-nav"
+        aria-label="ข้อมูลสมาชิก">
+      </div>
+
+    </div>
+
+  </div>
 </header>
 
   <main>
