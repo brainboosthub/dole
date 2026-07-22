@@ -213,13 +213,26 @@ function openAccount() {
     return;
   }
 
+  if (
+    typeof window.LearningBase?.openEditProfile !== 'function'
+  ) {
+    console.error(
+      'ไม่พบฟังก์ชัน LearningBase.openEditProfile'
+    );
+    return;
+  }
+
   hideProfileBody();
 
   try {
-    window.LearningBase?.openEditProfile();
-  } catch (e) {
+    window.LearningBase.openEditProfile();
+  } catch (error) {
     showProfileBody();
-    console.error(e);
+
+    console.error(
+      'เปิด editProfileModal ไม่สำเร็จ:',
+      error
+    );
   }
 }
 
