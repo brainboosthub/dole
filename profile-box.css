@@ -445,3 +445,19 @@
 #editProfileModal{
   z-index:10050 !important;
 }
+#profilePopupBackdrop{
+  z-index:9990;
+}
+
+#profileBox{
+  z-index:10000;
+}
+
+.learning-modal{
+  z-index:20000 !important;
+}
+
+.learning-modal-box{
+  position:relative;
+  z-index:20001 !important;
+}
