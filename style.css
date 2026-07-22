@@ -1755,10 +1755,3 @@ html.classroom-embed #appPage{
 .learning-login-actions #newRegisterBtn{
     margin-left:auto;
 }
-.btn-red learning-modal-close{
-    font-size:42px;
-    width:56px;
-    height:56px;
-    line-height:56px;
-    font-weight:700;
-}
