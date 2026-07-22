@@ -1995,3 +1995,8 @@ html.classroom-embed #appPage{
         max-width: 90%;
     }
 }
+.edit-profile-form{
+    flex: 1;
+    overflow-y: auto;
+    padding: 22px;
+}
