@@ -276,23 +276,26 @@
   .nav-wrap{
     display:flex;
     align-items:center;
-    justify-content:space-between;
     gap:10px;
   }
 
-  .nav-wrap .brand{
+  .brand{
     margin-right:auto;
   }
 
-  .nav-wrap > .profile-cart-btn{
-    flex:0 0 auto;
+  #profileCartBtn{
+    display:inline-flex;
     min-width:auto;
-    padding:8px 13px;
+    padding:8px 12px;
+    white-space:nowrap;
   }
 
   .mobile-profile-nav{
-    flex:0 0 auto;
+    display:flex;
+    align-items:center;
+    gap:8px;
   }
+
 }
 /* Desktop */
 @media (min-width:1025px){
