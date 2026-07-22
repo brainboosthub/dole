@@ -39,19 +39,19 @@ function hideProfileBody() {
 }
 
 function showProfileBody() {
-  const profileBody =
-    document.querySelector('#profileBox .profile-body');
 
-  const profileCover =
-    document.querySelector('#profileBox .profile-cover');
+  const profileBox = document.getElementById('profileBox');
 
-  if (profileBody) {
-    profileBody.style.display = '';
+  if (profileBox) {
+    profileBox.classList.remove('editing-profile');
   }
 
-  if (profileCover) {
-    profileCover.style.display = '';
-  }
+  document.querySelectorAll(
+    '#profileBox .profile-cover, #profileBox .profile-body'
+  ).forEach(el => {
+    el.style.display = '';
+  });
+
 }
 function showProfileBody() {
   const profileBody = getProfileBody();
