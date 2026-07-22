@@ -166,8 +166,13 @@ async function renderProfile(studentOverride) {
 
 function openAccount() {
   const currentStudent = getStudent();
+  const profileBody = document.querySelector('#profileBox .profile-body');
 
   if (currentStudent) {
+    if (profileBody) {
+      profileBody.style.display = 'none';
+    }
+
     window.LearningBase?.openEditProfile();
   } else {
     window.LearningBase?.openStudentModal();
