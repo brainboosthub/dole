@@ -23,13 +23,36 @@ function getProfileBody() {
 }
 
 function hideProfileBody() {
-  const profileBox = document.getElementById('profileBox');
+  const profileBox =
+    document.getElementById('profileBox');
+
+  const backdrop =
+    document.getElementById('profilePopupBackdrop');
 
   if (profileBox) {
     profileBox.classList.add('editing-profile');
   }
+
+  if (backdrop) {
+    backdrop.classList.add('editing-profile');
+  }
 }
 
+function showProfileBody() {
+  const profileBox =
+    document.getElementById('profileBox');
+
+  const backdrop =
+    document.getElementById('profilePopupBackdrop');
+
+  if (profileBox) {
+    profileBox.classList.remove('editing-profile');
+  }
+
+  if (backdrop) {
+    backdrop.classList.remove('editing-profile');
+  }
+}
 function showProfileBody() {
   const profileBox = document.getElementById('profileBox');
 
