@@ -45,29 +45,22 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
   </div>
 
 <header class="site-header">
-  <div class="container nav-wrap">
+<div class="container nav-wrap">
 
-    <a class="brand" href="#home">
-      <span class="brand-icon" data-website-brand-icon></span>
-      <span data-website-brand-name></span>
-    </a>
+    <a class="brand"...></a>
 
-    <nav class="main-nav" aria-label="เมนูหลัก">
-      <a href="#newsSlider">ข่าวสาร</a>
-      <a href="#learningSourceBox">แหล่งเรียนรู้</a>
-      <a href="#classroomBox">สื่อวิดีโอการเรียนรู้ตลอดชีวิต</a>
-      <a href="#featured">หนังสือที่น่าสนใจ</a>
-      <a href="#learningBaseModule">กิจกรรม</a>
-    </nav>
+    <nav class="main-nav">...</nav>
 
-    <!-- ไม่ต้องเพิ่มปุ่มใหม่ตรงนี้ -->
+    <button
+        id="profileCartBtn"
+        class="profile-cart-btn"
+        type="button">
+        🛒 <span id="profileCartCount">0</span> รายการ
+    </button>
 
-    <div id="mobileProfileNav"
-         class="mobile-profile-nav"
-         aria-label="ข้อมูลสมาชิก">
-    </div>
+    <div id="mobileProfileNav"></div>
 
-  </div>
+</div>
 </header>
 
   <main>
@@ -151,7 +144,6 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
           <div class="profile-action-row">
             <button id="profileLoginBtn" class="profile-login-btn" type="button">Login</button>
             <button id="profileLogoutBtn" class="profile-logout-btn" type="button" hidden>Logout</button>
-            <button id="profileCartBtn" class="profile-cart-btn" type="button">🛒 ตะกร้า</button>
           </div>
         </div>
       </aside>
@@ -611,17 +603,23 @@ const profileOriginalNextSibling = profileBox?.nextSibling;
 
   mobilePoint.append(mobileHours, mobileHoursLabel);
   mobileProfileNav.append(mobilePoint, mobilePhoto);
+const desktopCartBtn = document.getElementById('profileCartBtn');
 
+const mobileCartBtn = desktopCartBtn.cloneNode(true);
+mobileCartBtn.id = 'mobileProfileCartBtn';
+
+mobileProfileNav.prepend(mobileCartBtn);
+
+mobileCartBtn.addEventListener('click', () => {
+    desktopCartBtn.click();
+});
   const backdrop = document.createElement('div');
   backdrop.id = 'profilePopupBackdrop';
   backdrop.className = 'profile-popup-backdrop';
   backdrop.hidden = true;
   document.body.appendChild(backdrop);
 
-  const cartOriginal = profileCartBtn ? {
-    parent: profileCartBtn.parentNode,
-    nextSibling: profileCartBtn.nextSibling
-  } : null;
+
 
   function syncMobileProfile() {
     if (profilePhoto) mobilePhoto.src = profilePhoto.currentSrc || profilePhoto.src;
@@ -675,28 +673,13 @@ function closeProfilePopup() {
   }
 }
 
-  function moveCartToMobile() {
-    if (profileCartBtn) mobileProfileNav.prepend(profileCartBtn);
-  }
-
-  function restoreCart() {
-    if (!profileCartBtn || !cartOriginal?.parent) return;
-    if (cartOriginal.nextSibling && cartOriginal.nextSibling.parentNode === cartOriginal.parent) {
-      cartOriginal.parent.insertBefore(profileCartBtn, cartOriginal.nextSibling);
-    } else {
-      cartOriginal.parent.appendChild(profileCartBtn);
-    }
-  }
-
   function updateProfileLocation(event) {
     syncMobileProfile();
     if (event.matches) {
       mobileProfileNav.hidden = false;
-      moveCartToMobile();
       closeProfilePopup();
     } else {
       mobileProfileNav.hidden = true;
-      restoreCart();
       profileBox.hidden = false;
       profileBox.removeAttribute('aria-hidden');
       profileBox.classList.remove('profile-box-popup-open');
