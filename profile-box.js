@@ -303,3 +303,22 @@ function closeProfileBox() {
 
   document.body.classList.remove('profile-popup-open');
 }
+function resetProfileBox() {
+  const profileBox =
+    document.getElementById('profileBox');
+
+  const backdrop =
+    document.getElementById('profilePopupBackdrop');
+
+  if (profileBox) {
+    profileBox.classList.remove('editing-profile');
+    profileBox.classList.remove('profile-box-popup-open');
+  }
+
+  if (backdrop) {
+    backdrop.classList.remove('editing-profile');
+    backdrop.classList.remove('show');
+  }
+
+  document.body.classList.remove('profile-popup-open');
+}
