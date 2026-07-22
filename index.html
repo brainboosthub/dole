@@ -552,9 +552,19 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
 <!-- Cart Modal -->
 <div id="cartModal" class="learning-modal">
   <div class="learning-modal-box">
+
+    <button
+      class="btn-red learning-modal-close"
+      type="button"
+      onclick="LearningBase.closeModal('cartModal')"
+      aria-label="ปิด">
+      ×
+    </button>
+
     <h2>🛒 ตะกร้ากิจกรรม</h2>
+
     <div id="cartList"></div>
-    <button class="btn-red" onclick="LearningBase.closeModal('cartModal')">ปิด</button>
+
   </div>
 </div>
 
