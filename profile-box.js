@@ -18,16 +18,9 @@
     const value = String(url || '').trim();
     return value || FALLBACK_PHOTO;
   }
-function getProfileBody() {
-  return document.querySelector('#profileBox .profile-body');
-}
-
-function hideProfileBody() {
-  const profileBox =
-    document.getElementById('profileBox');
-
-  const backdrop =
-    document.getElementById('profilePopupBackdrop');
+function hideProfileBox() {
+  const profileBox = $('profileBox');
+  const backdrop = $('profilePopupBackdrop');
 
   if (profileBox) {
     profileBox.classList.add('editing-profile');
@@ -38,50 +31,27 @@ function hideProfileBody() {
   }
 }
 
-function showProfileBody() {
-  const profileBox =
-    document.getElementById('profileBox');
-
-  const backdrop =
-    document.getElementById('profilePopupBackdrop');
+function resetProfileBox() {
+  const profileBox = $('profileBox');
+  const backdrop = $('profilePopupBackdrop');
 
   if (profileBox) {
-    profileBox.classList.remove('editing-profile');
+    profileBox.classList.remove(
+      'editing-profile',
+      'profile-box-popup-open'
+    );
   }
 
   if (backdrop) {
-    backdrop.classList.remove('editing-profile');
-  }
-}
-function showProfileBody() {
-  const profileBox = document.getElementById('profileBox');
-
-  if (profileBox) {
-    profileBox.classList.remove('editing-profile');
-  }
-}
-
-function showProfileBody() {
-
-  const profileBox = document.getElementById('profileBox');
-
-  if (profileBox) {
-    profileBox.classList.remove('editing-profile');
+    backdrop.classList.remove(
+      'editing-profile',
+      'show'
+    );
   }
 
-  document.querySelectorAll(
-    '#profileBox .profile-cover, #profileBox .profile-body'
-  ).forEach(el => {
-    el.style.display = '';
-  });
-
-}
-function showProfileBody() {
-  const profileBody = getProfileBody();
-
-  if (profileBody) {
-    profileBody.style.display = '';
-  }
+  document.body.classList.remove(
+    'profile-popup-open'
+  );
 }
   async function getTotalHours(studentId) {
     if (!studentId) return 0;
@@ -232,14 +202,15 @@ function openAccount() {
   const currentStudent = getStudent();
 
   if (!currentStudent) {
+    resetProfileBox();
     window.LearningBase?.openStudentModal();
     return;
   }
 
-  // ปิด Profile Popup เดิมให้สมบูรณ์
-  closeProfileBox();
+  // ปิด Profile Popup ให้สถานะกลับเป็นปิด
+  resetProfileBox();
 
-  // เปิดหน้าต่างแก้ไขโปรไฟล์
+  // เปิด Modal แก้ไขโปรไฟล์
   window.LearningBase?.openEditProfile();
 }
 
@@ -279,46 +250,10 @@ window.addEventListener(
     if (event.key === 'LEARN_STUDENT') renderProfile();
   });
 window.ProfileBox = {
-  showProfileBody,
-  hideProfileBody,
-  renderProfile
+  renderProfile,
+  resetProfileBox,
+  hideProfileBox
 };
+
 })();
-function closeProfileBox() {
-  const profileBox =
-    document.getElementById('profileBox');
 
-  const backdrop =
-    document.getElementById('profilePopupBackdrop');
-
-  if (profileBox) {
-    profileBox.classList.remove('profile-box-popup-open');
-    profileBox.classList.remove('editing-profile');
-  }
-
-  if (backdrop) {
-    backdrop.classList.remove('show');
-    backdrop.classList.remove('editing-profile');
-  }
-
-  document.body.classList.remove('profile-popup-open');
-}
-function resetProfileBox() {
-  const profileBox =
-    document.getElementById('profileBox');
-
-  const backdrop =
-    document.getElementById('profilePopupBackdrop');
-
-  if (profileBox) {
-    profileBox.classList.remove('editing-profile');
-    profileBox.classList.remove('profile-box-popup-open');
-  }
-
-  if (backdrop) {
-    backdrop.classList.remove('editing-profile');
-    backdrop.classList.remove('show');
-  }
-
-  document.body.classList.remove('profile-popup-open');
-}
