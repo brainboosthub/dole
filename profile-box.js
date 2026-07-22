@@ -236,27 +236,11 @@ function openAccount() {
     return;
   }
 
-  if (
-    typeof window.LearningBase?.openEditProfile !== 'function'
-  ) {
-    console.error(
-      'ไม่พบฟังก์ชัน LearningBase.openEditProfile'
-    );
-    return;
-  }
+  // ปิด Profile Popup เดิมให้สมบูรณ์
+  closeProfileBox();
 
-  hideProfileBody();
-
-  try {
-    window.LearningBase.openEditProfile();
-  } catch (error) {
-    showProfileBody();
-
-    console.error(
-      'เปิด editProfileModal ไม่สำเร็จ:',
-      error
-    );
-  }
+  // เปิดหน้าต่างแก้ไขโปรไฟล์
+  window.LearningBase?.openEditProfile();
 }
 
   function openCart() {
@@ -300,3 +284,22 @@ window.ProfileBox = {
   renderProfile
 };
 })();
+function closeProfileBox() {
+  const profileBox =
+    document.getElementById('profileBox');
+
+  const backdrop =
+    document.getElementById('profilePopupBackdrop');
+
+  if (profileBox) {
+    profileBox.classList.remove('profile-box-popup-open');
+    profileBox.classList.remove('editing-profile');
+  }
+
+  if (backdrop) {
+    backdrop.classList.remove('show');
+    backdrop.classList.remove('editing-profile');
+  }
+
+  document.body.classList.remove('profile-popup-open');
+}
