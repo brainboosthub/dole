@@ -263,9 +263,46 @@
   font-weight:600;
   line-height:1;
 }
+/* =========================
+   Header Desktop
+========================= */
+
 .nav-wrap{
-  column-gap:14px;
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:center;
+  gap:20px;
+  min-height:72px;
 }
+
+.nav-wrap > .brand{
+  justify-self:start;
+  min-width:0;
+}
+
+.main-nav{
+  justify-self:center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:32px;
+  min-width:0;
+}
+
+.nav-profile-actions{
+  justify-self:end;
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:10px;
+  flex-wrap:nowrap;
+  min-width:0;
+}
+
+.mobile-profile-nav{
+  display:none;
+}
+
 
 .nav-wrap > .profile-cart-btn{
   justify-self:end;
@@ -308,4 +345,86 @@
     display:inline-flex;
   }
 
+}
+/* =========================
+   Header Mobile / Tablet
+========================= */
+
+@media(max-width:1024px){
+
+  .nav-wrap{
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    gap:8px;
+    min-height:72px;
+    flex-wrap:nowrap;
+  }
+
+  .nav-wrap > .brand{
+    display:flex;
+    align-items:center;
+    flex:1 1 auto;
+    min-width:0;
+    margin:0;
+  }
+
+  .main-nav{
+    display:none !important;
+  }
+
+  .nav-profile-actions{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:7px;
+    flex:0 0 auto;
+    flex-wrap:nowrap;
+    min-width:0;
+    margin-left:auto;
+  }
+
+  .profile-cart-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    flex:0 0 auto;
+    min-width:auto;
+    min-height:36px;
+    padding:7px 11px;
+    white-space:nowrap;
+    font-size:12px;
+  }
+
+  .mobile-profile-nav{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:7px;
+    flex:0 0 auto;
+    flex-wrap:nowrap;
+    white-space:nowrap;
+  }
+
+  .mobile-profile-point{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:4px;
+    flex:0 0 auto;
+    min-height:36px;
+    padding:6px 10px;
+    white-space:nowrap;
+  }
+
+  .mobile-profile-photo{
+    display:block;
+    width:38px;
+    height:38px;
+    min-width:38px;
+    flex:0 0 38px;
+    margin:0;
+    border-radius:50%;
+    object-fit:cover;
+  }
 }
