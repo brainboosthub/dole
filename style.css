@@ -1968,3 +1968,21 @@ html.classroom-embed #appPage{
     margin-top: 15px;
     padding-right: 6px;
 }
+#profilePopupClose{
+    display:none !important;
+}
+/* Desktop */
+@media (min-width:1025px){
+    #profilePopupClose{
+        display:none !important;
+    }
+}
+
+/* Mobile */
+@media (max-width:1024px){
+    #profilePopupClose{
+        display:flex !important;
+        align-items:center;
+        justify-content:center;
+    }
+}
