@@ -246,11 +246,11 @@ document.addEventListener('DOMContentLoaded', () => {
     openCart
   );
 
-  // กดจำนวนชั่วโมง เพื่อดูตารางรายการกิจกรรม
   $('profileHours')?.addEventListener(
     'click',
-    () => {
-      resetProfileBox();
+    event => {
+      event.preventDefault();
+      event.stopPropagation();
 
       if (
         window.LearningBase &&
@@ -258,6 +258,10 @@ document.addEventListener('DOMContentLoaded', () => {
           'function'
       ) {
         window.LearningBase.openScoreModal();
+      } else {
+        console.error(
+          'ไม่พบฟังก์ชัน LearningBase.openScoreModal'
+        );
       }
     }
   );
