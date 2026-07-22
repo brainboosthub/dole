@@ -585,7 +585,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const profileHours = document.getElementById('profileHours');
   const profileHoursLabel = document.getElementById('profileHoursLabel');
   const profileCartBtn = document.getElementById('profileCartBtn');
-  const popupClose = document.getElementById('profilePopupClose');
+const profileOriginalParent = profileBox?.parentNode;
+const profileOriginalNextSibling = profileBox?.nextSibling;
 
   if (!mobileProfileNav || !profileBox) return;
 
@@ -628,25 +629,51 @@ document.addEventListener('DOMContentLoaded', function () {
     mobileHoursLabel.textContent = profileHoursLabel?.textContent?.trim() || 'Point';
   }
 
-  function openProfilePopup() {
-    if (!breakpoint.matches) return;
-    syncMobileProfile();
-    profileBox.hidden = false;
-    profileBox.removeAttribute('aria-hidden');
-    profileBox.classList.add('profile-box-popup-open');
-    backdrop.hidden = false;
-    document.body.classList.add('profile-popup-lock');
-    popupClose?.focus();
+function openProfilePopup() {
+  if (!breakpoint.matches) return;
+
+  syncMobileProfile();
+
+  // ย้าย profileBox ออกจาก newsBusLayout ไปไว้ใต้ body
+  if (profileBox.parentNode !== document.body) {
+    document.body.appendChild(profileBox);
   }
 
-  function closeProfilePopup() {
-    if (!breakpoint.matches) return;
-    profileBox.classList.remove('profile-box-popup-open');
-    profileBox.hidden = true;
-    profileBox.setAttribute('aria-hidden', 'true');
-    backdrop.hidden = true;
-    document.body.classList.remove('profile-popup-lock');
+  profileBox.hidden = false;
+  profileBox.removeAttribute('aria-hidden');
+  profileBox.classList.add('profile-box-popup-open');
+
+  backdrop.hidden = false;
+  document.body.classList.add('profile-popup-lock');
+
+  popupClose?.focus();
+}
+
+function closeProfilePopup() {
+  if (!breakpoint.matches) return;
+
+  profileBox.classList.remove('profile-box-popup-open');
+  profileBox.hidden = true;
+  profileBox.setAttribute('aria-hidden', 'true');
+
+  backdrop.hidden = true;
+  document.body.classList.remove('profile-popup-lock');
+
+  // ย้าย profileBox กลับตำแหน่งเดิม
+  if (profileOriginalParent) {
+    if (
+      profileOriginalNextSibling &&
+      profileOriginalNextSibling.parentNode === profileOriginalParent
+    ) {
+      profileOriginalParent.insertBefore(
+        profileBox,
+        profileOriginalNextSibling
+      );
+    } else {
+      profileOriginalParent.appendChild(profileBox);
+    }
   }
+}
 
   function moveCartToMobile() {
     if (profileCartBtn) mobileProfileNav.prepend(profileCartBtn);
