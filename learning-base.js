@@ -160,7 +160,6 @@ function closeEditProfile() {
 
   editProfileRemovePhoto = false;
 
-  // แสดง profile-body กลับ
   window.ProfileBox?.showProfileBody();
 }
   function removeEditProfilePhoto() {
