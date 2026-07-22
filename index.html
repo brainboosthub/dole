@@ -467,20 +467,23 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
 <div id="editProfileModal" class="learning-modal">
   <div class="learning-modal-box edit-profile-modal-box">
 
-    <button
-      class="learning-modal-close"
-      type="button"
-      aria-label="ปิด"
-      onclick="LearningBase.closeEditProfile()">
-      ×
-    </button>
+    <div class="edit-profile-header">
 
-    <h2 class="edit-profile-title">
-      <i class="fa fa-user" aria-hidden="true"></i>
-      แก้ไขโปรไฟล์
-    </h2>
+      <h2 class="edit-profile-title">
+        <i class="fa fa-user" aria-hidden="true"></i>
+        แก้ไขโปรไฟล์
+      </h2>
 
-    <!-- ย้ายรูปตัวอย่างมาไว้ใต้หัวข้อ -->
+      <button
+        class="learning-modal-close edit-profile-close"
+        type="button"
+        aria-label="ปิด"
+        onclick="LearningBase.closeEditProfile()">
+        ×
+      </button>
+
+    </div>
+
     <div
       id="editPhotoPreviewWrap"
       class="edit-profile-preview-wrap"
