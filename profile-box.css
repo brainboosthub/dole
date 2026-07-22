@@ -471,3 +471,13 @@
 .profile-cart-btn .cart-icon{
     font-size:18px;
 }
+#profileHours{
+  cursor:pointer;
+  transition:transform 0.2s ease,
+             opacity 0.2s ease;
+}
+
+#profileHours:hover{
+  opacity:0.8;
+  transform:scale(1.05);
+}
