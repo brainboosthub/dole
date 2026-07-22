@@ -57,7 +57,17 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
         type="button">
         🛒 <span id="profileCartCount">0</span> รายการ
     </button>
+<button
+  id="profileCartBtn"
+  class="profile-cart-btn"
+  type="button">
+  🛒 <span id="profileCartCount">0</span> ตะกร้า
+</button>
 
+<div id="mobileProfileNav"
+     class="mobile-profile-nav"
+     aria-label="ข้อมูลสมาชิก">
+</div>
     <div id="mobileProfileNav"></div>
 
 </div>
@@ -602,17 +612,8 @@ const profileOriginalNextSibling = profileBox?.nextSibling;
   mobileHoursLabel.id = 'mobileProfileHoursLabel';
 
   mobilePoint.append(mobileHours, mobileHoursLabel);
-  mobileProfileNav.append(mobilePoint, mobilePhoto);
-const desktopCartBtn = document.getElementById('profileCartBtn');
+ mobileProfileNav.append(mobilePoint, mobilePhoto);
 
-const mobileCartBtn = desktopCartBtn.cloneNode(true);
-mobileCartBtn.id = 'mobileProfileCartBtn';
-
-mobileProfileNav.prepend(mobileCartBtn);
-
-mobileCartBtn.addEventListener('click', () => {
-    desktopCartBtn.click();
-});
   const backdrop = document.createElement('div');
   backdrop.id = 'profilePopupBackdrop';
   backdrop.className = 'profile-popup-backdrop';
@@ -621,12 +622,28 @@ mobileCartBtn.addEventListener('click', () => {
 
 
 
-  function syncMobileProfile() {
-    if (profilePhoto) mobilePhoto.src = profilePhoto.currentSrc || profilePhoto.src;
-    mobileHours.textContent = profileHours?.textContent?.trim() || '0';
-    mobileHoursLabel.textContent = profileHoursLabel?.textContent?.trim() || 'Point';
+function syncMobileProfile() {
+  if (profilePhoto) {
+    const photoUrl =
+      profilePhoto.getAttribute('src') ||
+      profilePhoto.src ||
+      '';
+
+    if (photoUrl) {
+      mobilePhoto.src = photoUrl;
+      mobilePhoto.style.display = 'block';
+    } else {
+      mobilePhoto.removeAttribute('src');
+      mobilePhoto.style.display = 'none';
+    }
   }
 
+  mobileHours.textContent =
+    profileHours?.textContent?.trim() || '0';
+
+  mobileHoursLabel.textContent =
+    profileHoursLabel?.textContent?.trim() || 'Point';
+}
 function openProfilePopup() {
   if (!breakpoint.matches) return;
 
