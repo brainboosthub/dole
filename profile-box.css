@@ -432,6 +432,16 @@
   display:none !important;
 }
 #profileBox.editing-profile,
-#profilePopupBackdrop.editing-profile{
-  display:none !important;
+/* ===== Z-INDEX ===== */
+
+#profilePopupBackdrop{
+  z-index:9990;
+}
+
+#profileBox{
+  z-index:10000;
+}
+
+#editProfileModal{
+  z-index:10050 !important;
 }
