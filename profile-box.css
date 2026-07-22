@@ -294,3 +294,15 @@
     flex:0 0 auto;
   }
 }
+/* Desktop */
+@media (min-width:1025px){
+
+  .mobile-profile-nav{
+    display:none !important;
+  }
+
+  #profileCartBtn{
+    display:inline-flex;
+  }
+
+}
