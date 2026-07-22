@@ -32,26 +32,28 @@ function hideProfileBox() {
 }
 
 function resetProfileBox() {
-  const profileBox = $('profileBox');
-  const backdrop = $('profilePopupBackdrop');
+  const profileBox = document.getElementById('profileBox');
+  const backdrop = document.getElementById('profilePopupBackdrop');
 
   if (profileBox) {
     profileBox.classList.remove(
-      'editing-profile',
-      'profile-box-popup-open'
+      'profile-box-popup-open',
+      'editing-profile'
     );
   }
 
   if (backdrop) {
     backdrop.classList.remove(
+      'show',
       'editing-profile',
-      'show'
+      'active',
+      'open'
     );
+
+    backdrop.style.display = 'none';
   }
 
-  document.body.classList.remove(
-    'profile-popup-open'
-  );
+  document.body.classList.remove('profile-popup-open');
 }
   async function getTotalHours(studentId) {
     if (!studentId) return 0;
@@ -201,16 +203,14 @@ async function renderProfile(studentOverride) {
 function openAccount() {
   const currentStudent = getStudent();
 
+  // ปิด Profile Popup และ Backdrop ก่อนทุกครั้ง
+  resetProfileBox();
+
   if (!currentStudent) {
-    resetProfileBox();
     window.LearningBase?.openStudentModal();
     return;
   }
 
-  // ปิด Profile Popup ให้สถานะกลับเป็นปิด
-  resetProfileBox();
-
-  // เปิด Modal แก้ไขโปรไฟล์
   window.LearningBase?.openEditProfile();
 }
 
