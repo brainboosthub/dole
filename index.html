@@ -620,24 +620,34 @@ const profileOriginalNextSibling = profileBox?.nextSibling;
   const mobilePoint = document.createElement('div');
   mobilePoint.id = 'mobileProfilePoint';
   mobilePoint.className = 'mobile-profile-point';
+const mobileHours = document.createElement('strong');
+mobileHours.id = 'mobileProfileHours';
 
-  const mobileHours = document.createElement('strong');
-  mobileHours.id = 'mobileProfileHours';
+const mobileHoursLabel = document.createElement('span');
+mobileHoursLabel.id = 'mobileProfileHoursLabel';
 
-  const mobileHoursLabel = document.createElement('span');
-  mobileHoursLabel.id = 'mobileProfileHoursLabel';
+mobilePoint.append(mobileHours, mobileHoursLabel);
+mobileProfileNav.append(mobilePoint, mobilePhoto);
 
-  mobilePoint.append(mobileHours, mobileHoursLabel);
- mobileProfileNav.append(mobilePoint, mobilePhoto);
+// เพิ่มส่วนนี้
+mobilePoint.tabIndex = 0;
+mobilePoint.setAttribute('role', 'button');
+mobilePoint.setAttribute('aria-label', 'เปิดข้อมูลสมาชิก');
 
-  const backdrop = document.createElement('div');
-  backdrop.id = 'profilePopupBackdrop';
-  backdrop.className = 'profile-popup-backdrop';
-  backdrop.hidden = true;
-  document.body.appendChild(backdrop);
+mobilePoint.addEventListener('click', openProfilePopup);
 
+mobilePoint.addEventListener('keydown', function (event) {
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    openProfilePopup();
+  }
+});
 
-
+const backdrop = document.createElement('div');
+backdrop.id = 'profilePopupBackdrop';
+backdrop.className = 'profile-popup-backdrop';
+backdrop.hidden = true;
+document.body.appendChild(backdrop);
 function syncMobileProfile() {
   if (profilePhoto) {
     const photoUrl =
