@@ -160,7 +160,8 @@ function closeEditProfile() {
 
   editProfileRemovePhoto = false;
 
-  window.ProfileBox?.showProfileBody();
+  // คืนค่า Profile Popup ให้เป็นสถานะปิด
+  window.ProfileBox?.resetProfileBox();
 }
   function removeEditProfilePhoto() {
   const input = $('editPhoto');
