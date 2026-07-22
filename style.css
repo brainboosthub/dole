@@ -1953,3 +1953,18 @@ html.classroom-embed #appPage{
     font-size: 34px;
     z-index: 9999;
 }
+.learning-modal-box{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    max-height: 85vh;
+}
+
+.learning-modal-content{
+    overflow-y: auto;
+    flex: 1;
+
+    margin-top: 15px;
+    padding-right: 6px;
+}
