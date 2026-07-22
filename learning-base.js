@@ -193,17 +193,18 @@ function closeEditProfile() {
     );
   }
 
-  const fullname = $('editFullname')?.value.trim() || '';
-  const phone = $('editPhone')?.value.trim() || '';
-  const address = $('editAddress')?.value.trim() || '';
+const fullname = $('editFullname')?.value.trim() || '';
+const phone = $('editPhone')?.value.trim() || '';
+const address = $('editAddress')?.value.trim() || '';
 
-  if (!fullname || !phone || !address) {
-    return Swal.fire(
-      'แจ้งเตือน',
-      'กรุณากรอกชื่อ-นามสกุล เบอร์โทร และที่อยู่ให้ครบ',
-      'warning'
-    );
-  }
+// บังคับเฉพาะชื่อและเบอร์โทร
+if (!fullname || !phone) {
+  return Swal.fire(
+    'แจ้งเตือน',
+    'กรุณากรอกชื่อ-นามสกุล และเบอร์โทรให้ครบ',
+    'warning'
+  );
+}
 
   if (!/^0\d{9}$/.test(phone)) {
     return Swal.fire(
