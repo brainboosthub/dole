@@ -1767,3 +1767,14 @@ html.classroom-embed #appPage{
     position: relative;
     z-index: 99999;
 }
+.book-detail-box{
+    position: relative;
+    overflow-y: auto;
+}
+
+#bookDetailClose{
+    position: sticky;
+    top: 15px;
+    float: right;
+    z-index: 1000;
+}
