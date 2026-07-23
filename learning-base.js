@@ -400,52 +400,60 @@ if (!fullname || !phone) {
     } catch(err) { grid.innerHTML=`<div class="learning-list-item">โหลดกิจกรรมไม่สำเร็จ: ${escapeHtml(err.message)}</div>`; }
   }
 
-  function renderActivities(list) {
-    const grid=$('activityGrid');
-    if (!list.length) return grid.innerHTML='<div class="learning-list-item">ยังไม่มีกิจกรรม</div>';
-    grid.innerHTML=list.map(a=>`
-<article class="learning-card">
+function renderActivities(list) {
+  const grid = $('activityGrid');
 
-  <img
-    src="${escapeHtml(a.image1)}"
-    alt="${escapeHtml(a.title)}"
-    class="learning-card-image"
-    role="button"
-    tabindex="0"
-    title="คลิกเพื่อดูรายละเอียด"
-    onclick="LearningBase.openActivityDetail('${escapeHtml(a.activityId)}')"
-    onkeydown="if(event.key==='Enter'){LearningBase.openActivityDetail('${escapeHtml(a.activityId)}')}"
-  >
-<div class="learning-card-body">
-
-    <h3>${escapeHtml(a.title)}</h3>
-
-    <div class="learning-point">
-        Point: ${escapeHtml(a.hours)}
-    </div>
-
-    <div class="learning-meta">
-        รูปแบบ: ${escapeHtml(a.learningType)}
-    </div>
-
-    <div class="learning-meta">
-        วันที่: ${escapeHtml(a.activityDate || "-")}
-    </div>
-
-    <div class="learning-card-actions">
-        <button
-            type="button"
-            onclick="LearningBase.addToCart('${escapeHtml(a.activityId)}')">
-
-            <i class="fa fa-shopping-bag"></i>
-            ใส่ตะกร้า
-        </button>
-    </div>
-
-</div>
-      </article>`).join('');
+  if (!list.length) {
+    grid.innerHTML = '<div class="learning-list-item">ยังไม่มีกิจกรรม</div>';
+    return;
   }
 
+  grid.innerHTML = list.map(a => `
+    <article class="learning-card">
+
+      <img
+        src="${escapeHtml(a.image1)}"
+        alt="${escapeHtml(a.title)}"
+        class="learning-card-image"
+        role="button"
+        tabindex="0"
+        title="คลิกเพื่อดูรายละเอียด"
+        onclick="LearningBase.openActivityDetail('${escapeHtml(a.activityId)}')"
+        onkeydown="if(event.key==='Enter'){LearningBase.openActivityDetail('${escapeHtml(a.activityId)}')}"
+      >
+
+      <div class="learning-card-body">
+
+        <h3 class="learning-card-title">
+          ${escapeHtml(a.title)}
+        </h3>
+
+        <div class="learning-point">
+          Point: ${escapeHtml(a.hours || '0')} Point
+        </div>
+
+        <div class="learning-meta">
+          รูปแบบ: ${escapeHtml(a.learningType || '-')}
+        </div>
+
+        <div class="learning-meta">
+          วันที่: ${escapeHtml(a.activityDate || '-')}
+        </div>
+
+      </div>
+
+      <button
+        type="button"
+        class="learning-card-cart-btn"
+        onclick="LearningBase.addToCart('${escapeHtml(a.activityId)}')"
+      >
+        <i class="fa fa-shopping-bag"></i>
+        ใส่ตะกร้า
+      </button>
+
+    </article>
+  `).join('');
+}
   function requireStudent() {
     if (student) return true;
     Swal.fire('กรุณายืนยันตัวตน','กดปุ่ม Login ก่อนเลือกกิจกรรม','warning');
