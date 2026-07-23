@@ -1,145 +1,148 @@
 (() => {
   'use strict';
 
-  const BUS_WEB_APP_URL =
+  const BOSS_WEB_APP_URL =
     'https://script.google.com/macros/s/AKfycbzq9SWm2mEBe_gsusJKNEj7hlORO29BejRrOI7CoapwBj145UCyUBccmzdv4pzLAHlW/exec';
-  const BUS_API_URL = BUS_WEB_APP_URL + '?mode=bus';
+  const BOSS_API_URL = BOSS_WEB_APP_URL + '?mode=boss';
 
-  let busItems = [];
-  let busIndex = 0;
+  const text = value => String(value ?? '').trim();
 
-  const escapeHtml = value => String(value ?? '')
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#039;');
+  function normalizeBoss(result) {
+    const source = result?.boss || result?.data?.boss || result?.data || result || {};
 
-  function normalizeBusItem(row) {
+    if (Array.isArray(source)) {
+      const byLabel = {};
+      source.forEach(row => {
+        if (Array.isArray(row)) byLabel[text(row[0])] = text(row[1]);
+        else if (row && typeof row === 'object') {
+          byLabel[text(row.label || row.key || row.item || row['รายการ'])] =
+            text(row.value || row.url || row.text || row['ระบุ']);
+        }
+      });
+      return {
+        image: byLabel['รูป'] || byLabel['รูปภาพ'] || '',
+        name: byLabel['ชื่อ'] || '',
+        position: byLabel['ตำแหน่ง'] || '',
+        popupImage: byLabel['รูปป๊อปอัป'] || byLabel['รูป Pop-up'] || '',
+        popupUrl: byLabel['ลิงก์อ่านเพิ่มเติม'] || '',
+        popupMode: text(byLabel['เปิด/ปิด']).toLowerCase()
+      };
+    }
+
     return {
-      place: String(row.place || row.location || row['สถานที่จัดกิจกรรม'] || '').trim(),
-      vehicle: String(row.vehicle || row.busType || row['ประเภทรถ'] || '').trim(),
-      date: String(row.date || row.activityDate || row['วันที่จัดกิจกรรม'] || '').trim(),
-      time: String(row.time || row.activityTime || row['เวลาจัดกิจกรรม'] || '').trim(),
-      detail: String(row.detail || row.activity || row['กิจกรรมที่น่าสนใจ'] || '').trim()
+      image: text(source.image || source.photo || source.url || source['รูป'] || source['รูปภาพ']),
+      name: text(source.name || source.fullName || source['ชื่อ']),
+      position: text(source.position || source.title || source['ตำแหน่ง']),
+      popupImage: text(source.popupImage || source.popup_image || source['รูปป๊อปอัป'] || source['รูป Pop-up']),
+      popupUrl: text(source.popupUrl || source.popup_url || source.detailUrl || source['ลิงก์อ่านเพิ่มเติม']),
+      popupMode: text(source.popupMode || source.popup_mode || source.mode || source['เปิด/ปิด']).toLowerCase()
     };
   }
 
-  function hideBusBox() {
-    document.getElementById('busBox')?.setAttribute('hidden', '');
-    document.getElementById('newsBusLayout')?.classList.add('bus-is-hidden');
+  function hideBossBox() {
+    document.getElementById('bossBox')?.setAttribute('hidden', '');
+    document.getElementById('leftInfoStack')?.classList.add('boss-is-hidden');
   }
 
-  function showBusBox() {
-    document.getElementById('busBox')?.removeAttribute('hidden');
-    document.getElementById('newsBusLayout')?.classList.remove('bus-is-hidden');
+  function renderBoss(boss) {
+    // ไม่แสดง Box เมื่อข้อมูลคอลัมน์ B ว่างทั้งหมด
+    if (!boss.image && !boss.name && !boss.position) {
+      hideBossBox();
+      return;
+    }
+
+    const box = document.getElementById('bossBox');
+    const photo = document.getElementById('bossPhoto');
+    const name = document.getElementById('bossName');
+    const position = document.getElementById('bossPosition');
+    if (!box || !photo || !name || !position) return;
+
+    if (boss.image) {
+      photo.src = boss.image;
+      photo.hidden = false;
+    } else {
+      photo.removeAttribute('src');
+      photo.hidden = true;
+    }
+
+    name.textContent = boss.name;
+    name.hidden = !boss.name;
+    position.textContent = boss.position;
+    position.hidden = !boss.position;
+
+    document.getElementById('leftInfoStack')?.classList.remove('boss-is-hidden');
+    box.removeAttribute('hidden');
   }
 
-  function renderBus() {
-    const content = document.getElementById('busContent');
-    const dots = document.getElementById('busDots');
-    const controls = document.getElementById('busControls');
-    if (!content || !dots || !controls || !busItems.length) return;
 
-const item = busItems[busIndex];
+  function closeBossPopup() {
+    const popup = document.getElementById('bossPopup');
+    if (!popup) return;
+    popup.setAttribute('hidden', '');
+    popup.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('boss-popup-open');
+  }
 
-    content.innerHTML = `
-      <h3 class="bus-title">กิจกรรมรถโมบาย</h3>
-      <div class="bus-info-grid">
-        <div class="bus-info-item">
-          <strong>สถานที่จัดกิจกรรม</strong>
-          <span>${escapeHtml(item.place || '-')}</span>
-        </div>
-        <div class="bus-info-item">
-          <strong>ประเภทรถ</strong>
-          <span>${escapeHtml(item.vehicle || '-')}</span>
-        </div>
-        <div class="bus-info-item">
-          <strong>วันที่จัดกิจกรรม</strong>
-          <span>${escapeHtml(item.date || '-')}</span>
-        </div>
-        <div class="bus-info-item">
-          <strong>เวลาจัดกิจกรรม</strong>
-          <span>${escapeHtml(item.time || '-')}</span>
-        </div>
-      </div>
-${item.detail ? `
-    <div class="bus-detail">
-        <strong>กิจกรรมที่น่าสนใจ</strong>
-        <div class="bus-detail-text">
-            ${escapeHtml(item.detail)}
-        </div>
-    </div>
-` : ''}
-    `;
+  function renderBossPopup(boss) {
+    const popup = document.getElementById('bossPopup');
+    const image = document.getElementById('bossPopupImage');
+    const actions = document.getElementById('bossPopupActions');
+    const detail = document.getElementById('bossPopupDetail');
+    if (!popup || !image || !actions || !detail) return;
 
-    dots.innerHTML = busItems.map((_, index) => `
-      <button
-        class="bus-dot ${index === busIndex ? 'active' : ''}"
-        type="button"
-        data-bus-index="${index}"
-        aria-label="กิจกรรมที่ ${index + 1}">
-      </button>
-    `).join('');
+    if (boss.popupMode !== 'block' || !boss.popupImage) {
+      closeBossPopup();
+      return;
+    }
 
-    dots.querySelectorAll('[data-bus-index]').forEach(button => {
-      button.addEventListener('click', () => {
-        busIndex = Number(button.dataset.busIndex) || 0;
-        renderBus();
-      });
+    image.src = boss.popupImage;
+
+    if (boss.popupUrl) {
+      detail.href = boss.popupUrl;
+      actions.removeAttribute('hidden');
+    } else {
+      detail.removeAttribute('href');
+      actions.setAttribute('hidden', '');
+    }
+
+    popup.removeAttribute('hidden');
+    popup.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('boss-popup-open');
+  }
+
+  function bindBossPopupEvents() {
+    document.getElementById('bossPopupClose')?.addEventListener('click', closeBossPopup);
+    document.getElementById('bossPopup')?.addEventListener('click', event => {
+      if (event.target.id === 'bossPopup') closeBossPopup();
     });
-
-    controls.hidden = busItems.length <= 1;
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') closeBossPopup();
+    });
   }
 
-  async function loadBus() {
+  async function loadBoss() {
     try {
-      const response = await fetch(BUS_API_URL + '&_t=' + Date.now(), {
+      const response = await fetch(BOSS_API_URL + '&_t=' + Date.now(), {
         method: 'GET',
         cache: 'no-store'
       });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
       const result = await response.json();
-      if (result.success === false) {
-        throw new Error(result.message || 'โหลดข้อมูลรถโมบายไม่สำเร็จ');
-      }
+      if (result.success === false) throw new Error(result.message || 'โหลดข้อมูลผู้บริหารไม่สำเร็จ');
 
-      const raw = result.items || result.data?.items || result.data || [];
-      busItems = (Array.isArray(raw) ? raw : [])
-        .map(normalizeBusItem)
-        .filter(item => item.place || item.vehicle || item.date || item.time || item.detail);
-
-      if (!busItems.length) {
-        hideBusBox();
-        return;
-      }
-
-      busIndex = 0;
-      showBusBox();
-      renderBus();
+      const boss = normalizeBoss(result);
+      renderBoss(boss);
+      renderBossPopup(boss);
     } catch (error) {
-      console.error('โหลดข้อมูลกิจกรรมรถโมบายไม่สำเร็จ:', error);
-      hideBusBox();
+      console.error('โหลดข้อมูลผู้บริหารไม่สำเร็จ:', error);
+      hideBossBox();
     }
   }
 
-  function bindBusControls() {
-    document.getElementById('busPrev')?.addEventListener('click', () => {
-      if (!busItems.length) return;
-      busIndex = (busIndex - 1 + busItems.length) % busItems.length;
-      renderBus();
-    });
-
-    document.getElementById('busNext')?.addEventListener('click', () => {
-      if (!busItems.length) return;
-      busIndex = (busIndex + 1) % busItems.length;
-      renderBus();
-    });
-  }
-
   document.addEventListener('DOMContentLoaded', () => {
-    bindBusControls();
-    loadBus();
+    bindBossPopupEvents();
+    loadBoss();
   });
 })();
+
