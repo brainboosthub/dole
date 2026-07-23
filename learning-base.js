@@ -575,7 +575,12 @@ $('detailContent').innerHTML = `
 
   <div class="detail-info">
 
-    <h2>${escapeHtml(a.title || '-')}</h2>
+ <h2>${escapeHtml(a.title || '-')}</h2>
+
+<div class="line">
+  <b>Point:</b>
+  ${escapeHtml(a.hours || '0')}
+</div>
 
     <div class="line">
       <b>รูปแบบการเรียนรู้:</b>
