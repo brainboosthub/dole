@@ -416,29 +416,33 @@ if (!fullname || !phone) {
     onclick="LearningBase.openActivityDetail('${escapeHtml(a.activityId)}')"
     onkeydown="if(event.key==='Enter'){LearningBase.openActivityDetail('${escapeHtml(a.activityId)}')}"
   >
+<div class="learning-card-body">
 
-  <div class="learning-card-body">
+    <h3>${escapeHtml(a.title)}</h3>
 
-
-
-        
-          <span class="learning-tag">${escapeHtml(a.baseNo || '-')}</span>
-          <div class="learning-title">${escapeHtml(a.title || '-')}</div>
-          <div class="learning-muted">
-  ${hourText}: ${getActivityHours(a)}
-</div>
-          ${a.learningType ? `<div class="learning-muted">รูปแบบ: ${escapeHtml(a.learningType)}</div>`:''}
-          <div class="learning-muted">วันที่: ${formatThaiDate(a.activityDate)}</div>
-          <div class="learning-muted">ครูฐาน: ${escapeHtml(a.teacherName || '-')}</div>
-          <p class="learning-muted">${escapeHtml(a.detail || '')}</p>
-    <div class="learning-card-actions">
-      <button type="button"
-        onclick="LearningBase.addToCart('${escapeHtml(a.activityId)}')">
-        <i class="fa fa-shopping-bag"></i>
-        ใส่ตะกร้า
-      </button>
+    <div class="learning-point">
+        Point: ${escapeHtml(a.hours)}
     </div>
-        </div>
+
+    <div class="learning-meta">
+        รูปแบบ: ${escapeHtml(a.learningType)}
+    </div>
+
+    <div class="learning-meta">
+        วันที่: ${escapeHtml(a.activityDate || "-")}
+    </div>
+
+    <div class="learning-card-actions">
+        <button
+            type="button"
+            onclick="LearningBase.addToCart('${escapeHtml(a.activityId)}')">
+
+            <i class="fa fa-shopping-bag"></i>
+            ใส่ตะกร้า
+        </button>
+    </div>
+
+</div>
       </article>`).join('');
   }
 
