@@ -595,6 +595,9 @@
     justify-content:center;
     gap:8px;
 
-    width:220px;
+    width:100%;
+    max-width:220px;
+
     margin:24px auto 0;
+    box-sizing:border-box;
 }
