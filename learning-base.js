@@ -405,23 +405,30 @@ if (!fullname || !phone) {
     if (!list.length) return grid.innerHTML='<div class="learning-list-item">ยังไม่มีกิจกรรม</div>';
     grid.innerHTML=list.map(a=>`
       <article class="learning-card">
-        <img src="${escapeHtml(a.image1 || 'https://placehold.co/600x400?text=Learning+Base')}" alt="${escapeHtml(a.title || 'กิจกรรมฐานการเรียนรู้')}" loading="lazy">
-        <div class="learning-card-body">
-          <span class="learning-tag">${escapeHtml(a.baseNo || '-')}</span>
-          <div class="learning-title">${escapeHtml(a.title || '-')}</div>
-          <div class="learning-muted">
-  ${hourText}: ${getActivityHours(a)}
-</div>
-          ${a.learningType ? `<div class="learning-muted">รูปแบบ: ${escapeHtml(a.learningType)}</div>`:''}
-          <div class="learning-muted">วันที่: ${formatThaiDate(a.activityDate)}</div>
-          <div class="learning-muted">ครูฐาน: ${escapeHtml(a.teacherName || '-')}</div>
-          <p class="learning-muted">${escapeHtml(a.detail || '')}</p>
-          <div class="learning-actions">
-            <button type="button" onclick="LearningBase.addToCart('${escapeHtml(a.activityId)}')">ใส่ตะกร้า</button>
-            <button type="button" class="btn-green" onclick="LearningBase.openActivityDetail('${escapeHtml(a.activityId)}')">ดูรายละเอียด</button>
-          </div>
-        </div>
-      </article>`).join('');
+
+  <img
+    src="${escapeHtml(a.image1)}"
+    alt="${escapeHtml(a.title)}"
+    class="learning-card-image"
+    role="button"
+    tabindex="0"
+    title="คลิกเพื่อดูรายละเอียด"
+    onclick="LearningBase.openActivityDetail('${escapeHtml(a.activityId)}')"
+    onkeydown="if(event.key==='Enter'){LearningBase.openActivityDetail('${escapeHtml(a.activityId)}')}"
+  >
+
+  <div class="learning-card-body">
+    ...
+    <div class="learning-card-actions">
+      <button type="button"
+        onclick="LearningBase.addToCart('${escapeHtml(a.activityId)}')">
+        <i class="fa fa-shopping-bag"></i>
+        ใส่ตะกร้า
+      </button>
+    </div>
+  </div>
+
+</article>`).join('');
   }
 
   function requireStudent() {
