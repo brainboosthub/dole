@@ -471,21 +471,41 @@ if (!fullname || !phone) {
       const total=list.reduce((s,c)=>s+getActivityHours(c.activity),0);
       $('cartList').innerHTML=`<div class="learning-cart-summary"><b>รวมทั้งหมด ${total} ${escapeHtml(hourText)}</b></div>`+
       list.map(c=>`<div class="learning-cart-item">
-        <div class="learning-cart-info">
-          <div class="learning-cart-title">${escapeHtml(c.activity?.title||'-')}</div>
-          <span class="learning-muted">${escapeHtml(hourText)}: ${getActivityHours(c.activity)} ${escapeHtml(hourText)}</span><br>
-          <span class="learning-muted">วันที่ ${formatThaiDate(c.activity?.activityDate)}</span>
-          <div class="learning-cart-actions">
-            <button class="btn-green learning-confirm-btn" onclick="LearningBase.confirmJoin('${escapeHtml(c.activityId)}')">ยืนยันเข้าร่วม</button>
-            <button class="btn-red learning-delete-btn" onclick="LearningBase.cancelCartItem('${escapeHtml(c.cartId)}')">ลบ</button>
-          </div>
+
+    <img
+        class="learning-cart-image"
+        src="${escapeHtml(c.activity?.image1 || 'https://placehold.co/300x200?text=Activity')}"
+        alt="${escapeHtml(c.activity?.title || 'กิจกรรม')}"
+        loading="lazy"
+        onerror="this.onerror=null;this.src='https://placehold.co/300x200?text=Activity';">
+
+    <div class="learning-cart-info">
+        <div class="learning-cart-title">
+            ${escapeHtml(c.activity?.title||'-')}
         </div>
-        <img class="learning-cart-image"
-          src="${escapeHtml(c.activity?.image1 || 'https://placehold.co/300x200?text=Activity')}"
-          alt="${escapeHtml(c.activity?.title || 'กิจกรรม')}"
-          loading="lazy"
-          onerror="this.onerror=null;this.src='https://placehold.co/300x200?text=Activity';">
-      </div>`).join('');
+
+        <span class="learning-muted">
+            ${escapeHtml(hourText)}: ${getActivityHours(c.activity)} ${escapeHtml(hourText)}
+        </span><br>
+
+        <span class="learning-muted">
+            วันที่ ${formatThaiDate(c.activity?.activityDate)}
+        </span>
+
+        <div class="learning-cart-actions">
+            <button class="btn-green learning-confirm-btn"
+                onclick="LearningBase.confirmJoin('${escapeHtml(c.activityId)}')">
+                ยืนยันเข้าร่วม
+            </button>
+
+            <button class="btn-red learning-delete-btn"
+                onclick="LearningBase.cancelCartItem('${escapeHtml(c.cartId)}')">
+                ลบ
+            </button>
+        </div>
+    </div>
+
+</div>`).join('');
     } catch(err) { $('cartList').innerHTML=`<div class="learning-list-item">${escapeHtml(err.message)}</div>`; }
   }
 
