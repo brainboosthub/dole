@@ -568,7 +568,37 @@ async function loadCartCount() {
     if(!a) return Swal.fire('แจ้งเตือน','ไม่พบข้อมูลกิจกรรม','warning');
     const images=[a.image1,a.image2,a.image3].filter(Boolean);
     const slider=images.length?`<div class="detail-slider">${images.map((img,i)=>`<div class="detail-slide ${i===0?'active':''}"><img src="${escapeHtml(img)}" alt=""></div>`).join('')}</div><div class="detail-dots">${images.map((_,i)=>`<span class="detail-dot ${i===0?'active':''}"></span>`).join('')}</div>`:'';
-    $('detailContent').innerHTML=`${slider}<div class="detail-info"><h2>${escapeHtml(a.title||'-')}</h2><div class="line"><b>รูปแบบการเรียนรู้:</b> ${escapeHtml(a.learningType||'-')}</div><div class="line"><b>รายละเอียด:</b><br>${escapeHtml(a.detail||'-')}</div><div class="line"><b>วันที่จัดกิจกรรม:</b> ${formatThaiDate(a.activityDate)}</div></div>`;
+    
+    
+$('detailContent').innerHTML = `
+  ${slider}
+
+  <div class="detail-info">
+
+    <h2>${escapeHtml(a.title || '-')}</h2>
+
+    <div class="line">
+      <b>รูปแบบการเรียนรู้:</b>
+      ${escapeHtml(a.learningType || '-')}
+    </div>
+
+    <div class="line">
+      <b>รายละเอียด:</b><br>
+      ${escapeHtml(a.detail || '-')}
+    </div>
+
+    <div class="line">
+      <b>วันที่จัดกิจกรรม:</b>
+      ${formatThaiDate(a.activityDate)}
+    </div>
+
+    <div class="line">
+      <b>ครูฐาน:</b>
+      ${escapeHtml(a.teacher || a.baseTeacher || '-')}
+    </div>
+
+  </div>
+`;
     $('detailAddCartBtn').onclick=()=>addToCart(activityId); $('detailModal').style.display='flex'; startDetailSlider();
   }
 function updateTop() {
