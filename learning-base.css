@@ -588,3 +588,13 @@
     width: 100%;
   }
 }
+/* ปุ่มใส่ตะกร้าในหน้ารายละเอียด */
+#detailAddCartBtn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+
+    width:220px;
+    margin:24px auto 0;
+}
