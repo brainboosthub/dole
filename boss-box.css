@@ -23,8 +23,6 @@
 .boss-box[hidden]{display:none !important;}
 
 .boss-photo-wrap{
-  width:122px;
-  height:162px;
   margin:0 auto 14px;
   border-radius:12px;
   overflow:hidden;
