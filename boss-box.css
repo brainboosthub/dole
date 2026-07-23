@@ -1,1 +1,79 @@
+/* Boss box — isolated styles */
+.left-info-stack{
+  position:absolute;
+  top:6px;
+  left:-285px;
+  width:255px;
+  z-index:20;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+.boss-box{
+  width:255px;
+  padding:20px 16px 18px;
+  background:#fff;
+  border:1px solid #e2e8f0;
+  border-radius:18px;
+  box-shadow:0 14px 35px rgba(15,23,42,.14);
+  text-align:center;
+}
+
+.boss-box[hidden]{display:none !important;}
+
+.boss-photo-wrap{
+  width:122px;
+  height:162px;
+  margin:0 auto 14px;
+  border-radius:12px;
+  overflow:hidden;
+  background:#f1f5f9;
+}
+
+.boss-photo{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  object-position:center top;
+}
+
+.boss-name{
+  color:#111827;
+  font-size:12px;
+  font-weight:800;
+  line-height:1.5;
+  overflow-wrap:anywhere;
+}
+
+.boss-position{
+  margin-top:4px;
+  color:#475569;
+  font-size:10.5px;
+  font-weight:600;
+  line-height:1.55;
+  overflow-wrap:anywhere;
+}
+
+@media(max-width:1450px){
+  .left-info-stack{
+    position:relative;
+    top:auto;
+    left:auto;
+    width:255px;
+    margin-top:6px;
+  }
+}
+
+@media(max-width:900px){
+  .left-info-stack{
+    order:2;
+    width:min(420px,100%);
+    margin:0 auto;
+  }
+  .boss-box{
+    width:100%;
+  }
+}
 
