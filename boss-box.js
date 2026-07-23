@@ -22,14 +22,20 @@
       return {
         image: byLabel['รูป'] || byLabel['รูปภาพ'] || '',
         name: byLabel['ชื่อ'] || '',
-        position: byLabel['ตำแหน่ง'] || ''
+        position: byLabel['ตำแหน่ง'] || '',
+        popupImage: byLabel['รูปป๊อปอัป'] || byLabel['รูป Pop-up'] || '',
+        popupUrl: byLabel['ลิงก์อ่านเพิ่มเติม'] || '',
+        popupMode: text(byLabel['เปิด/ปิด']).toLowerCase()
       };
     }
 
     return {
       image: text(source.image || source.photo || source.url || source['รูป'] || source['รูปภาพ']),
       name: text(source.name || source.fullName || source['ชื่อ']),
-      position: text(source.position || source.title || source['ตำแหน่ง'])
+      position: text(source.position || source.title || source['ตำแหน่ง']),
+      popupImage: text(source.popupImage || source.popup_image || source['รูปป๊อปอัป'] || source['รูป Pop-up']),
+      popupUrl: text(source.popupUrl || source.popup_url || source.detailUrl || source['ลิงก์อ่านเพิ่มเติม']),
+      popupMode: text(source.popupMode || source.popup_mode || source.mode || source['เปิด/ปิด']).toLowerCase()
     };
   }
 
@@ -68,6 +74,52 @@
     box.removeAttribute('hidden');
   }
 
+
+  function closeBossPopup() {
+    const popup = document.getElementById('bossPopup');
+    if (!popup) return;
+    popup.setAttribute('hidden', '');
+    popup.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('boss-popup-open');
+  }
+
+  function renderBossPopup(boss) {
+    const popup = document.getElementById('bossPopup');
+    const image = document.getElementById('bossPopupImage');
+    const actions = document.getElementById('bossPopupActions');
+    const detail = document.getElementById('bossPopupDetail');
+    if (!popup || !image || !actions || !detail) return;
+
+    if (boss.popupMode !== 'block' || !boss.popupImage) {
+      closeBossPopup();
+      return;
+    }
+
+    image.src = boss.popupImage;
+
+    if (boss.popupUrl) {
+      detail.href = boss.popupUrl;
+      actions.removeAttribute('hidden');
+    } else {
+      detail.removeAttribute('href');
+      actions.setAttribute('hidden', '');
+    }
+
+    popup.removeAttribute('hidden');
+    popup.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('boss-popup-open');
+  }
+
+  function bindBossPopupEvents() {
+    document.getElementById('bossPopupClose')?.addEventListener('click', closeBossPopup);
+    document.getElementById('bossPopup')?.addEventListener('click', event => {
+      if (event.target.id === 'bossPopup') closeBossPopup();
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') closeBossPopup();
+    });
+  }
+
   async function loadBoss() {
     try {
       const response = await fetch(BOSS_API_URL + '&_t=' + Date.now(), {
@@ -79,13 +131,18 @@
       const result = await response.json();
       if (result.success === false) throw new Error(result.message || 'โหลดข้อมูลผู้บริหารไม่สำเร็จ');
 
-      renderBoss(normalizeBoss(result));
+      const boss = normalizeBoss(result);
+      renderBoss(boss);
+      renderBossPopup(boss);
     } catch (error) {
       console.error('โหลดข้อมูลผู้บริหารไม่สำเร็จ:', error);
       hideBossBox();
     }
   }
 
-  document.addEventListener('DOMContentLoaded', loadBoss);
+  document.addEventListener('DOMContentLoaded', () => {
+    bindBossPopupEvents();
+    loadBoss();
+  });
 })();
 
