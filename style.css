@@ -34,7 +34,7 @@ html {
 }
 .hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,28,44,.96) 0%,rgba(5,28,44,.79) 40%,rgba(5,28,44,.1) 78%)}
 .hero-content{position:relative;z-index:2;color:#fff;padding-top:90px}.eyebrow,.section-kicker{text-transform:uppercase;letter-spacing:2px;font-size:12px;font-weight:600}.hero h1{font-size:clamp(42px,6vw,70px);line-height:.98;max-width:650px;margin:18px 0}.hero p{max-width:520px;line-height:1.8;opacity:.88}.hero-actions{display:flex;align-items:center;gap:26px;margin-top:30px}.text-link{font-weight:500}.floating-dot{position:absolute;border-radius:50%;background:var(--orange);box-shadow:0 0 0 7px rgba(255,132,103,.16)}.dot-1{width:12px;height:12px;left:9%;top:25%}.dot-2{width:8px;height:8px;left:39%;top:16%;background:var(--yellow)}.dot-3{width:10px;height:10px;right:8%;top:24%}
-.featured-section{background:linear-gradient(180deg,var(--orange) 0%,#ff8e71 54%,var(--yellow) 54%,#ffdc86 100%);padding:70px 0 95px;position:relative}.section-heading{display:flex;justify-content:space-between;align-items:end;margin-bottom:28px}.section-heading h2{font-size:clamp(28px,4vw,44px);margin:6px 0 0}.view-all{font-weight:600}
+.section-heading{display:flex;justify-content:space-between;align-items:end;margin-bottom:28px}.section-heading h2{font-size:clamp(28px,4vw,44px);margin:6px 0 0}.view-all{font-weight:600}
 .book-grid{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
@@ -103,14 +103,7 @@ html {
     grid-template-columns:1fr;
   }
 
-  .featured-section{
-    background:linear-gradient(
-      180deg,
-      var(--orange),
-      #ff9d82 72%,
-      var(--yellow)
-    );
-  }
+  
 
   .book-card{
     width:100%;
@@ -321,7 +314,7 @@ background: #ffffff;
   width:100%;
   margin:0;
   padding:24px 0 60px;
-  font-family:'Prompt','Kanit',Arial,sans-serif;
+  font-family:"Prompt","Kanit",Arial,sans-serif;
   background:#f5f7fb;
   color:#111827;
 }
@@ -340,7 +333,7 @@ background: #ffffff;
   border:0;
   border-radius:14px;
   padding:10px 16px;
-  font-family:'Prompt','Kanit',Arial,sans-serif;
+  font-family:"Prompt","Kanit",Arial,sans-serif;
   font-weight:700;
   cursor:pointer;
   background:#eb5325;
@@ -510,7 +503,7 @@ background: #ffffff;
   justify-content:center;
   padding:16px;
   background:rgba(15,23,42,.55);
-  font-family:'Prompt','Kanit',Arial,sans-serif;
+  font-family:"Prompt","Kanit",Arial,sans-serif;
   color:#111827;
 }
 
@@ -589,157 +582,59 @@ background: #ffffff;
 /* =====================================================
    Recommended books — separate box below news slider
 ===================================================== */
-.recommended-books-section{padding-top:44px}
-.book-toggle-wrap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 18px;
-}
 
-.book-list-toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 11px;
 
-  min-width: 190px;
-  padding: 11px 22px;
 
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
-  color: #263238;
 
-  font-family: inherit;
-  font-size: 17px;
-  font-weight: 600;
 
-  cursor: pointer;
-  transition:
-    transform 0.2s ease,
-    background-color 0.2s ease;
-}
 
-.book-list-toggle:hover {
-  background: rgba(255, 255, 255, 0.35);
-  transform: translateY(-2px);
-}
 
-.book-toggle-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
 
-  font-size: 32px;
-  font-weight: 700;
-  line-height: 1;
 
-  transform: rotate(0deg);
-  transition: transform 0.3s ease;
-}
-.book-toggle-icon{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
 
-    width:30px;
-    height:30px;
 
-    font-size:24px;
-    color:#333;
 
-    transition:.25s;
-}
 
-.book-list-toggle:hover .book-toggle-icon{
-    color:#ff9800;
-}
-.book-toggle-text {
-  line-height: 1;
-}
 
-.all-books-panel {
-  padding-top: 20px;
-  scroll-margin-top: 90px;
-}
-.book-showcase{
-  position:relative;
-  min-height:430px;
-  padding:34px 72px 52px;
-  border-radius:24px;
-  //background:linear-gradient(180deg,#0877a1 0%,#0785ad 58%,#d8eef3 100%);
-  overflow:hidden;
-  //box-shadow:0 14px 34px rgba(16,33,44,.14)}
-.book-slider-stage{position:relative;height:330px;display:flex;align-items:center;justify-content:center;perspective:1100px}
-.book-cover{position:absolute;width:175px;height:255px;padding:0;border:0;border-radius:8px;background:#fff;overflow:hidden;cursor:pointer;box-shadow:0 12px 28px rgba(0,0,0,.24);transition:transform .45s ease,opacity .45s ease,filter .45s ease;transform-origin:center bottom}
-.book-cover img{width:100%;height:100%;object-fit:cover;display:block}
-.book-cover-caption{position:absolute;left:0;right:0;bottom:0;padding:9px 8px;background:linear-gradient(transparent,rgba(0,0,0,.8));color:#fff;font-size:12px;font-weight:700;text-align:center}
-.book-cover.is-active{z-index:5;width:220px;height:320px;transform:translateX(0) scale(1);opacity:1}
-.book-cover.is-prev{
-    transform:translateX(-180px) scale(.88);
-}
 
-.book-cover.is-next{
-    transform:translateX(180px) scale(.88);
-}
 
-.book-cover.is-far-prev{
-    transform:translateX(-350px) scale(.72);
-}
 
-.book-cover.is-far-next{
-    transform:translateX(350px) scale(.72);
-}
-.book-slider-arrow{position:absolute;top:50%;z-index:8;width:46px;height:46px;border:0;border-radius:50%;background:#fff;color:#0877a1;font-size:34px;line-height:1;cursor:pointer;transform:translateY(-50%);box-shadow:0 8px 20px rgba(0,0,0,.18)}
-.book-slider-prev{left:18px}.book-slider-next{right:18px}
-.book-slider-dots{position:absolute;left:50%;bottom:18px;z-index:8;display:flex;gap:7px;transform:translateX(-50%)}
-.book-slider-dot{width:9px;height:9px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.55);cursor:pointer}
-.book-slider-dot.active{width:25px;border-radius:10px;background:#ffdd4a}
-.book-loading{display:flex;align-items:center;justify-content:center;width:100%;height:100%;color:#fff;font-weight:700}
-.all-books-panel{padding-top:26px}
-.all-books-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:20px}
-.all-book-card{overflow:hidden;border:1px solid #e5e7eb;border-radius:18px;background:#fff;box-shadow:0 8px 22px rgba(15,23,42,.08)}
-.all-book-card>img{width:100%;height:270px;object-fit:cover;background:#e5e7eb}
-.all-book-card-body{padding:15px}.all-book-card-body h3{margin:8px 0 14px;font-size:17px;color:#111827}
-.all-book-category{display:inline-block;padding:5px 9px;border-radius:999px;background:#e0f2fe;color:#0369a1;font-size:11px;font-weight:700}
-.book-detail-button{width:100%;border:0;border-radius:12px;padding:10px;background:#ef233c;color:#fff;font-weight:800;cursor:pointer}
-.book-detail-modal{display:none;position:fixed;inset:0;z-index:1500;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.68)}
-.book-detail-modal.open{display:flex}.book-detail-box{position:relative;width:min(900px,100%);max-height:90vh;overflow:auto;border-radius:24px;padding:28px;background:#d90429;color:#fff;box-shadow:0 25px 70px rgba(0,0,0,.38)}
-.book-detail-close{position:absolute;top:12px;right:14px;width:42px;height:42px;border:0;border-radius:50%;background:#fff;color:#d90429;font-size:28px;cursor:pointer}
-.book-detail-layout{display:grid;grid-template-columns:260px 1fr;gap:28px;align-items:start}.book-detail-image-wrap img{width:100%;max-height:390px;object-fit:cover;border-radius:16px;background:#fff}.book-detail-info{padding-top:10px}.book-detail-info h2{margin:5px 0 18px;color:#fff;font-size:30px}.book-detail-info p{white-space:pre-line;line-height:1.8}.book-detail-label{display:block;margin-top:12px;font-size:12px;font-weight:800;letter-spacing:.04em;opacity:.8}.book-detail-category{font-size:17px;font-weight:700}.modal-open{overflow:hidden}
-@media(max-width:720px){.book-showcase{min-height:360px;padding:25px 44px 48px}.book-slider-stage{height:270px}.book-cover{width:125px;height:185px}.book-cover.is-active{width:170px;height:250px}.book-cover.is-prev{transform:translateX(-125px) scale(.78)}.book-cover.is-next{transform:translateX(125px) scale(.78)}.book-cover.is-far-prev{transform:translateX(-220px) scale(.62)}.book-cover.is-far-next{transform:translateX(220px) scale(.62)}.book-slider-arrow{width:38px;height:38px;font-size:28px}.book-slider-prev{left:8px}.book-slider-next{right:8px}.book-detail-layout{grid-template-columns:1fr}.book-detail-image-wrap{max-width:230px;margin:auto}.book-detail-info h2{font-size:24px}}
-.book-toggle-icon{
-    width:28px;
-    display:inline-flex;
-    justify-content:center;
-    align-items:center;
-    font-size:22px;
-    color:#444;
-    transition:.25s;
-}
 
-.book-list-toggle:hover .book-toggle-icon{
-    color:#ff9800;
-}
-.book-cover.is-super-far-prev{
-    z-index:1;
-    transform:translateX(-520px) scale(.58);
-    opacity:.25;
-    filter:saturate(.45);
-}
 
-.book-cover.is-super-far-next{
-    z-index:1;
-    transform:translateX(520px) scale(.58);
-    opacity:.25;
-    filter:saturate(.45);
-}
 
-.book-cover.is-hidden{
-    opacity:0;
-    pointer-events:none;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.modal-open{overflow:hidden}
+
+
+
+
+
+
+
+
+
 html.classroom-embed,
 html.classroom-embed body{
   overflow:hidden !important;
@@ -751,11 +646,7 @@ html.classroom-embed #appPage{
   max-width:100%;
   padding:15px;
 }
-#newsSlider,
-#learningSourceBox,
-#classroomBox,
-#featured,
-#learningBaseModule {
+#newsSlider, #learningSourceBox, #classroomBox, #learningBaseModule{
   scroll-margin-top: 90px;
 }
 @media (max-width:860px){
@@ -863,12 +754,7 @@ html.classroom-embed #appPage{
     transform: scale(0.94);
   }
 
-  #home,
-  #newsSlider,
-  #learningSourceBox,
-  #classroomBox,
-  #featured,
-  #learningBaseModule {
+  #home, #newsSlider, #learningSourceBox, #classroomBox, #learningBaseModule{
     scroll-margin-top: 78px;
   }
 }
@@ -1754,21 +1640,11 @@ html.classroom-embed #appPage{
     margin-left:auto;
 }
 /* พื้นหลัง Popup */
-.book-detail-modal{
-    position: fixed;
-    inset: 0;
-    z-index: 99998;
-}
+
 
 /* กล่อง Popup */
-.book-detail-box{
-    position: relative;
-    z-index: 99999;
-}
-.book-detail-box{
-    position: relative;
-    overflow-y: auto;
-}
+
+
 
 #bookDetailClose{
     position: absolute;
@@ -1779,12 +1655,7 @@ html.classroom-embed #appPage{
 /* =========================================
    รูปแบบปุ่มปิด X ใช้ร่วมกันทั้งเว็บไซต์
 ========================================= */
-.news-close-btn,
-.learning-modal-close,
-.detail-close-btn,
-.profile-popup-close,
-.book-detail-close,
-.edit-profile-close {
+.news-close-btn, .learning-modal-close, .detail-close-btn, .profile-popup-close, .edit-profile-close{
 
     width:52px !important;
     height:52px !important;
@@ -1821,24 +1692,14 @@ html.classroom-embed #appPage{
 
     z-index:99999;
 }
-.news-close-btn:hover,
-.learning-modal-close:hover,
-.detail-close-btn:hover,
-.profile-popup-close:hover,
-.book-detail-close:hover,
-.edit-profile-close:hover {
+.news-close-btn:hover, .learning-modal-close:hover, .detail-close-btn:hover, .profile-popup-close:hover, .edit-profile-close:hover{
 
     background:#49515c !important;
     color:#ffffff !important;
     transform:scale(1.08);
 }
 
-.news-close-btn:focus,
-.learning-modal-close:focus,
-.detail-close-btn:focus,
-.profile-popup-close:focus,
-.book-detail-close:focus,
-.edit-profile-close:focus {
+.news-close-btn:focus, .learning-modal-close:focus, .detail-close-btn:focus, .profile-popup-close:focus, .edit-profile-close:focus{
 
     outline:none;
 
@@ -1847,12 +1708,7 @@ html.classroom-embed #appPage{
         0 0 0 4px rgba(95,103,116,.25) !important;
 }
 
-.news-close-btn:active,
-.learning-modal-close:active,
-.detail-close-btn:active,
-.profile-popup-close:active,
-.book-detail-close:active,
-.edit-profile-close:active {
+.news-close-btn:active, .learning-modal-close:active, .detail-close-btn:active, .profile-popup-close:active, .edit-profile-close:active{
 
     transform:scale(.95);
 }
@@ -1888,18 +1744,9 @@ html.classroom-embed #appPage{
 }
 
 /* Popup รายละเอียดหนังสือ */
-.book-detail-box{
-    position:relative;
-    overflow:auto;
-}
 
-.book-detail-close{
-    position:sticky !important;
-    top:0 !important;
-    float:right;
-    margin-top:-18px;
-    margin-right:-18px;
-}
+
+
 
 /* Popup โปรไฟล์มือถือ */
 #profileBox.profile-box-popup-open{
@@ -1913,12 +1760,7 @@ html.classroom-embed #appPage{
 }
 @media(max-width:600px){
 
-    .news-close-btn,
-    .learning-modal-close,
-    .detail-close-btn,
-    .profile-popup-close,
-    .book-detail-close,
-    .edit-profile-close {
+    .news-close-btn, .learning-modal-close, .detail-close-btn, .profile-popup-close, .edit-profile-close{
 
         width:46px !important;
         height:46px !important;

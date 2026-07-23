@@ -57,8 +57,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
       <a href="#newsSlider">ข่าวสาร</a>
       <a href="#learningSourceBox">แหล่งเรียนรู้</a>
       <a href="#classroomBox">สื่อวิดีโอการเรียนรู้ตลอดชีวิต</a>
-      <a href="#featured">หนังสือที่น่าสนใจ</a>
-      <a href="#learningBaseModule">กิจกรรม</a>
+<a href="#learningBaseModule">กิจกรรม</a>
     </nav>
 
     <div class="nav-profile-actions">
@@ -93,8 +92,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
         <h1><span id="heroTitleLine1"></span><br><span id="heroTitleLine2"></span></h1>
         <p>ค้นพบหนังสือ ภาพประกอบ และเรื่องราวที่ช่วยเปิดมุมมองใหม่ในทุกวัน</p>
         <div class="hero-actions">
-          <a class="primary-btn" href="#featured">ดูหนังสือแนะนำ</a>
-          <a class="text-link" href="#categories">ดูทุกหมวดหมู่ <span>→</span></a>
+<a class="text-link" href="#categories">ดูทุกหมวดหมู่ <span>→</span></a>
         </div>
       </div>
       <div class="floating-dot dot-1"></div>
@@ -273,50 +271,6 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
 
       <div id="classroomDots" class="classroom-dots"></div>
 
-    </div>
-  </div>
-</section>
-
-<!-- หนังสือที่น่าอ่าน: อยู่ Box ถัดลงมาจากข่าวสาร -->
-<section id="featured" class="featured-section recommended-books-section">
-  <div class="container">
-    <div class="section-heading">
-      <div>
-        <span class="section-kicker">หนังสือที่น่าอ่าน</span>
-        <h2>หนังสือที่น่าสนใจ</h2>
-      </div>
-
-    </div>
-
-    <div class="book-showcase">
-      <button id="bookPrev" class="book-slider-arrow book-slider-prev" type="button" aria-label="หนังสือก่อนหน้า">‹</button>
-      <div id="bookSlides" class="book-slider-stage">
-        <div class="book-loading">กำลังโหลดหนังสือ...</div>
-      </div>
-      <button id="bookNext" class="book-slider-arrow book-slider-next" type="button" aria-label="หนังสือถัดไป">›</button>
-      <div id="bookDots" class="book-slider-dots"></div>
-    </div>
-
-<!-- ปุ่มเปิด/ปิดหนังสือทั้งหมด -->
-<div class="book-toggle-wrap">
-<button id="toggleBookListBtn"
-        class="book-list-toggle"
-        type="button"
-        aria-expanded="false">
-
-    <span class="book-toggle-icon">
-        <i class="fa fa-eye-slash"></i>
-    </span>
-
-    <span class="book-toggle-text">
-        หนังสือทั้งหมด
-    </span>
-
-</button>
-</div>
-
-    <div id="allBooksPanel" class="all-books-panel" hidden>
-      <div id="allBooksGrid" class="all-books-grid"></div>
     </div>
   </div>
 </section>
@@ -667,11 +621,6 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
 
 
 <!-- Popup รายละเอียดหนังสือ -->
-<div id="bookDetailModal" class="book-detail-modal" aria-hidden="true">
-  <div class="book-detail-box" role="dialog" aria-modal="true" aria-labelledby="bookDetailTitle">
-    <button id="bookDetailClose" class="book-detail-close" type="button" aria-label="ปิด">×</button>
-    <div id="bookDetailContent"></div>
-  </div>
 </div>
 
   <script src="learning-base.js?v=20260720-3"></script>
@@ -1089,13 +1038,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <i class="fa fa-play-circle" aria-hidden="true"></i>
     <span>วิดีโอเอกสาร</span>
   </a>
-
-  <a href="#featured" class="mobile-bottom-link">
-    <i class="fa fa-book" aria-hidden="true"></i>
-    <span>หนังสือ</span>
-  </a>
-
-  <a href="#learningBaseModule" class="mobile-bottom-link">
+<a href="#learningBaseModule" class="mobile-bottom-link">
     <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
     <span>กิจกรรม</span>
   </a>
@@ -1112,8 +1055,7 @@ document.addEventListener('DOMContentLoaded', function () {
     'newsSlider',
     'learningSourceBox',
     'classroomBox',
-    'featured',
-    'learningBaseModule'
+'learningBaseModule'
   ];
 
   const setActiveMenu = function (targetId) {
