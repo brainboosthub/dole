@@ -530,9 +530,11 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
       ×
     </button>
 
+    <!-- เนื้อหา -->
     <div id="detailContent"></div>
 
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:15px">
+    <!-- Footer -->
+    <div class="detail-footer">
 
       <button id="detailAddCartBtn" type="button">
         <i class="bi bi-bag-plus-fill"></i>
