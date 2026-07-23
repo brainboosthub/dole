@@ -191,17 +191,13 @@
     padding:24px;
 }
 
-/* Footer */
 #detailModal .detail-footer{
     display:flex;
     justify-content:center;
     align-items:center;
-    width:100%;
-    padding:18px 24px 24px;
-    border-top:1px solid #e5e7eb;
-    background:#fff;
-}
 
+    padding:20px 24px 40px;
+}
 #detailModal #detailAddCartBtn{
     display:inline-flex;
     align-items:center;
