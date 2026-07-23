@@ -1,7 +1,7 @@
 /* Boss box — isolated styles */
 .left-info-stack{
   position:absolute;
-  top:6px;
+  top:108px;
   left:-285px;
   width:255px;
   z-index:20;
@@ -62,7 +62,7 @@
     top:auto;
     left:auto;
     width:255px;
-    margin-top:6px;
+    margin-top:108px;
   }
 }
 
