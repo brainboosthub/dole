@@ -209,3 +209,6 @@
 
     margin:0 auto;
 }
+#detailModal #detailAddCartBtn{
+    margin-top:6px;
+}
