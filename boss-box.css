@@ -77,7 +77,6 @@
   }
 }
 
-
 /* Popup ประชาสัมพันธ์จากชีต boss */
 .boss-popup{
   position:fixed;
@@ -86,54 +85,70 @@
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:24px;
+  padding:34px;
   background:rgba(0,0,0,.72);
   backdrop-filter:blur(2px);
   -webkit-backdrop-filter:blur(2px);
 }
 
-.boss-popup[hidden]{display:none !important;}
+.boss-popup[hidden]{
+  display:none !important;
+}
 
+/* กล่องภายนอก ไม่ตัดปุ่มปิด */
 .boss-popup-dialog{
   position:relative;
-  width:min(760px,94vw);
-  max-height:92vh;
-  overflow:auto;
+  width:min(760px,92vw);
+  max-height:90vh;
+  overflow:visible;
   background:#fff;
   border-radius:24px;
   box-shadow:0 28px 80px rgba(0,0,0,.42);
   padding:12px 12px 24px;
   animation:bossPopupIn .24s ease-out;
+  box-sizing:border-box;
 }
 
+/* รูปไม่ให้ล้นจนเกิด scrollbar */
 .boss-popup-image{
   display:block;
   width:100%;
-  max-height:72vh;
+  height:auto;
+  max-height:calc(90vh - 105px);
   object-fit:contain;
   border-radius:18px;
   background:#f8fafc;
 }
 
-.boss-popup-close{
+/* ปุ่มปิด แสดงเต็มวง */
+.boss-popup-close,
+#bossPopupClose{
   position:absolute;
-  top:-17px;
-  right:-17px;
-  z-index:2;
+  top:-22px;
+  right:-22px;
+  z-index:100;
   width:52px;
   height:52px;
+  padding:0;
   border:4px solid #fff;
   border-radius:50%;
   background:#64748b;
   color:#fff;
-  font-size:38px;
+  font-size:36px;
   font-weight:400;
-  line-height:42px;
+  line-height:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   cursor:pointer;
-  box-shadow:0 8px 22px rgba(0,0,0,.3);
+  box-sizing:border-box;
+  box-shadow:0 8px 22px rgba(0,0,0,.35);
 }
 
-.boss-popup-close:hover{background:#475569;}
+.boss-popup-close:hover,
+#bossPopupClose:hover{
+  background:#475569;
+}
 
 .boss-popup-actions{
   display:flex;
@@ -141,7 +156,9 @@
   padding-top:18px;
 }
 
-.boss-popup-actions[hidden]{display:none !important;}
+.boss-popup-actions[hidden]{
+  display:none !important;
+}
 
 .boss-popup-detail{
   display:inline-flex;
@@ -164,48 +181,45 @@
   filter:brightness(.96);
 }
 
-body.boss-popup-open{overflow:hidden;}
+body.boss-popup-open{
+  overflow:hidden;
+}
 
 @keyframes bossPopupIn{
-  from{opacity:0;transform:translateY(12px) scale(.97)}
-  to{opacity:1;transform:translateY(0) scale(1)}
+  from{
+    opacity:0;
+    transform:translateY(12px) scale(.97);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
 }
 
 @media(max-width:600px){
-  .boss-popup{padding:14px;}
-  .boss-popup-dialog{width:100%;padding:8px 8px 18px;border-radius:18px;}
-  .boss-popup-image{border-radius:13px;max-height:76vh;}
-  .boss-popup-close{top:-10px;right:-8px;width:44px;height:44px;font-size:32px;line-height:35px;}
-}
-#bossPopupClose{
-  position:absolute;
-  top:-22px;
-  right:-22px;
-  width:52px;
-  height:52px;
-  border:4px solid #fff;
-  border-radius:50%;
-  background:#64748b;
-  color:#fff;
-  font-size:36px;
-  line-height:42px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-  z-index:9999;
-  box-shadow:0 6px 18px rgba(0,0,0,.35);
-}
-.boss-popup-card{
-  overflow:visible;
-}
-@media (max-width:600px){
+  .boss-popup{
+    padding:26px 14px 14px;
+  }
+
+  .boss-popup-dialog{
+    width:100%;
+    max-height:92vh;
+    padding:8px 8px 18px;
+    border-radius:18px;
+  }
+
+  .boss-popup-image{
+    max-height:calc(92vh - 95px);
+    border-radius:13px;
+  }
+
+  .boss-popup-close,
   #bossPopupClose{
-    top:-16px;
-    right:-8px;
+    top:-18px;
+    right:-6px;
     width:44px;
     height:44px;
+    border-width:3px;
     font-size:30px;
-    line-height:36px;
   }
 }
