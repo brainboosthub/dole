@@ -430,7 +430,6 @@ if (!fullname || !phone) {
           ${a.learningType ? `<div class="learning-muted">รูปแบบ: ${escapeHtml(a.learningType)}</div>`:''}
           <div class="learning-muted">วันที่: ${formatThaiDate(a.activityDate)}</div>
           <div class="learning-muted">ครูฐาน: ${escapeHtml(a.teacherName || '-')}</div>
-          <p class="learning-muted">${escapeHtml(a.detail || '')}</p>
     <div class="learning-card-actions">
       <button type="button"
         onclick="LearningBase.addToCart('${escapeHtml(a.activityId)}')">
