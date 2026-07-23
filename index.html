@@ -24,7 +24,7 @@
 <link rel="stylesheet" href="style.css?v=20260722-2" />
   <link rel="stylesheet" href="learning-base.css?v=20260720-3" />
   <link rel="stylesheet" href="learning-source-box.css?v=20260720-1" />
-  <link rel="stylesheet" href="boss-box.css?v=20260723-1" />
+  <link rel="stylesheet" href="boss-box.css?v=20260723-2" />
   <link rel="stylesheet" href="bus-box.css?v=20260723-1" />
   <link rel="stylesheet" href="classroom-box.css?v=20260720-2" />
   <link rel="stylesheet" href="profile-box.css?v=20260721-2" />
@@ -396,7 +396,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
 
 <script src="script.js?v=20260722-2"></script>
   <script src="learning-source-box.js?v=20260720-1"></script>
-  <script src="boss-box.js?v=20260723-1"></script>
+  <script src="boss-box.js?v=20260723-2"></script>
   <script src="bus-box.js?v=20260723-1"></script>
   <script src="classroom-box.js?v=20260720-2"></script>
 
@@ -1166,5 +1166,16 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 </script>
+  <!-- Popup ประชาสัมพันธ์จากชีต boss -->
+  <div id="bossPopup" class="boss-popup" hidden aria-hidden="true">
+    <div class="boss-popup-dialog" role="dialog" aria-modal="true" aria-label="ประชาสัมพันธ์">
+      <button id="bossPopupClose" class="boss-popup-close" type="button" aria-label="ปิด">×</button>
+      <img id="bossPopupImage" class="boss-popup-image" src="" alt="ภาพประชาสัมพันธ์">
+      <div id="bossPopupActions" class="boss-popup-actions" hidden>
+        <a id="bossPopupDetail" class="boss-popup-detail" href="#" target="_blank" rel="noopener noreferrer">รายละเอียด</a>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
