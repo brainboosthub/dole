@@ -2065,7 +2065,7 @@ html.classroom-embed #appPage{
 .learning-cart-item{
   display:grid;
   grid-template-columns:180px minmax(0,1fr);
-  gap:12px;
+  gap:25px;
   align-items:center;
 }
 
