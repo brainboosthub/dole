@@ -24,7 +24,8 @@
 <link rel="stylesheet" href="style.css?v=20260722-2" />
   <link rel="stylesheet" href="learning-base.css?v=20260720-3" />
   <link rel="stylesheet" href="learning-source-box.css?v=20260720-1" />
-  <link rel="stylesheet" href="bus-box.css?v=20260720-1" />
+  <link rel="stylesheet" href="boss-box.css?v=20260723-1" />
+  <link rel="stylesheet" href="bus-box.css?v=20260723-1" />
   <link rel="stylesheet" href="classroom-box.css?v=20260720-2" />
   <link rel="stylesheet" href="profile-box.css?v=20260721-2" />
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -106,24 +107,36 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
   <div class="container">
     <div id="newsBusLayout" class="news-bus-layout bus-is-hidden">
 
-      <aside id="busBox" class="bus-box" hidden aria-live="polite">
-        <div class="bus-visual">
-          <img
-            class="bus-image"
-            src="https://static.wixstatic.com/media/a503e5_823e4678ac4746edbe89fbcdacde2a47~mv2.png"
-            alt="รถโมบายส่งเสริมการอ่าน">
-        </div>
+      <div id="leftInfoStack" class="left-info-stack">
+        <aside id="bossBox" class="boss-box" hidden aria-live="polite">
+          <div class="boss-photo-wrap">
+            <img id="bossPhoto" class="boss-photo" src="" alt="รูปผู้บริหาร">
+          </div>
+          <div class="boss-text">
+            <div id="bossName" class="boss-name"></div>
+            <div id="bossPosition" class="boss-position"></div>
+          </div>
+        </aside>
 
-        <div id="busContent" class="bus-content">
-          <div class="bus-loading">กำลังโหลดกิจกรรมรถโมบาย...</div>
-        </div>
+        <aside id="busBox" class="bus-box" hidden aria-live="polite">
+          <div class="bus-visual">
+            <img
+              class="bus-image"
+              src="https://static.wixstatic.com/media/a503e5_823e4678ac4746edbe89fbcdacde2a47~mv2.png"
+              alt="รถโมบายส่งเสริมการอ่าน">
+          </div>
 
-        <div id="busControls" class="bus-controls" hidden>
-          <button id="busPrev" class="bus-nav" type="button" aria-label="กิจกรรมก่อนหน้า">‹</button>
-          <div id="busDots" class="bus-dots"></div>
-          <button id="busNext" class="bus-nav" type="button" aria-label="กิจกรรมถัดไป">›</button>
-        </div>
-      </aside>
+          <div id="busContent" class="bus-content">
+            <div class="bus-loading">กำลังโหลดกิจกรรมรถโมบาย...</div>
+          </div>
+
+          <div id="busControls" class="bus-controls" hidden>
+            <button id="busPrev" class="bus-nav" type="button" aria-label="กิจกรรมก่อนหน้า">‹</button>
+            <div id="busDots" class="bus-dots"></div>
+            <button id="busNext" class="bus-nav" type="button" aria-label="กิจกรรมถัดไป">›</button>
+          </div>
+        </aside>
+      </div>
 
       <div class="news-column">
         <div class="section-heading">
@@ -383,7 +396,8 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
 
 <script src="script.js?v=20260722-2"></script>
   <script src="learning-source-box.js?v=20260720-1"></script>
-  <script src="bus-box.js?v=20260720-1"></script>
+  <script src="boss-box.js?v=20260723-1"></script>
+  <script src="bus-box.js?v=20260723-1"></script>
   <script src="classroom-box.js?v=20260720-2"></script>
 
 <!-- Student Modal -->
