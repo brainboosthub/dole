@@ -1687,11 +1687,20 @@ html.classroom-embed #appPage{
   cursor:pointer;
 }
 .edit-profile-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  width:100%;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background: #fff;
+
+    margin: 16px 16px 0;   /* เว้นซ้าย-ขวา */
+    padding: 16px 0;        /* เว้นบน-ล่าง */
+
+    border-bottom: 1px solid #e5e7eb;
 }
 
 .edit-profile-title{
