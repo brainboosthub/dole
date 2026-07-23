@@ -196,3 +196,16 @@ body.boss-popup-open{overflow:hidden;}
   z-index:9999;
   box-shadow:0 6px 18px rgba(0,0,0,.35);
 }
+.boss-popup-card{
+  overflow:visible;
+}
+@media (max-width:600px){
+  #bossPopupClose{
+    top:-16px;
+    right:-8px;
+    width:44px;
+    height:44px;
+    font-size:30px;
+    line-height:36px;
+  }
+}
