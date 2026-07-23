@@ -1690,16 +1690,11 @@ html.classroom-embed #appPage{
     position: sticky;
     top: 0;
     z-index: 20;
-
     display: flex;
     justify-content: space-between;
     align-items: center;
-
     background: #fff;
-
     margin: 20px 20px 0;   /* เว้นซ้าย-ขวา */
-    padding: 16px 0;        /* เว้นบน-ล่าง */
-
     border-bottom: 1px solid #e5e7eb;
 }
 
