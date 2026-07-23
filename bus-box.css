@@ -37,12 +37,11 @@
   transform:none;
 }
 
-/* Box Bus ลอยด้านซ้าย */
+/* Box Bus อยู่ใต้ Box ผู้บริหารภายใน left-info-stack */
 .bus-box{
-  position:absolute !important;
-
-  top:108px;
-  left:-285px;
+  position:relative !important;
+  top:auto;
+  left:auto;
 
   width:255px;
   max-width:255px;
@@ -242,15 +241,9 @@
   }
 
   .bus-box{
-    position:relative !important;
-
-    top:auto;
-    left:auto;
-
     width:100%;
     max-width:255px;
-
-    margin:108px 0 0 !important;
+    margin:0 !important;
   }
 }
 
@@ -271,11 +264,8 @@
   }
 
   .bus-box{
-    order:2;
-
-    width:min(420px,100%);
+    width:100%;
     max-width:420px;
-
     margin:0 auto !important;
   }
 }
