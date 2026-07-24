@@ -1952,3 +1952,24 @@ html.classroom-embed #appPage{
     max-width:100%;
   }
 }
+.activity-box-more-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+
+    padding:10px 18px;
+
+    background:#ff9800;
+    color:#fff;
+    text-decoration:none;
+
+    border-radius:999px;
+    font-weight:600;
+
+    transition:.25s;
+}
+
+.activity-box-more-btn:hover{
+    background:#f57c00;
+    transform:translateY(-2px);
+}
