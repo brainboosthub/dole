@@ -184,3 +184,15 @@
     font-size:17px;
   }
 }
+.activity-box-date{
+    margin-top:10px;
+    color:#777;
+    font-size:14px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
+
+.activity-box-date i{
+    color:#ff9800;
+}
