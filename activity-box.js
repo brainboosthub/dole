@@ -45,17 +45,6 @@
     };
   }
 
-function getActivitiesFromResponse(result) {
-
-  const raw =
-    result.activities ||
-    [];
-
-  return raw
-    .map(normalizeActivity)
-    .filter(item => item.title || item.image);
-
-}
 
   function renderActivities(items) {
     const grid = document.getElementById('activityBoxGrid');
