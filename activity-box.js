@@ -1,1 +1,160 @@
+(() => {
+  'use strict';
+
+  const ACTIVITY_API_URL =
+    'https://script.google.com/macros/s/AKfycbzq9SWm2mEBe_gsusJKNEj7hlORO29BejRrOI7CoapwBj145UCyUBccmzdv4pzLAHlW/exec?mode=activity';
+
+  const state = {
+    items: []
+  };
+
+  const escapeHtml = (value) => String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+
+  function normalizeActivity(row) {
+    return {
+      title: String(
+        row.title ??
+        row.topic ??
+        row.name ??
+        row['เรื่อง'] ??
+        ''
+      ).trim(),
+
+      image: String(
+        row.image ??
+        row.imageUrl ??
+        row.photo ??
+        row['รูป'] ??
+        row['URL รูปภาพ'] ??
+        ''
+      ).trim(),
+
+      url: String(
+        row.url ??
+        row.link ??
+        row.detailUrl ??
+        row['URL รายละเอียด'] ??
+        row['รายละเอียด'] ??
+        ''
+      ).trim()
+    };
+  }
+
+  function getActivitiesFromResponse(result) {
+    const raw =
+      result.activities ??
+      result.data ??
+      result.items ??
+      result;
+
+    if (!Array.isArray(raw)) return [];
+
+    /*
+     * Apps Script ควรส่งข้อมูลแถวล่างสุดมาก่อนอยู่แล้ว
+     * reverse() ด้านล่างรองรับกรณี API ส่งข้อมูลตามลำดับชีต
+     * โดย Apps Script สามารถส่ง reverseOrder: true เพื่อไม่ให้กลับซ้ำ
+     */
+    const items = raw
+      .map(normalizeActivity)
+      .filter(item => item.title || item.image);
+
+    return result.reverseOrder === true
+      ? items
+      : items.reverse();
+  }
+
+  function renderActivities(items) {
+    const grid = document.getElementById('activityBoxGrid');
+    const status = document.getElementById('activityBoxStatus');
+
+    if (!grid || !status) return;
+
+    if (!items.length) {
+      grid.innerHTML = '';
+      status.hidden = false;
+      status.textContent = 'ยังไม่มีข้อมูลกิจกรรม';
+      return;
+    }
+
+    status.hidden = true;
+
+    grid.innerHTML = items.map((item, index) => {
+      const title = escapeHtml(item.title || 'กิจกรรม');
+      const image = escapeHtml(
+        item.image ||
+        'https://placehold.co/900x650?text=Activity'
+      );
+      const url = escapeHtml(item.url || '');
+      const clickableClass = item.url ? ' is-clickable' : '';
+
+      return `
+        <article class="activity-box-card${clickableClass}">
+          <a class="activity-box-image-link"
+             href="${url || '#'}"
+             ${item.url ? 'target="_blank" rel="noopener noreferrer"' : ''}
+             aria-label="เปิดรายละเอียด ${title}"
+             ${item.url ? '' : 'aria-disabled="true" tabindex="-1"'}>
+            <img
+              src="${image}"
+              alt="${title}"
+              loading="lazy"
+              onerror="this.onerror=null;this.src='https://placehold.co/900x650?text=Activity';">
+            <span class="activity-box-badge">
+              <i class="fa fa-star" aria-hidden="true"></i>
+              กิจกรรม
+            </span>
+          </a>
+
+          <div class="activity-box-card-body">
+            <h3>${title}</h3>
+          </div>
+        </article>
+      `;
+    }).join('');
+  }
+
+  async function loadActivities() {
+    const status = document.getElementById('activityBoxStatus');
+
+    try {
+      const response = await fetch(
+        ACTIVITY_API_URL + '&_t=' + Date.now(),
+        {
+          method: 'GET',
+          cache: 'no-store'
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      if (result.success === false) {
+        throw new Error(
+          result.message || 'โหลดข้อมูลกิจกรรมไม่สำเร็จ'
+        );
+      }
+
+      state.items = getActivitiesFromResponse(result);
+      renderActivities(state.items);
+    } catch (error) {
+      console.error('Activity Box:', error);
+
+      if (status) {
+        status.hidden = false;
+        status.textContent =
+          'ไม่สามารถโหลดข้อมูลกิจกรรมได้ กรุณาตรวจสอบ Apps Script';
+      }
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', loadActivities);
+})();
 
