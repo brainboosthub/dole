@@ -121,35 +121,44 @@ function load() {
     oldScript.remove();
   }
 
+  clearTimeout(window.learningLoadTimer);
+
   window.learningLoadTimer = setTimeout(function () {
     showLoadError(
       'หมดเวลารอข้อมูลจาก Google Apps Script'
     );
-  }, 20000);
+  }, 30000);
 
   const script = document.createElement('script');
 
   script.id = 'learningJsonpScript';
+  script.async = true;
 
   script.src =
     LEARNING_API_URL +
-    '&callback=receiveLearningData' +
-    '&_=' +
-    Date.now();
+    '&callback=window.receiveLearningData';
 
-  script.async = true;
+  script.onload = function () {
+    console.log('โหลดไฟล์ JSONP สำเร็จ');
+  };
 
-  script.onerror = function () {
+  script.onerror = function (event) {
     clearTimeout(window.learningLoadTimer);
 
+    console.error(
+      'JSONP URL ที่โหลดไม่สำเร็จ:',
+      script.src,
+      event
+    );
+
     showLoadError(
-      'ไม่สามารถโหลด JSONP จาก Google Apps Script'
+      'ไม่สามารถเชื่อมต่อ Google Apps Script'
     );
 
     script.remove();
   };
 
-  document.head.appendChild(script);
+  document.body.appendChild(script);
 }
     $('learningSearch').addEventListener('input',applyFilters);$('learningCategory').addEventListener('change',applyFilters);$('learningSort').addEventListener('change',applyFilters);$('learningReset').addEventListener('click',resetFilters);$('learningModalClose').addEventListener('click',closeModal);$('learningModal').addEventListener('click',e=>{if(e.target===$('learningModal'))closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});document.addEventListener('DOMContentLoaded',load);
   })();
