@@ -63,6 +63,94 @@
     function moveSlide(d){if(state.detailImages.length<2)return;state.detailIndex=(state.detailIndex+d+state.detailImages.length)%state.detailImages.length;const t=$('detailSliderTrack');if(t)t.style.transform=`translateX(-${state.detailIndex*100}%)`}
     function closeModal(){$('learningModal').hidden=true;document.body.style.overflow=''}
     function resetFilters(){$('learningSearch').value='';$('learningCategory').value='';$('learningSort').value='name-asc';applyFilters()}
+function showLoadError(message) {
+  console.error('Learning error:', message);
+
+  $('learningResultText').textContent =
+    'ไม่สามารถโหลดข้อมูลได้';
+
+  $('learningGrid').innerHTML = `
+    <div class="learning-status">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      ไม่สามารถโหลดข้อมูลแหล่งเรียนรู้ได้<br>
+      ${esc(message || 'เชื่อมต่อฐานข้อมูลไม่สำเร็จ')}
+    </div>
+  `;
+}
+
+function handleLearningData(result) {
+  clearTimeout(window.learningLoadTimer);
+
+  if (!result || result.success !== true) {
+    showLoadError(
+      result && result.message
+        ? result.message
+        : 'ข้อมูลที่ได้รับไม่ถูกต้อง'
+    );
+    return;
+  }
+
+  state.items = Array.isArray(result.sources)
+    ? result.sources
+        .map(normalize)
+        .filter(item => item.name || item.image_url)
+    : [];
+
+  fillCategories();
+  applyFilters();
+
+  const script =
+    document.getElementById('learningJsonpScript');
+
+  if (script) {
+    script.remove();
+  }
+}
+
+/*
+ * ต้องประกาศ callback ไว้บน window
+ * เพื่อให้ Apps Script เรียกได้
+ */
+window.receiveLearningData = handleLearningData;
+
+function load() {
+  const oldScript =
+    document.getElementById('learningJsonpScript');
+
+  if (oldScript) {
+    oldScript.remove();
+  }
+
+  window.learningLoadTimer = setTimeout(function () {
+    showLoadError(
+      'หมดเวลารอข้อมูลจาก Google Apps Script'
+    );
+  }, 20000);
+
+  const script = document.createElement('script');
+
+  script.id = 'learningJsonpScript';
+
+  script.src =
+    LEARNING_API_URL +
+    '&callback=receiveLearningData' +
+    '&_=' +
+    Date.now();
+
+  script.async = true;
+
+  script.onerror = function () {
+    clearTimeout(window.learningLoadTimer);
+
+    showLoadError(
+      'ไม่สามารถโหลด JSONP จาก Google Apps Script'
+    );
+
+    script.remove();
+  };
+
+  document.head.appendChild(script);
+}
     $('learningSearch').addEventListener('input',applyFilters);$('learningCategory').addEventListener('change',applyFilters);$('learningSort').addEventListener('change',applyFilters);$('learningReset').addEventListener('click',resetFilters);$('learningModalClose').addEventListener('click',closeModal);$('learningModal').addEventListener('click',e=>{if(e.target===$('learningModal'))closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});document.addEventListener('DOMContentLoaded',load);
   })();
   </script>
