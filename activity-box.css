@@ -60,25 +60,34 @@
   box-shadow:0 16px 34px rgba(15, 23, 42, .15);
 }
 
-.activity-box-image-link{
-    position: relative;
-    display: block;
-    width: 100%;
-    aspect-ratio: 3 / 4;
-    overflow: hidden;
-    background: transparent;
-}
 
 
 .activity-box-image-link[aria-disabled="true"]{
   cursor:default;
 }
 
-.activity-box-image-link img{
+.activity-box-image-link{
+    position:relative;
+    display:block;
     width:100%;
-    height:100%;
-    object-fit:contain;   /* เห็นทั้งภาพ */
-    background:#fff;
+    overflow:hidden;
+    text-decoration:none;
+
+    /* รูปชนขอบ */
+    margin:0;
+    padding:0;
+
+    border-radius:18px 18px 0 0;
+    background:transparent;
+}
+
+.activity-box-image-link img{
+    display:block;
+    width:100%;
+    height:auto;          /* ให้สูงตามสัดส่วนจริง */
+    object-fit:unset;
+
+    border-radius:18px 18px 0 0;
 }
 
 .activity-box-card.is-clickable:hover .activity-box-image-link img{
@@ -102,9 +111,19 @@
 }
 
 .activity-box-card-body{
-  padding:14px 18px 18px;
+    padding:16px 18px 20px;
+    background:#fff;
 }
+.activity-box-card{
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+    border:1px solid #e5e7eb;
+    box-shadow:0 8px 24px rgba(15,23,42,.08);
 
+    display:flex;
+    flex-direction:column;
+}
 .activity-box-card-body h3{
   display:-webkit-box;
   overflow:hidden;
