@@ -176,3 +176,33 @@
     flex-basis: 62px;
   }
 }
+/* ===== คอลัมน์ด้านขวา ===== */
+
+.right-info-stack{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    width:255px;
+    align-self:start;
+}
+
+.right-info-stack > *{
+    width:100%;
+}
+
+.right-info-stack .profile-box{
+    position:relative !important;
+    top:auto !important;
+    right:auto !important;
+    left:auto !important;
+
+    width:100% !important;
+    max-width:none !important;
+
+    margin:0 !important;
+}
+
+.right-info-stack .student-box{
+    margin:0;
+    width:100%;
+}
