@@ -45,28 +45,17 @@
     };
   }
 
-  function getActivitiesFromResponse(result) {
-    const raw =
-      result.activities ??
-      result.data ??
-      result.items ??
-      result;
+function getActivitiesFromResponse(result) {
 
-    if (!Array.isArray(raw)) return [];
+  const raw =
+    result.activities ||
+    [];
 
-    /*
-     * Apps Script ควรส่งข้อมูลแถวล่างสุดมาก่อนอยู่แล้ว
-     * reverse() ด้านล่างรองรับกรณี API ส่งข้อมูลตามลำดับชีต
-     * โดย Apps Script สามารถส่ง reverseOrder: true เพื่อไม่ให้กลับซ้ำ
-     */
-    const items = raw
-      .map(normalizeActivity)
-      .filter(item => item.title || item.image);
+  return raw
+    .map(normalizeActivity)
+    .filter(item => item.title || item.image);
 
-    return result.reverseOrder === true
-      ? items
-      : items.reverse();
-  }
+}
 
   function renderActivities(items) {
     const grid = document.getElementById('activityBoxGrid');
@@ -118,42 +107,46 @@
     }).join('');
   }
 
-  async function loadActivities() {
-    const status = document.getElementById('activityBoxStatus');
+async function loadActivities() {
+  const status = document.getElementById('activityBoxStatus');
 
-    try {
-      const response = await fetch(
-        ACTIVITY_API_URL + '&_t=' + Date.now(),
-        {
-          method: 'GET',
-          cache: 'no-store'
-        }
+  try {
+    const response = await fetch(
+      ACTIVITY_API_URL + '&_t=' + Date.now(),
+      {
+        method: 'GET',
+        cache: 'no-store'
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    if (!result.success) {
+      throw new Error(
+        result.message || 'โหลดข้อมูลกิจกรรมไม่สำเร็จ'
       );
+    }
 
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
+    state.items = (result.activities || [])
+      .map(normalizeActivity)
+      .filter(item => item.title || item.image);
 
-      const result = await response.json();
+    renderActivities(state.items);
 
-      if (result.success === false) {
-        throw new Error(
-          result.message || 'โหลดข้อมูลกิจกรรมไม่สำเร็จ'
-        );
-      }
+  } catch (error) {
+    console.error('Activity Box:', error);
 
-      state.items = getActivitiesFromResponse(result);
-      renderActivities(state.items);
-    } catch (error) {
-      console.error('Activity Box:', error);
-
-      if (status) {
-        status.hidden = false;
-        status.textContent =
-          'ไม่สามารถโหลดข้อมูลกิจกรรมได้ กรุณาตรวจสอบ Apps Script';
-      }
+    if (status) {
+      status.hidden = false;
+      status.textContent =
+        'ไม่สามารถโหลดข้อมูลกิจกรรมได้ กรุณาตรวจสอบ Apps Script';
     }
   }
+}
 
   document.addEventListener('DOMContentLoaded', loadActivities);
 })();
