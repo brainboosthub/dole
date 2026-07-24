@@ -128,9 +128,10 @@ async function loadActivities() {
       );
     }
 
-    state.items = (result.activities || [])
-      .map(normalizeActivity)
-      .filter(item => item.title || item.image);
+state.items = (result.activities || [])
+  .map(normalizeActivity)
+  .filter(item => item.title || item.image)
+  .slice(0, 5);   // แสดงเฉพาะ 5 รายการล่าสุด
 
     renderActivities(state.items);
 
