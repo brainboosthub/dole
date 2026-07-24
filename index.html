@@ -24,6 +24,7 @@
 <link rel="stylesheet" href="style.css?v=20260722-2" />
   <link rel="stylesheet" href="learning-base.css?v=20260720-3" />
   <link rel="stylesheet" href="learning-source-box.css?v=20260720-1" />
+  <link rel="stylesheet" href="activity-box.css?v=20260724-1" />
   <link rel="stylesheet" href="boss-box.css?v=20260723-2" />
   <link rel="stylesheet" href="bus-box.css?v=20260723-1" />
   <link rel="stylesheet" href="classroom-box.css?v=20260720-2" />
@@ -226,6 +227,28 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
 </section>
 
 <!-- ห้องเรียนออนไลน์: ใช้ระบบ Login เดียวกับ accountBtn -->
+
+<!-- Activity Box: ข้อมูลจากชีต activity -->
+<section id="activityBox" class="activity-box-section">
+  <div class="activity-box-container">
+    <div class="activity-box-heading">
+      <div>
+        <span class="activity-box-kicker">
+          <i class="fa fa-star" aria-hidden="true"></i>
+          ข่าวกิจกรรม
+        </span>
+        <h2>กิจกรรมล่าสุด</h2>
+      </div>
+    </div>
+
+    <div id="activityBoxStatus" class="activity-box-status">
+      กำลังโหลดกิจกรรม...
+    </div>
+
+    <div id="activityBoxGrid" class="activity-box-grid"></div>
+  </div>
+</section>
+
 <section id="classroomBox" class="classroom-section">
   <div class="container">
 
@@ -350,6 +373,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
 
 <script src="script.js?v=20260722-2"></script>
   <script src="learning-source-box.js?v=20260720-1"></script>
+  <script src="activity-box.js?v=20260724-1"></script>
   <script src="boss-box.js?v=20260723-2"></script>
   <script src="bus-box.js?v=20260723-1"></script>
   <script src="classroom-box.js?v=20260720-2"></script>
