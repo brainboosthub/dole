@@ -61,26 +61,24 @@
 }
 
 .activity-box-image-link{
-  position:relative;
-  display:block;
-  width:100%;
-  height:240px;
-  overflow:hidden;
-  text-decoration:none;
-  background:#fff;
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: transparent;
 }
+
 
 .activity-box-image-link[aria-disabled="true"]{
   cursor:default;
 }
 
 .activity-box-image-link img{
-  width:100%;
-  height:100%;
-  display:block;
-  object-fit:contain;
-  object-position:center;
-  transition:transform .35s ease;
+    width:100%;
+    height:100%;
+    object-fit:contain;   /* เห็นทั้งภาพ */
+    background:#fff;
 }
 
 .activity-box-card.is-clickable:hover .activity-box-image-link img{
