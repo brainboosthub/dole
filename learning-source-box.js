@@ -4,7 +4,6 @@
   /* เปลี่ยน URL นี้เป็น URL /exec ของโปรเจกต์ฐานแหล่งเรียนรู้ */
   const LEARNING_SOURCE_WEB_APP_URL =
     'https://script.google.com/macros/s/AKfycbzFDJkwIHcxxsu9aJfhIgYQsKpp2aD_c-5wzMvWXTiRfc7FiztMuU81NEmd0Tb5N3DH/exec';
-  const API_URL = LEARNING_SOURCE_WEB_APP_URL + '?mode=learningBox';
 
   let sources = [];
   let pageIndex = 0;
@@ -19,40 +18,69 @@
   const number = value => Number.isFinite(Number(value)) ? Number(value) : 0;
   const formatNumber = value => number(value).toLocaleString('th-TH');
 
-  async function loadLearningSourceBox() {
+  function showBoxError(message) {
+    const mapStage = $('lsbMapStage');
+    const track = $('lsbTrack');
+    console.error('Learning Source Box:', message);
+    if (mapStage) mapStage.innerHTML = `<div class="lsb-loading">โหลดแผนที่ไม่สำเร็จ: ${esc(message)}</div>`;
+    if (track) track.innerHTML = `<div class="lsb-loading">โหลดรายการไม่สำเร็จ: ${esc(message)}</div>`;
+  }
+
+  window.receiveLearningSourceBox = function(result) {
+    clearTimeout(window.lsbLoadTimer);
+
+    if (!result || result.success !== true) {
+      showBoxError(result && result.message ? result.message : 'ข้อมูลที่ได้รับไม่ถูกต้อง');
+      return;
+    }
+
+    const settings = result.settings || result.data?.settings || {};
+    const rawSources = result.sources || result.data?.sources || [];
+
+    sources = (Array.isArray(rawSources) ? rawSources : []).filter(item =>
+      String(item.status || 'block').toLowerCase() === 'block'
+    );
+
+    const openAll = $('lsbOpenAll');
+    if (openAll) {
+      openAll.href = 'learning.html';
+      openAll.removeAttribute('target');
+      openAll.removeAttribute('rel');
+    }
+
+    renderMap(settings);
+    renderCards();
+    bindControls();
+    startAutoSlide();
+
+    document.getElementById('lsbJsonpScript')?.remove();
+  };
+
+  function loadLearningSourceBox() {
     const mapStage = $('lsbMapStage');
     const track = $('lsbTrack');
     if (!mapStage || !track) return;
 
-    if (!/^https:\/\/script\.google\.com\//i.test(LEARNING_SOURCE_WEB_APP_URL)) {
-      const message = 'กรุณาใส่ URL Web App ของระบบฐานแหล่งเรียนรู้ใน learning-source-box.js';
-      mapStage.innerHTML = `<div class="lsb-loading">${esc(message)}</div>`;
-      track.innerHTML = `<div class="lsb-loading">${esc(message)}</div>`;
-      return;
-    }
+    document.getElementById('lsbJsonpScript')?.remove();
+    clearTimeout(window.lsbLoadTimer);
 
-    try {
-      const response = await fetch(API_URL + '&_t=' + Date.now(), { cache:'no-store' });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const result = await response.json();
-      if (result.success === false) throw new Error(result.message || 'โหลดข้อมูลไม่สำเร็จ');
+    window.lsbLoadTimer = setTimeout(() => {
+      showBoxError('หมดเวลารอข้อมูลจาก Google Apps Script');
+    }, 30000);
 
-      const settings = result.settings || result.data?.settings || {};
-      const rawSources = result.sources || result.data?.sources || [];
-      sources = (Array.isArray(rawSources) ? rawSources : []).filter(item =>
-        String(item.status || 'block').toLowerCase() === 'block'
-      );
+    const script = document.createElement('script');
+    script.id = 'lsbJsonpScript';
+    script.async = true;
+    script.src = LEARNING_SOURCE_WEB_APP_URL +
+      '?mode=learning&callback=window.receiveLearningSourceBox&_=' + Date.now();
 
-      $('lsbOpenAll').href = LEARNING_SOURCE_WEB_APP_URL;
-      renderMap(settings);
-      renderCards();
-      bindControls();
-      startAutoSlide();
-    } catch (error) {
-      console.error('Learning Source Box:', error);
-      mapStage.innerHTML = `<div class="lsb-loading">โหลดแผนที่ไม่สำเร็จ: ${esc(error.message)}</div>`;
-      track.innerHTML = `<div class="lsb-loading">โหลดรายการไม่สำเร็จ: ${esc(error.message)}</div>`;
-    }
+    script.onerror = () => {
+      clearTimeout(window.lsbLoadTimer);
+      showBoxError('ไม่สามารถโหลด JSONP จาก Google Apps Script');
+      script.remove();
+    };
+
+    document.body.appendChild(script);
   }
 
   function renderMap(settings) {
