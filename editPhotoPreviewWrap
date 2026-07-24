@@ -156,7 +156,11 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome
         <span class="section-kicker">แหล่งเรียนรู้ในพื้นที่</span>
         <h2>แหล่งเรียนรู้ผ่านแผนที่</h2>
       </div>
-      <a id="lsbOpenAll" class="lsb-open-all" href="#" target="_blank" rel="noopener">ดูรายการทั้งหมด</a>
+     <a id="lsbOpenAll"
+   class="lsb-open-all"
+   href="learning.html">
+  ดูรายการทั้งหมด
+</a>
     </div>
 
     <div class="lsb-box">
