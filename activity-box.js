@@ -16,33 +16,30 @@
     .replaceAll("'", '&#039;');
 
   function normalizeActivity(row) {
-    return {
-      title: String(
-        row.title ??
-        row.topic ??
-        row.name ??
-        row['เรื่อง'] ??
-        ''
-      ).trim(),
+ return {
+  title: String(
+    row.title ??
+    row.topic ??
+    ''
+  ).trim(),
 
-      image: String(
-        row.image ??
-        row.imageUrl ??
-        row.photo ??
-        row['รูป'] ??
-        row['URL รูปภาพ'] ??
-        ''
-      ).trim(),
+  image: String(
+    row.image ??
+    row.imageUrl ??
+    ''
+  ).trim(),
 
-      url: String(
-        row.url ??
-        row.link ??
-        row.detailUrl ??
-        row['URL รายละเอียด'] ??
-        row['รายละเอียด'] ??
-        ''
-      ).trim()
-    };
+  url: String(
+    row.url ??
+    row.link ??
+    ''
+  ).trim(),
+
+  date: String(
+    row.date ??
+    ''
+  ).trim()
+};
   }
 
 
@@ -88,9 +85,20 @@
             </span>
           </a>
 
-          <div class="activity-box-card-body">
-            <h3>${title}</h3>
-          </div>
+<div class="activity-box-card-body">
+
+    <h3>${title}</h3>
+
+    ${
+      item.date
+      ? `<div class="activity-box-date">
+            <i class="fa fa-calendar"></i>
+            ${escapeHtml(item.date)}
+         </div>`
+      : ''
+    }
+
+</div>
         </article>
       `;
     }).join('');
